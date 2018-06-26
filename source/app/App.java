@@ -1,11 +1,16 @@
 package app;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.inject.Inject;
 import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanException;
@@ -18,6 +23,7 @@ import javax.ws.rs.core.Application;
 import org.jboss.as.cli.CommandLineException;
 
 import beans.Host;
+import controllers.RestController;
 
 @ApplicationPath("/rest")
 @Singleton
@@ -25,9 +31,15 @@ import beans.Host;
 public class App extends Application {
 
 	private static String port;
+	
 	private static String host;
+	
 	private static String ip;
+	
 	private static String hostname;
+	
+	@Inject
+	private RestController restController;
 	
 	@PostConstruct
 	public void init() {
@@ -35,6 +47,28 @@ public class App extends Application {
 			ip = InetAddress.getLocalHost().toString();
 			hostname = InetAddress.getLocalHost().getHostName();
 			System.out.println("Hostname/IP: " + ip + " Hostname:" + hostname);
+			
+			boolean isFirstNode = true;
+			
+			//doesn't work on startup, check for other solutions
+			Host me = getHost();
+			File file = new File("/nodesData/nodes.txt");
+			FileReader nodesData = new FileReader(file);
+			String line;
+			try (BufferedReader bufferedReader = new BufferedReader(nodesData)) {
+			      if((line = bufferedReader.readLine()) != null)
+			    	  isFirstNode = false;
+		    }
+			
+			if(isFirstNode) {
+				//set master
+				FileWriter fw = new FileWriter(file);
+				fw.write(me.getHostAddress() + ":" + port);
+			}
+			else {
+				//send handshake to master (line has the data!)
+			}
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
