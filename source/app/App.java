@@ -24,6 +24,7 @@ import org.jboss.as.cli.CommandLineException;
 
 import beans.Host;
 import controllers.RestController;
+import services.GetHostDataService;
 
 @ApplicationPath("/rest")
 @Singleton
@@ -46,13 +47,17 @@ public class App extends Application {
 		try {
 			ip = InetAddress.getLocalHost().toString();
 			hostname = InetAddress.getLocalHost().getHostName();
-			System.out.println("Hostname/IP: " + ip + " Hostname:" + hostname);
+			System.out.println("Hostname/IP: " + ip + " Hostname: " + hostname);
 			
 			boolean isFirstNode = true;
 			
 			//doesn't work on startup, check for other solutions
-			Host me = getHost();
-			File file = new File("/nodesData/nodes.txt");
+			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname);
+			Thread t = new Thread(getHostDataService);
+			t.start();
+			System.out.println(getHostDataService.getHost());
+			
+			/*File file = new File("/nodesData/nodes.txt");
 			FileReader nodesData = new FileReader(file);
 			String line;
 			try (BufferedReader bufferedReader = new BufferedReader(nodesData)) {
@@ -67,7 +72,7 @@ public class App extends Application {
 			}
 			else {
 				//send handshake to master (line has the data!)
-			}
+			}*/
 			
 		} catch(Exception e) {
 			e.printStackTrace();
