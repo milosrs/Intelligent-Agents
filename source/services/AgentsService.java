@@ -21,7 +21,10 @@ public class AgentsService {
 	private ArrayList<AgentInterface> runningAgents;
 
 	public AgentsService() {
-		this.slaveNodes = new ArrayList<Host>();		
+		this.slaveNodes = new ArrayList<Host>();
+		this.myAgents = new ArrayList<AgentInterface>();
+		this.allAgents = new ArrayList<AgentInterface>();
+		this.runningAgents = new ArrayList<AgentInterface>();
 	}
 	
 	public AgentsService(Host mainNode, ArrayList<Host> slaveNodes, ArrayList<AgentInterface> myAgents,
