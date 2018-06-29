@@ -34,7 +34,7 @@ public class RestController {
 	@GET
 	@Path("/node")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String test() {
+	public String node() {
 		
 		return "ACTIVE";
 	}
