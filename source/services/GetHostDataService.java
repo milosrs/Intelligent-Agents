@@ -4,24 +4,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+//import javax.ejb.Stateless;
 import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanException;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.management.ReflectionException;
-import javax.ws.rs.core.Response;
 
 import org.jboss.as.cli.CommandLineException;
-import org.json.simple.parser.ParseException;
 
 import beans.Host;
-import controllers.RestController;
 
 //@Stateless
 public class GetHostDataService implements Runnable {
@@ -70,16 +65,21 @@ public class GetHostDataService implements Runnable {
 			e.printStackTrace();
 		}
 		this.mainNodeDetails = getMainNodeDetails();
-		Host mainNode = new Host(this.mainNodeDetails, "mainNode");
-		this.agentsService.setMainNode(mainNode);
 		
 		//i am a slave node, initialize handshake
 		if(!this.mainNodeDetails.equals(this.host.getHostAddress())) {
 			//add me to the slaves list
 			this.agentsService.getSlaveNodes().add(this.host);
+			//add the main node to the service
+			Host mainNode = new Host(this.mainNodeDetails, "mainNode");
+			this.agentsService.setMainNode(mainNode);
 			
 			//start REST handshake
 			
+		}
+		else { //i am the master, save my data
+			Host me = new Host("ME", this.host.getAlias());
+			this.agentsService.setMainNode(me);
 		}
 	}
 	
@@ -127,8 +127,10 @@ public class GetHostDataService implements Runnable {
 	    	e.printStackTrace();
 	    }
 		
-		if(line == null)
+		if(line == null) {
+			System.out.println("ERROR WHLE READING THE MAIN NODE DATA!");
 			return "ERROR";
+		}
 		else
 			return line;
 	}

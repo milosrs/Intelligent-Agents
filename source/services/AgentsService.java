@@ -14,17 +14,21 @@ public class AgentsService {
 	
 	private ArrayList<Host> slaveNodes;
 	
+	private ArrayList<AgentInterface> myAgents;
+	
 	private ArrayList<AgentInterface> allAgents;
 	
 	private ArrayList<AgentInterface> runningAgents;
 
 	public AgentsService() {}
 	
-	public AgentsService(Host mainNode, ArrayList<Host> slaveNodes, ArrayList<AgentInterface> allAgents,
+	public AgentsService(Host mainNode, ArrayList<Host> slaveNodes, ArrayList<AgentInterface> myAgents,
+			ArrayList<AgentInterface> allAgents,
 			ArrayList<AgentInterface> runningAgents) {
 		super();
 		this.mainNode = mainNode;
 		this.slaveNodes = slaveNodes;
+		this.myAgents = myAgents;
 		this.allAgents = allAgents;
 		this.runningAgents = runningAgents;
 	}
@@ -45,6 +49,14 @@ public class AgentsService {
 		this.slaveNodes = slaveNodes;
 	}
 
+	public ArrayList<AgentInterface> getMyAgents() {
+		return myAgents;
+	}
+
+	public void setMyAgents(ArrayList<AgentInterface> myAgents) {
+		this.myAgents = myAgents;
+	}
+	
 	public ArrayList<AgentInterface> getAllAgents() {
 		return allAgents;
 	}
