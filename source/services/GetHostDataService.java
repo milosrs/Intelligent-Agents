@@ -2,20 +2,28 @@ package services;
 
 import java.lang.management.ManagementFactory;
 
+import javax.ejb.Stateless;
 import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanException;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.management.ReflectionException;
+import javax.ws.rs.core.Response;
 
 import org.jboss.as.cli.CommandLineException;
+import org.json.simple.parser.ParseException;
 
 import beans.Host;
 
+//@Stateless
 public class GetHostDataService implements Runnable {
 
+	private RestHandshakeService restHandshakeService;
+	
 	private Host host;
+	
+	private String mainNodeDetails;
 	
 	private String ip;
 	
@@ -24,6 +32,9 @@ public class GetHostDataService implements Runnable {
 	public GetHostDataService (String ip, String hostname) {
 		this.hostname = hostname;
 		this.ip = ip;
+		this.mainNodeDetails = "";
+		this.host = null;
+		this.restHandshakeService = new RestHandshakeService();
 	}
 	
 	@Override
@@ -48,15 +59,8 @@ public class GetHostDataService implements Runnable {
 		} catch (CommandLineException e) {
 			e.printStackTrace();
 		}
+		this.mainNodeDetails = getMainNodeDetails();
 	}
-
-	public Host getHost() {
-		return host;
-	}
-
-	public void setHost(Host host) {
-		this.host = host;
-	}	
 	
 	public Host getHostData() throws CommandLineException, InstanceNotFoundException, AttributeNotFoundException, MalformedObjectNameException, ReflectionException, MBeanException {
 		Host ret = new Host();
@@ -75,15 +79,24 @@ public class GetHostDataService implements Runnable {
 						.getAttribute(new ObjectName("jboss.as:socket-binding-group=standard-sockets"), "port-offset")
 						.toString();	
 		
-		String address = this.ip.toString().split("/")[1] + ":" + port;
+		int portValue = Integer.parseInt(port) + Integer.parseInt(portOffset);
+		
+		String address = this.ip.toString().split("/")[1] + ":" + portValue;
 		String alias = host + "/" + this.hostname;
 		ret.setAlias(alias);
 		ret.setHostAddress(address);
 		
-		int portValue = Integer.parseInt(port) + Integer.parseInt(portOffset);
-		
-		System.out.println(portValue + " " + alias);
-		
 		return ret;
     }
+	
+	public String getMainNodeDetails() {
+		String retVal = "";
+		try {
+			Response resp = this.restHandshakeService.handleNode(this.host.getHostAddress());
+			retVal = resp.readEntity(String.class);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return retVal;
+	}
 }

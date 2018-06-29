@@ -1,4 +1,4 @@
-package beans;
+package beans.enums;
 
 public enum Performative {
 

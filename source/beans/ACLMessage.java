@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import beans.enums.Performative;
+
 public class ACLMessage implements Serializable {
 
 	private static final long serialVersionUID = 1L;
