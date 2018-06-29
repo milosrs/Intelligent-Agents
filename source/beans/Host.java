@@ -10,6 +10,11 @@ public class Host {
 		alias = "";
 	}
 
+	public Host(String hostAddress, String alias) {
+		this.hostAddress = hostAddress;
+		this.alias = alias;
+	}
+	
 	public String getHostAddress() {
 		return hostAddress;
 	}

@@ -1,8 +1,14 @@
 package services;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanException;
@@ -15,11 +21,14 @@ import org.jboss.as.cli.CommandLineException;
 import org.json.simple.parser.ParseException;
 
 import beans.Host;
+import controllers.RestController;
 
 //@Stateless
 public class GetHostDataService implements Runnable {
 
 	private RestHandshakeService restHandshakeService;
+	
+	private AgentsService agentsService;
 	
 	private Host host;
 	
@@ -35,6 +44,7 @@ public class GetHostDataService implements Runnable {
 		this.mainNodeDetails = "";
 		this.host = null;
 		this.restHandshakeService = new RestHandshakeService();
+		this.agentsService = new AgentsService();
 	}
 	
 	@Override
@@ -60,6 +70,17 @@ public class GetHostDataService implements Runnable {
 			e.printStackTrace();
 		}
 		this.mainNodeDetails = getMainNodeDetails();
+		Host mainNode = new Host(this.mainNodeDetails, "mainNode");
+		this.agentsService.setMainNode(mainNode);
+		
+		//i am a slave node, initialize handshake
+		if(!this.mainNodeDetails.equals(this.host.getHostAddress())) {
+			//add me to the slaves list
+			this.agentsService.getSlaveNodes().add(this.host);
+			
+			//start REST handshake
+			
+		}
 	}
 	
 	public Host getHostData() throws CommandLineException, InstanceNotFoundException, AttributeNotFoundException, MalformedObjectNameException, ReflectionException, MBeanException {
@@ -89,14 +110,26 @@ public class GetHostDataService implements Runnable {
 		return ret;
     }
 	
+	@SuppressWarnings("resource")
 	public String getMainNodeDetails() {
-		String retVal = "";
+		String absolutePath = GetHostDataService.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+	    String newPath = absolutePath.substring(1);
+	    String fullResourcePath = newPath + "/../mainNodeData/mainNodeInfo.txt";
+		File file = new File(fullResourcePath);
+		
+		String line = null;
 		try {
-			Response resp = this.restHandshakeService.handleNode(this.host.getHostAddress());
-			retVal = resp.readEntity(String.class);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return retVal;
+			FileReader nodesData = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(nodesData);
+			line = bufferedReader.readLine();
+
+	    } catch (IOException e) {
+	    	e.printStackTrace();
+	    }
+		
+		if(line == null)
+			return "ERROR";
+		else
+			return line;
 	}
 }
