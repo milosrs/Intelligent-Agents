@@ -1,8 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { AbstractService } from '../../../services/abstract.service';
 import { ListComponent } from '../list/list.component';
 import { HelperFunctions } from '../../util/helper-functions';
-import $ from 'jquery'
+import $ from 'jquery';
 import { CrudInterfaceObject } from '../../model/crudInterfaceObject';
 declare var $: $
 

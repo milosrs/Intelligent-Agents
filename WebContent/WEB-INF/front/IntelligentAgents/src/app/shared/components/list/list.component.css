@@ -3,7 +3,7 @@
   border-style: solid;
   border-color: cadetblue;
   overflow-y: scroll;
-
+  height: 400px;
   -webkit-overflow-scrolling: touch;
 }
 
