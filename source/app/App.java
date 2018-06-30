@@ -57,7 +57,7 @@ public class App extends Application {
 			//delete node data from other slaves (all slaves if i am the main node)
 			for (Iterator<Host> h = agentsService.getSlaveNodes().iterator(); h.hasNext();) {
 				Host item = h.next();
-				Response resp = restHandshakeService.deleteAgents(item, agentsService.getMyAgents());
+				Response resp = restHandshakeService.deleteAgents(item, agentsService.getMySupportedAgentTypes());
 				boolean respInfo = resp.readEntity(Boolean.class);
 				
 				if(respInfo)
@@ -70,7 +70,7 @@ public class App extends Application {
 			if(!agentsService.getMainNode().getHostAddress().equals("ME")) {
 				//delete node data from main node
 				Host main = agentsService.getMainNode();
-				Response resp = restHandshakeService.deleteAgents(main, agentsService.getMyAgents());
+				Response resp = restHandshakeService.deleteAgents(main, agentsService.getMySupportedAgentTypes());
 				boolean respInfo = resp.readEntity(Boolean.class);
 				
 				if(respInfo)

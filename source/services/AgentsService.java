@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.ejb.Singleton;
 
+import beans.AgentType;
 import beans.Host;
 import interfaces.AgentInterface;
 
@@ -13,28 +14,24 @@ public class AgentsService {
 	private Host mainNode;
 	
 	private ArrayList<Host> slaveNodes;
-	
-	private ArrayList<AgentInterface> myAgents;
-	
-	private ArrayList<AgentInterface> allAgents;
-	
+	private ArrayList<AgentType> allSupportedAgentTypes;
+	private ArrayList<AgentType> mySupportedAgentTypes;
 	private ArrayList<AgentInterface> runningAgents;
 
 	public AgentsService() {
 		this.slaveNodes = new ArrayList<Host>();
-		this.myAgents = new ArrayList<AgentInterface>();
-		this.allAgents = new ArrayList<AgentInterface>();
+		
 		this.runningAgents = new ArrayList<AgentInterface>();
 	}
 	
-	public AgentsService(Host mainNode, ArrayList<Host> slaveNodes, ArrayList<AgentInterface> myAgents,
-			ArrayList<AgentInterface> allAgents,
+	public AgentsService(Host mainNode, ArrayList<Host> slaveNodes, ArrayList<AgentType> allSupportedAgentTypes,
+			ArrayList<AgentType> mySupportedAgentTypes,
 			ArrayList<AgentInterface> runningAgents) {
 		super();
 		this.mainNode = mainNode;
 		this.slaveNodes = slaveNodes;
-		this.myAgents = myAgents;
-		this.allAgents = allAgents;
+		this.allSupportedAgentTypes = allSupportedAgentTypes;
+		this.mySupportedAgentTypes = mySupportedAgentTypes;
 		this.runningAgents = runningAgents;
 	}
 
@@ -53,21 +50,21 @@ public class AgentsService {
 	public void setSlaveNodes(ArrayList<Host> slaveNodes) {
 		this.slaveNodes = slaveNodes;
 	}
-
-	public ArrayList<AgentInterface> getMyAgents() {
-		return myAgents;
-	}
-
-	public void setMyAgents(ArrayList<AgentInterface> myAgents) {
-		this.myAgents = myAgents;
-	}
 	
-	public ArrayList<AgentInterface> getAllAgents() {
-		return allAgents;
+	public ArrayList<AgentType> getAllSupportedAgentTypes() {
+		return allSupportedAgentTypes;
 	}
 
-	public void setAllAgents(ArrayList<AgentInterface> allAgents) {
-		this.allAgents = allAgents;
+	public void setAllSupportedAgentTypes(ArrayList<AgentType> allSupportedAgentTypes) {
+		this.allSupportedAgentTypes = allSupportedAgentTypes;
+	}
+
+	public ArrayList<AgentType> getMySupportedAgentTypes() {
+		return mySupportedAgentTypes;
+	}
+
+	public void setMySupportedAgentTypes(ArrayList<AgentType> mySupportedAgentTypes) {
+		this.mySupportedAgentTypes = mySupportedAgentTypes;
 	}
 
 	public ArrayList<AgentInterface> getRunningAgents() {

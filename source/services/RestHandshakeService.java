@@ -10,6 +10,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.AgentType;
 import beans.Host;
 import interfaces.AgentInterface;
 
@@ -27,7 +28,7 @@ public class RestHandshakeService {
 		return webTarget.request(MediaType.APPLICATION_JSON).get();
 	}
 	
-	public Response deleteAgents(Host host, ArrayList<AgentInterface> agentsToDelete) {
+	public Response deleteAgents(Host host, ArrayList<AgentType> agentsToDelete) {
 		restClient = ClientBuilder.newClient();
 		webTarget = restClient.target(HTTP_URL + host.getHostAddress() + NODE_URL + "/node/{" + host.getAlias() + "}");
 		return webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agentsToDelete, MediaType.APPLICATION_JSON));
