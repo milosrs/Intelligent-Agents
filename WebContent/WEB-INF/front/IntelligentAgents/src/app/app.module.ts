@@ -13,6 +13,7 @@ import { ListComponent } from './shared/components/list/list.component';
 import { RequestComponent } from './shared/components/request/request.component';
 import { SearchComponent } from './shared/components/search/search.component';
 import { HomeComponent } from './shared/components/home/home.component';
+import { ToolboxComponent } from './shared/components/toolbox/toolbox.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { HomeComponent } from './shared/components/home/home.component';
     RequestComponent,
     SearchComponent,
     HomeComponent,
+    ToolboxComponent,
   ],
   imports: [
     BrowserModule,

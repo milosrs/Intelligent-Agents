@@ -1,0 +1,35 @@
+.TextCenter {
+    text-align: center;
+}
+
+.NoFlex {
+    display: block;
+}
+
+.AgentTypeText {
+    font-weight: 700;
+    color: #1565C0;
+}
+
+.FormText {
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 5%;
+}
+
+.Background {
+    background-color: rgba(200,230,201, 0.4);
+}
+
+.BackgroundMessage {
+    background-color: rgba(179,229,252, 0.3);
+}
+
+.BackgroundDelete {
+    background-color: rgba(239,83,80, 0.2);
+}
+
+.Textarea {
+    overflow-y: scroll;
+    resize: none;
+}

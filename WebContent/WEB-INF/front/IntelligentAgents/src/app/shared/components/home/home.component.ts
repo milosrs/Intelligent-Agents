@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ListItem } from '../../model/list-item';
 import { HelperFunctions } from '../../util/helper-functions';
 import { HttpClient } from '@angular/common/http';
-import { Agent } from 'http';
 
 @Component({
   selector: 'app-home',
