@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 
+import javax.inject.Inject;
 //import javax.ejb.Stateless;
 import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
@@ -17,11 +18,17 @@ import javax.management.ReflectionException;
 import org.jboss.as.cli.CommandLineException;
 
 import beans.Host;
+import beans.enums.NodeType;
+import registrators.NodeRegistrator;
+import requestSenders.RestHandshakeRequestSender;
 
-//@Stateless
 public class GetHostDataService implements Runnable {
 
-	private RestHandshakeService restHandshakeService;
+	@Inject
+	private RestHandshakeRequestSender requestSender;
+	
+	@Inject
+	private NodeRegistrator nodeRegistrator;
 	
 	private AgentsService agentsService;
 	
@@ -38,7 +45,6 @@ public class GetHostDataService implements Runnable {
 		this.ip = ip;
 		this.mainNodeDetails = "";
 		this.host = null;
-		this.restHandshakeService = new RestHandshakeService();
 		this.agentsService = new AgentsService();
 	}
 	
@@ -74,15 +80,29 @@ public class GetHostDataService implements Runnable {
 			Host mainNode = new Host(this.mainNodeDetails, "mainNode");
 			this.agentsService.setMainNode(mainNode);
 			
-			//start REST handshake
-			
+			setSlavery(mainNode);
 		}
 		else { //i am the master, save my data
 			Host me = new Host("ME", this.host.getAlias());
 			this.agentsService.setMainNode(me);
+			
+			setMastery(me);
 		}
 	}
 	
+	private void setMastery(Host mainNode) {
+		nodeRegistrator.setNodeType(NodeType.MASTER);
+		nodeRegistrator.setMaster(mainNode);
+		nodeRegistrator.setThisNodeInfo(mainNode);
+	}
+
+	private void setSlavery(Host mainNode) {
+		nodeRegistrator.setNodeType(NodeType.SLAVE);
+		nodeRegistrator.setMaster(mainNode);
+		nodeRegistrator.setThisNodeInfo(host);
+		requestSender.registerSlaveNode(this.mainNodeDetails, this.host);
+	}
+
 	public Host getHostData() throws CommandLineException, InstanceNotFoundException, AttributeNotFoundException, MalformedObjectNameException, ReflectionException, MBeanException {
 		Host ret = new Host();
 		String port;

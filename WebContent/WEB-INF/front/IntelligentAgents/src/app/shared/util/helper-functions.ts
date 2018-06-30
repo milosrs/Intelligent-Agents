@@ -61,7 +61,7 @@ export class HelperFunctions {
         }
         return 0;
       }
-    })
+    });
   }
 
   private static makeRandom() {
@@ -80,7 +80,7 @@ export class HelperFunctions {
 
     for (let i = 0; i < 20; i++) {
       const text = this.makeRandom();
-      const item = new ListItem('assets/aaa.jpg', text, dummyEntity);
+      const item = new ListItem(null, text, dummyEntity);
 
       ret.push(item);
     }
@@ -95,7 +95,7 @@ export class HelperFunctions {
       for (let i = 0; i < arrayOfItems.length; i++) {
         let text = '';
 
-        if(!this.isEmptyValue(textKeys)) {
+        if (!this.isEmptyValue(textKeys)) {
           for (let j = 0; j < textKeys.length; j++) {
             text += arrayOfItems[i][textKeys[j]] + ' ';
           }
@@ -141,7 +141,7 @@ export class HelperFunctions {
     const keys = Object.keys(object);
     const typesList = [];
 
-    for(let i = 0; i < keys.length; i++) {
+    for (let i = 0; i < keys.length; i++) {
       const type = typeof object[keys[i]];
       typesList.push(type);
     }

@@ -1,36 +1,63 @@
 package services;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import javax.ejb.Stateless;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ejb.Stateful;
+import javax.inject.Inject;
 
-import beans.AgentType;
 import beans.Host;
-import interfaces.AgentInterface;
+import beans.enums.NodeType;
+import registrators.NodeRegistrator;
+import requestSenders.RestHandshakeRequestSender;
 
-@Stateless
+@Stateful
 public class RestHandshakeService {
+	
+	@Inject
+	private RestHandshakeRequestSender requestSender;
+	@Inject
+	private NodeRegistrator nodeRegistrator;
+	
+	public List<Host> registerSlaveNode(Host newSlave) {
+		boolean isSuccess = true;
+		
+		List<Host> slaves = nodeRegistrator.getSlaves();
+			
+		for (Host slave : slaves) {
+			if (slave.getHostAddress().equals(newSlave.getHostAddress())
+					|| slave.getAlias().equals(newSlave.getAlias())) {
+				isSuccess = false;
+				break;
+			}
+		}
 
-	private Client restClient;
-	private WebTarget webTarget;
-	private static String HTTP_URL = "http://";
-	private static String NODE_URL = "/Inteligent_Agents/rest/app";
-
-	public Response getRunningAgents(String hostAddress) {
-		restClient = ClientBuilder.newClient();
-		webTarget = restClient.target(HTTP_URL + hostAddress + NODE_URL + "/agents/running");
-		return webTarget.request(MediaType.APPLICATION_JSON).get();
+		if (isSuccess) {
+			if(nodeRegistrator.getNodeType().equals(NodeType.MASTER)) {
+				isSuccess = sendRegisteredSlaveToSlaves(newSlave);
+			}
+			if(isSuccess) {
+				nodeRegistrator.getSlaves().add(newSlave);	
+			} else {
+				return null;
+			}
+		}
+		
+		return nodeRegistrator.getSlaves();
 	}
 	
-	public Response deleteAgents(Host host, ArrayList<AgentType> agentsToDelete) {
-		restClient = ClientBuilder.newClient();
-		webTarget = restClient.target(HTTP_URL + host.getHostAddress() + NODE_URL + "/node/{" + host.getAlias() + "}");
-		return webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agentsToDelete, MediaType.APPLICATION_JSON));
+	
+	public boolean sendRegisteredSlaveToSlaves(Host newSlave) {
+		boolean isSuccess = true;
+		
+		if(nodeRegistrator.getNodeType().equals(NodeType.MASTER)) {
+			for(Host slave : nodeRegistrator.getSlaves()) {
+				isSuccess = requestSender.registerSlaveNode(slave.getHostAddress(), newSlave) != null;
+				if(!isSuccess) {
+					break;
+				}
+			}	
+		}
+		
+		return isSuccess;
 	}
 }

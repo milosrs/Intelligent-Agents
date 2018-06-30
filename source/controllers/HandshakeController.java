@@ -1,31 +1,32 @@
 package controllers;
 
-import javax.ejb.Singleton;
+import java.util.List;
+
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-import services.GetHostDataService;
+import beans.Host;
 import services.RestHandshakeService;
 
-@Singleton
 @Path("/handshake")
 public class HandshakeController {
 
 	@Inject
 	private RestHandshakeService handshakeService;
 	
-//	@Inject
-//	private GetHostDataService hostDataService;
-	
 	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/node")
-	public void registerSlaveNode() {
-		
+	public Response registerSlaveNode(Host newSlave) {
+		List<Host> slavesList = handshakeService.registerSlaveNode(newSlave);
+		return Response.ok(slavesList).build();
 	}
 	
 	@GET
@@ -37,19 +38,6 @@ public class HandshakeController {
 	@POST
 	@Path("/agents/classes")
 	public void registerNewAgentClasses() {
-		
-	}
-	
-	//Ovo mora da je put ili bilo sta drugo, ne moze post, a i nema smisla za istu putanju
-	@PUT
-	@Path("/node")
-	public void registerNewSlaveNode() {
-		
-	}
-	
-	@POST
-	@Path("/node")
-	public void createSlaveNodesList() {
 		
 	}
 	
