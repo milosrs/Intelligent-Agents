@@ -18,10 +18,10 @@ import javax.ws.rs.core.Response;
 
 import beans.Host;
 import interfaces.AgentInterface;
+import requestSenders.RestHandshakeRequestSender;
 import services.AgentsService;
 import services.RestHandshakeService;
 
-@Singleton
 @Path("/app")
 public class RestController {
 
@@ -30,6 +30,9 @@ public class RestController {
 	
 	@Inject
 	private RestHandshakeService restHandshakeService;
+	
+	@Inject
+	private RestHandshakeRequestSender requestSender;
 	
 	@GET
 	@Path("/node")
@@ -68,7 +71,7 @@ public class RestController {
 		for (Iterator<Host> h = agentsService.getSlaveNodes().iterator(); h.hasNext();) {
 			Host item = h.next();
 			if(!item.getHostAddress().equals(myHostAddress)) {
-				Response resp = restHandshakeService.getRunningAgents(item.getHostAddress());
+				Response resp = requestSender.getRunningAgents(item.getHostAddress());
 				ArrayList<AgentInterface> respAgents = resp.readEntity(new GenericType<ArrayList<AgentInterface>>() {});
 				for(Iterator<AgentInterface> ra = respAgents.iterator(); ra.hasNext();)
 					retList.add(ra.next());
@@ -78,7 +81,7 @@ public class RestController {
 		//i am a slave node, send also to the main node
 		if(!agentsService.getMainNode().getHostAddress().equals("ME")) {
 			Host main = agentsService.getMainNode();
-			Response resp = restHandshakeService.getRunningAgents(main.getHostAddress());
+			Response resp = requestSender.getRunningAgents(main.getHostAddress());
 			ArrayList<AgentInterface> respAgents = resp.readEntity(new GenericType<ArrayList<AgentInterface>>() {});
 			for(Iterator<AgentInterface> ra = respAgents.iterator(); ra.hasNext();)
 				retList.add(ra.next());
