@@ -1,9 +1,11 @@
 package registrators;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Singleton;
 
+import beans.AgentType;
 import beans.Host;
 import beans.enums.NodeType;
 
@@ -12,6 +14,7 @@ public class NodeRegistrator {
 
 	private NodeType nodeType;
 	private List<Host> slaves;
+	private List<AgentType> supportedAgentTypes;
 	private Host master;
 	private Host thisNodeInfo;
 	
@@ -35,6 +38,26 @@ public class NodeRegistrator {
 		}
 		
 		return success;
+	}
+	
+	public List<AgentType> addNewAgentTypes(List<AgentType> agentTypes) {
+		List<AgentType> nonSupported = new ArrayList<AgentType>();
+		
+		if (agentTypes != null) {
+			try {
+				for(AgentType type : agentTypes) {
+					if(!supportedAgentTypes.contains(type)) {
+						supportedAgentTypes.add(type);
+						nonSupported.add(type);
+					}
+				}	
+			} catch(Exception e ) {
+				e.printStackTrace();
+				System.out.println("Error adding agentTypes");
+			}	
+		}
+		
+		return nonSupported;
 	}
 	
 	public NodeType getNodeType() {
@@ -61,4 +84,13 @@ public class NodeRegistrator {
 	public void setThisNodeInfo(Host thisNodeInfo) {
 		this.thisNodeInfo = thisNodeInfo;
 	}
+
+	public List<AgentType> getSupportedAgentTypes() {
+		return supportedAgentTypes;
+	}
+
+	public void setSupportedAgentTypes(List<AgentType> supportedAgentTypes) {
+		this.supportedAgentTypes = supportedAgentTypes;
+	}
+	
 }

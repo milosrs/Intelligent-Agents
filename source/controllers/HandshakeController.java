@@ -9,9 +9,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.AgentType;
 import beans.Host;
 import services.RestHandshakeService;
 
@@ -23,22 +25,29 @@ public class HandshakeController {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/node")
 	public Response registerSlaveNode(Host newSlave) {
 		List<Host> slavesList = handshakeService.registerSlaveNode(newSlave);
+		
 		return Response.ok(slavesList).build();
 	}
 	
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/agents/classes")
-	public void getSupportedAgentClasses() {
-		
+	public Response getSupportedAgentClasses() {
+		return Response.ok(handshakeService.fetchAgentTypeList()).build();
 	}
 	
 	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/agents/classes")
-	public void registerNewAgentClasses() {
+	public Response registerNewAgentClasses(List<AgentType> agentTypes) {
+		boolean success = handshakeService.addNewAgentTypes(agentTypes);
 		
+		return Response.ok(success).build();
 	}
 	
 	@POST
