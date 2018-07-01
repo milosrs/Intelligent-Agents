@@ -8,6 +8,7 @@ import javax.ejb.Singleton;
 import beans.AgentType;
 import beans.Host;
 import beans.enums.NodeType;
+import interfaces.AgentInterface;
 
 @Singleton
 public class NodeRegistrator {
@@ -17,6 +18,7 @@ public class NodeRegistrator {
 	private List<AgentType> supportedAgentTypes;
 	private Host master;
 	private Host thisNodeInfo;
+	private ArrayList<AgentInterface> runningAgents;
 	
 	public boolean setSlavesSentFromMaster(List<Host> slavesList) {
 		Host thisNode = thisNodeInfo;
@@ -92,5 +94,12 @@ public class NodeRegistrator {
 	public void setSupportedAgentTypes(List<AgentType> supportedAgentTypes) {
 		this.supportedAgentTypes = supportedAgentTypes;
 	}
-	
+
+	public ArrayList<AgentInterface> getRunningAgents() {
+		return runningAgents;
+	}
+
+	public void setRunningAgents(ArrayList<AgentInterface> runningAgents) {
+		this.runningAgents = runningAgents;
+	}
 }

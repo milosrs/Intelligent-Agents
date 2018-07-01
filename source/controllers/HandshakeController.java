@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 import beans.AgentType;
 import beans.Host;
+import interfaces.AgentInterface;
 import services.RestHandshakeService;
 
 @Path("/handshake")
@@ -57,15 +59,19 @@ public class HandshakeController {
 	}
 	
 	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/agents/running")
-	public void sendRunningAgentsList() {
-		
+	public Response postRunningAgents(String myHostAddress) {
+		return Response.ok(handshakeService.sendRunningAgents(myHostAddress)).build();		
 	}
 	
 	@DELETE
 	@Path("/node/{alias}")
-	public void rollback(@PathParam("alias") String alias) {
-		
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response rollback(@PathParam(value = "alias") String alias, ArrayList<AgentType> agentsToDelete) {
+		return Response.ok(handshakeService.deleteNode(alias, agentsToDelete)).build();
 	}
 	
 	
