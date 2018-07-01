@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameClassPair;
@@ -13,6 +14,7 @@ import javax.naming.NamingException;
 import beans.AgentType;
 import interfaces.AgentInterface;
 
+@Stateless
 public class JndiTreeParser {
 
 	private String EXP = "java:global/";
