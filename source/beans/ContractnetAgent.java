@@ -1,11 +1,8 @@
 package beans;
 
-import javax.ejb.Stateless;
-
 import interfaces.AgentInterface;
 
-@Stateless
-public class ContractnetAgent extends AgentClass implements AgentInterface{
+public class ContractnetAgent implements AgentInterface {
 
 	@Override
 	public void handleMessage(ACLMessage message) {

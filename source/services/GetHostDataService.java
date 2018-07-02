@@ -17,9 +17,12 @@ import javax.management.ReflectionException;
 
 import org.jboss.as.cli.CommandLineException;
 
+import beans.AID;
+import beans.AgentType;
 import beans.Host;
-import beans.enums.NodeType;
-import registrators.NodeRegistrator;
+import beans.PongAgent;
+//import beans.enums.NodeType;
+//import registrators.NodeRegistrator;
 import requestSenders.RestHandshakeRequestSender;
 
 public class GetHostDataService implements Runnable {
@@ -27,8 +30,8 @@ public class GetHostDataService implements Runnable {
 	@Inject
 	private RestHandshakeRequestSender requestSender;
 	
-	@Inject
-	private NodeRegistrator nodeRegistrator;
+	/*@Inject
+	private NodeRegistrator nodeRegistrator;*/
 	
 	private AgentsService agentsService;
 	
@@ -51,7 +54,7 @@ public class GetHostDataService implements Runnable {
 	@Override
 	public void run() {
 		try {
-			Thread.sleep(3000);
+			Thread.sleep(30000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -80,17 +83,27 @@ public class GetHostDataService implements Runnable {
 			Host mainNode = new Host(this.mainNodeDetails, "mainNode");
 			this.agentsService.setMainNode(mainNode);
 			
-			setSlavery(mainNode);
+			//get my agent types + start handshake
+			
+			//setSlavery(mainNode);
 		}
 		else { //i am the master, save my data
 			Host me = new Host("ME", this.host.getAlias());
 			this.agentsService.setMainNode(me);
 			
-			setMastery(me);
+			//mock of runningAgents
+			AgentType pong = new AgentType("pong1", "PONG");
+			AID aid = new AID("pongAgent", me, pong);
+			PongAgent pongAgent = new PongAgent(aid);
+			this.agentsService.getRunningAgents().add(pongAgent);
+			
+			//get my agent types
+			
+			//setMastery(me);
 		}
 	}
 	
-	private void setMastery(Host mainNode) {
+	/*private void setMastery(Host mainNode) {
 		nodeRegistrator.setNodeType(NodeType.MASTER);
 		nodeRegistrator.setMaster(mainNode);
 		nodeRegistrator.setThisNodeInfo(mainNode);
@@ -101,7 +114,7 @@ public class GetHostDataService implements Runnable {
 		nodeRegistrator.setMaster(mainNode);
 		nodeRegistrator.setThisNodeInfo(host);
 		requestSender.registerSlaveNode(this.mainNodeDetails, this.host);
-	}
+	}*/
 
 	public Host getHostData() throws CommandLineException, InstanceNotFoundException, AttributeNotFoundException, MalformedObjectNameException, ReflectionException, MBeanException {
 		Host ret = new Host();

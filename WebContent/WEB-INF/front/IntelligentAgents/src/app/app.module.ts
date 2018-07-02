@@ -14,6 +14,7 @@ import { RequestComponent } from './shared/components/request/request.component'
 import { SearchComponent } from './shared/components/search/search.component';
 import { HomeComponent } from './shared/components/home/home.component';
 import { ToolboxComponent } from './shared/components/toolbox/toolbox.component';
+import { ConsoleComponent } from './shared/components/console/console.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ToolboxComponent } from './shared/components/toolbox/toolbox.component'
     SearchComponent,
     HomeComponent,
     ToolboxComponent,
+    ConsoleComponent,
   ],
   imports: [
     BrowserModule,

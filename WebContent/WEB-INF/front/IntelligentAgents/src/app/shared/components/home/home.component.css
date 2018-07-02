@@ -14,4 +14,5 @@
     background-color: #00796B;
     color: #ffffff;
     height: 400px;
+    overflow-y: scroll;
 }
