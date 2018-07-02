@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 //import javax.ejb.Stateless;
@@ -21,6 +22,7 @@ import beans.AID;
 import beans.AgentType;
 import beans.Host;
 import beans.PongAgent;
+import interfaces.AgentInterface;
 //import beans.enums.NodeType;
 //import registrators.NodeRegistrator;
 import requestSenders.RestHandshakeRequestSender;
@@ -43,12 +45,12 @@ public class GetHostDataService implements Runnable {
 	
 	private String hostname;
 	
-	public GetHostDataService (String ip, String hostname) {
+	public GetHostDataService (String ip, String hostname, AgentsService as) {
 		this.hostname = hostname;
 		this.ip = ip;
 		this.mainNodeDetails = "";
 		this.host = null;
-		this.agentsService = new AgentsService();
+		this.agentsService = as;
 	}
 	
 	@Override
@@ -75,6 +77,8 @@ public class GetHostDataService implements Runnable {
 		}
 		this.mainNodeDetails = getMainNodeDetails();
 		
+		this.agentsService.hackz();
+		
 		//i am a slave node, initialize handshake
 		if(!this.mainNodeDetails.equals(this.host.getHostAddress())) {
 			//add me to the slaves list
@@ -95,7 +99,9 @@ public class GetHostDataService implements Runnable {
 			AgentType pong = new AgentType("pong1", "PONG");
 			AID aid = new AID("pongAgent", me, pong);
 			PongAgent pongAgent = new PongAgent(aid);
-			this.agentsService.getRunningAgents().add(pongAgent);
+			ArrayList<AgentInterface> agentsList = new ArrayList<AgentInterface>();
+			agentsList.add(pongAgent);
+			this.agentsService.setRunningAgents(agentsList);
 			
 			//get my agent types
 			

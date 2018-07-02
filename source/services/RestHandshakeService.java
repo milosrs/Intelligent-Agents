@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.ejb.Stateful;
 import javax.inject.Inject;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
@@ -22,11 +21,13 @@ public class RestHandshakeService {
 	
 	@Inject
 	private RestHandshakeRequestSender requestSender;
+	
 	@Inject
 	private NodeRegistrator nodeRegistrator;
+	
 	@Inject
 	private JndiTreeParser treeParser;
-	
+
 	public List<Host> registerSlaveNode(Host newSlave) {
 		boolean isSuccess = true;
 		
@@ -131,6 +132,7 @@ public class RestHandshakeService {
 		return retList;							
 	}
 	
+	@SuppressWarnings("unlikely-arg-type")
 	public boolean deleteNode(String alias, ArrayList<AgentType> agentsToDelete){
 		
 		boolean retVal = true;

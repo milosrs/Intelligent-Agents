@@ -49,6 +49,8 @@ public class RestController {
 	public ArrayList<AgentInterface> getRunningAgents(){
 		
 		ArrayList<AgentInterface> retList = new ArrayList<AgentInterface>();
+		//hack for singleton injection
+		agentsService.hackz();
 		
 		for (Iterator<AgentInterface> i = agentsService.getRunningAgents().iterator(); i.hasNext();)
 		    retList.add(i.next());

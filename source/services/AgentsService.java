@@ -2,13 +2,20 @@ package services;
 
 import java.util.ArrayList;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 
 import beans.AgentType;
 import beans.Host;
 import interfaces.AgentInterface;
 
 @Singleton
+@ApplicationScoped
+@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class AgentsService {
 
 	private Host mainNode;
@@ -18,23 +25,20 @@ public class AgentsService {
 	private ArrayList<AgentType> mySupportedAgentTypes;
 	private ArrayList<AgentInterface> runningAgents;
 
-	public AgentsService() {
-		this.slaveNodes = new ArrayList<Host>();
-		
-		this.runningAgents = new ArrayList<AgentInterface>();
+	@PostConstruct
+	public void onInit() {
+		System.out.println("----------SINGLETON CONSTRUCTED----------");
 	}
 	
-	public AgentsService(Host mainNode, ArrayList<Host> slaveNodes, ArrayList<AgentType> allSupportedAgentTypes,
-			ArrayList<AgentType> mySupportedAgentTypes,
-			ArrayList<AgentInterface> runningAgents) {
-		super();
-		this.mainNode = mainNode;
-		this.slaveNodes = slaveNodes;
-		this.allSupportedAgentTypes = allSupportedAgentTypes;
-		this.mySupportedAgentTypes = mySupportedAgentTypes;
-		this.runningAgents = runningAgents;
+	public void hackz() {
+		System.out.println("---------SINGLETON TOUCHED----------");
 	}
-
+	
+	@PreDestroy
+	public void onDelete() {
+		System.out.println("----------SINGLETON DELETED----------");
+	}
+	
 	public Host getMainNode() {
 		return mainNode;
 	}
