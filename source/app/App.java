@@ -16,6 +16,7 @@ import beans.Host;
 import requestSenders.RestHandshakeRequestSender;
 import services.AgentsService;
 import services.GetHostDataService;
+import services.JndiTreeParser;
 
 @ApplicationPath("/rest")
 @Singleton
@@ -35,6 +36,9 @@ public class App extends Application {
 	@Inject
 	private AgentsService as;	
 	
+	@Inject
+	private JndiTreeParser jtp;
+	
 	@PostConstruct
 	public void init() {
 		try {
@@ -45,9 +49,11 @@ public class App extends Application {
 			
 //			//touch singleton to work properly
 //			as.hackz();
+			//touch singleton to work properly
+			as.firstTouch();
 			
 			//await for jboss to start and then get the port and initialize the node-handshake
-			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname, as);
+			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname, as, jtp);
 			Thread t = new Thread(getHostDataService);
 			t.start();
 			

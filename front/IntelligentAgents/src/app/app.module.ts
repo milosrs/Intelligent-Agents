@@ -12,9 +12,9 @@ import { AppComponent } from './app.component';
 import { ListComponent } from './shared/components/list/list.component';
 import { RequestComponent } from './shared/components/request/request.component';
 import { SearchComponent } from './shared/components/search/search.component';
-import { HomeComponent } from './shared/components/home/home.component';
-import { ToolboxComponent } from './shared/components/toolbox/toolbox.component';
-import { ConsoleComponent } from './shared/components/console/console.component';
+import { HomeComponent } from './components/home/home.component';
+import { ToolboxComponent } from './components/toolbox/toolbox.component';
+import { ConsoleComponent } from './components/console/console.component';
 
 @NgModule({
   declarations: [

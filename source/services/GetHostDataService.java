@@ -6,10 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
 
 import javax.inject.Inject;
-//import javax.ejb.Stateless;
 import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanException;
@@ -22,14 +21,13 @@ import org.jboss.as.cli.CommandLineException;
 
 import beans.AID;
 import beans.AgentType;
+import beans.AgentTypeDTO;
 import beans.Host;
 import beans.PongAgent;
 import beans.enums.NodeType;
 import registrators.NodeRegistrator;
 import requestSenders.AdminConsoleRequestSender;
 import interfaces.AgentInterface;
-//import beans.enums.NodeType;
-//import registrators.NodeRegistrator;
 import requestSenders.RestHandshakeRequestSender;
 
 public class GetHostDataService implements Runnable {
@@ -46,13 +44,13 @@ public class GetHostDataService implements Runnable {
 	private final int maxPingTrials = 100;
 	private AdminConsoleRequestSender adminRequestSender;
 	
-	public GetHostDataService (String ip, String hostname, AgentsService as) {
+	public GetHostDataService (String ip, String hostname, AgentsService as, JndiTreeParser jtp) {
 		this.hostname = hostname;
 		this.ip = ip;
 		this.mainNodeDetails = "";
 		this.host = null;
 		this.agentsService = as;
-		this.jndiTreeParser = new JndiTreeParser();
+		this.jndiTreeParser = jtp;
 	}
 	
 	@Override
@@ -69,10 +67,10 @@ public class GetHostDataService implements Runnable {
 		
 		//i am a slave node, initialize handshake
 		if(!this.mainNodeDetails.equals(this.host.getHostAddress())) {
-			//add me to the slaves list
-			this.agentsService.getSlaveNodes().add(this.host);
+			//add my host data
+			this.agentsService.setMyHostInfo(this.host);
 			
-			//add the main node to the service
+			//add the main node data
 			Host mainNode = new Host(this.mainNodeDetails, "mainNode");
 			this.agentsService.setMainNode(mainNode);
 			
@@ -84,23 +82,35 @@ public class GetHostDataService implements Runnable {
 				e.printStackTrace();
 			}		
 			this.agentsService.setMySupportedAgentTypes(myAgentTypes);
-			this.agentsService.setAllSupportedAgentTypes(myAgentTypes);
+			
+			for(Iterator<AgentType> i = myAgentTypes.iterator(); i.hasNext();) {
+				AgentTypeDTO listItem = new AgentTypeDTO(i.next(), this.host);
+				this.agentsService.getAllSupportedAgentTypes().add(listItem);
+			}
 			
 			//start rest handshake
-			
 			setSlavery(mainNode);
 		}
 		else { //i am the master, save my data
-			Host me = new Host("ME", this.host.getAlias());
-			this.agentsService.setMainNode(me);
+			//add the main node data
+			this.agentsService.setMainNode(this.host);
 			
-			//mock of runningAgents
+			//add my host data
+			this.agentsService.setMyHostInfo(this.host);
+			
+			/*//mock of runningAgents
 			AgentType pong = new AgentType("pong1", "PONG");
-			AID aid = new AID("pongAgent", me, pong);
+			AID aid = new AID("pongAgent", this.host, pong);
+			ArrayList<AID> allAgentsList = new ArrayList<AID>();			
+			allAgentsList.add(aid);
+			this.agentsService.setAllRunningAgents(allAgentsList);
+			
 			PongAgent pongAgent = new PongAgent(aid);
 			ArrayList<AgentInterface> agentsList = new ArrayList<AgentInterface>();
 			agentsList.add(pongAgent);
-			this.agentsService.setRunningAgents(agentsList);
+			this.agentsService.setMyRunningAgents(agentsList);
+			//end mock*/
+			
 			
 			//get and set my agent types
 			ArrayList<AgentType> myAgentTypes = new ArrayList<AgentType>();
@@ -110,9 +120,13 @@ public class GetHostDataService implements Runnable {
 				e.printStackTrace();
 			}		
 			this.agentsService.setMySupportedAgentTypes(myAgentTypes);
-			this.agentsService.setAllSupportedAgentTypes(myAgentTypes);
 			
-			setMastery(me);
+			for(Iterator<AgentType> i = myAgentTypes.iterator(); i.hasNext();) {
+				AgentTypeDTO listItem = new AgentTypeDTO(i.next(), this.host);
+				this.agentsService.getAllSupportedAgentTypes().add(listItem);
+			}
+			
+//			setMastery(me);
 		}
 	}
 	

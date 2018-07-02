@@ -3,7 +3,6 @@ package controllers;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -17,14 +16,16 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.AID;
 import beans.AgentType;
+import beans.AgentTypeDTO;
 import beans.Host;
 import factories.AgentsFactory;
 import interfaces.AgentInterface;
+import requestSenders.ClientRequestSender;
 import requestSenders.RestHandshakeRequestSender;
 import services.AgentsService;
 import services.RestHandshakeService;
-import sun.management.Agent;
 
 @Path("/app")
 public class RestController {
@@ -38,6 +39,9 @@ public class RestController {
 	@Inject
 	private RestHandshakeRequestSender requestSender;
 	
+	@Inject
+	private ClientRequestSender clientRequestSender;
+	
 	@GET
 	@Path("/node")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -49,11 +53,11 @@ public class RestController {
 	@GET
 	@Path("/agents/classes")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<AgentType> getAllAgentTypes(){
+	public ArrayList<AgentTypeDTO> getAllAgentTypes(){
 		
-		ArrayList<AgentType> retList = new ArrayList<AgentType>();
+		ArrayList<AgentTypeDTO> retList = new ArrayList<AgentTypeDTO>();
 		
-		for (Iterator<AgentType> i = agentsService.getAllSupportedAgentTypes().iterator(); i.hasNext();)
+		for (Iterator<AgentTypeDTO> i = agentsService.getAllSupportedAgentTypes().iterator(); i.hasNext();)
 		    retList.add(i.next());
 		
 		return retList;
@@ -62,11 +66,11 @@ public class RestController {
 	@GET
 	@Path("/agents/running")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<AgentInterface> getRunningAgents(){
+	public ArrayList<AID> getRunningAgents(){
 		
-		ArrayList<AgentInterface> retList = new ArrayList<AgentInterface>();
+		ArrayList<AID> retList = new ArrayList<AID>();
 		
-		for (Iterator<AgentInterface> i = agentsService.getRunningAgents().iterator(); i.hasNext();)
+		for (Iterator<AID> i = agentsService.getAllRunningAgents().iterator(); i.hasNext();)
 		    retList.add(i.next());
 		
 		return retList;
@@ -76,32 +80,82 @@ public class RestController {
 	@Path("/agents/running/{type}/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean putNewAgent(@PathParam(value = "type") String type, @PathParam(value = "name") String name){
+	public String putNewAgent(@PathParam(value = "type") String type, @PathParam(value = "name") String name){
 		
-		boolean retVal = true;
+		String retStr = "";
 		
-		Host myHostData = agentsService.getMainNode();
-		for (Iterator<AgentType> i = agentsService.getAllSupportedAgentTypes().iterator(); i.hasNext();) {
-			AgentType item = i.next();
-			if(item.getName().equals(name)) {
-				AgentInterface myAgent = AgentsFactory.createAgent(name, myHostData, item);
-			}
+		boolean flag = true;		
+		Host myHostData = agentsService.getMyHostInfo();
+		if(agentsService.getAllRunningAgents().stream()
+				.filter(o -> o.getName().equals(name) 
+					&& o.getHost().getHostAddress().equals(myHostData.getHostAddress())
+						&& o.getHost().getAlias().equals(myHostData.getAlias()))
+							.findFirst().isPresent()) {
+			retStr = "Agent with the given name already exists on this node!";
+			flag = false;
 		}
 		
-		return retVal;
+		if(flag) {
+			
+			boolean isMainNode = false;
+			if(agentsService.getMainNode().getHostAddress().equals(myHostData.getHostAddress())
+					&& agentsService.getMainNode().getAlias().equals(myHostData.getAlias()))
+				isMainNode = true;
+			
+			for (Iterator<AgentTypeDTO> i = agentsService.getAllSupportedAgentTypes().iterator(); i.hasNext();) {
+				AgentTypeDTO item = i.next();
+				if(item.getType().getName().equals(name)) {
+					//add agent to my list
+					AID aid = new AID(name, myHostData, item.getType());
+					AgentInterface myAgent = AgentsFactory.createAgent(aid);
+					agentsService.getMyRunningAgents().add(myAgent);
+					
+					ArrayList<AID> postList = new ArrayList<AID>();
+					postList.add(aid);
+					//send AID to all other nodes
+					for(Iterator<Host> h = agentsService.getSlaveNodes().iterator(); h.hasNext();)
+						clientRequestSender.postRunningAgents(postList, h.next().getHostAddress());
+					
+					//if I am a slave node, send AID to the main node also
+					if(!isMainNode)
+						clientRequestSender.postRunningAgents(postList, agentsService.getMainNode().getHostAddress());
+					
+					retStr = "SUCCESS";
+					break;
+				}
+			}	
+		}
+		
+		return retStr;
 	}
 	
 	@POST
 	@Path("/agents/running")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<AgentInterface> postRunningAgents(String myHostAddress){
+	public void postRunningAgents(ArrayList<AID> agentsList){
 		
-		ArrayList<AgentInterface> retList = new ArrayList<AgentInterface>();
+		for (Iterator<AID> i = agentsList.iterator(); i.hasNext();)
+			agentsService.getAllRunningAgents().add(i.next());
+		
+	}
+	
+	/*@POST
+	@Path("/agents/running")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<AgentInterface> postRunningAgents(Host senderHostData){
+		
+		ArrayList<AID> retList = new ArrayList<AID>();
+		Host myHostData = agentsService.getMyHostInfo();
 		
 		//add my running agents
-		for (Iterator<AgentInterface> i = agentsService.getRunningAgents().iterator(); i.hasNext();)
-		    retList.add(i.next());
+		for (Iterator<AID> i = agentsService.getAllRunningAgents().iterator(); i.hasNext();) {
+			AID item = i.next();
+			if(item.getHost().getAlias().equals(myHostData.getAlias())
+					&& item.getHost().getHostAddress().equals(myHostData.getHostAddress())) {
+			    retList.add(item);
+			}
+		}
 
 		//only sending to other slaves (if I am the main node I will skip the slave who initiated the call)
 		for (Iterator<Host> h = agentsService.getSlaveNodes().iterator(); h.hasNext();) {
@@ -114,7 +168,7 @@ public class RestController {
 			}
 		}
 		
-		//i am a slave node, send also to the main node
+		//i am a slave node, send also to the main node, FIX THE MEEEE
 		if(!agentsService.getMainNode().getHostAddress().equals("ME")) {
 			Host main = agentsService.getMainNode();
 			Response resp = requestSender.getRunningAgents(main.getHostAddress());
@@ -124,7 +178,7 @@ public class RestController {
 		}
 		
 		return retList;
-	}
+	}*/
 	
 	@SuppressWarnings("unlikely-arg-type")
 	@DELETE

@@ -9,7 +9,9 @@ import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 
+import beans.AID;
 import beans.AgentType;
+import beans.AgentTypeDTO;
 import beans.Host;
 import interfaces.AgentInterface;
 
@@ -20,17 +22,29 @@ public class AgentsService {
 
 	private Host mainNode;
 	
+	private Host myHostInfo;
+	
 	private ArrayList<Host> slaveNodes;
-	private ArrayList<AgentType> allSupportedAgentTypes;
+	
 	private ArrayList<AgentType> mySupportedAgentTypes;
-	private ArrayList<AgentInterface> runningAgents;
+	
+	private ArrayList<AgentTypeDTO> allSupportedAgentTypes;
+	
+	private ArrayList<AgentInterface> myRunningAgents;
+	
+	private ArrayList<AID> allRunningAgents;
 
 	@PostConstruct
 	public void onInit() {
 		System.out.println("----------SINGLETON CONSTRUCTED----------");
 	}
 	
-	public void hackz() {
+	public void firstTouch() {
+		setSlaveNodes(new ArrayList<Host>());
+		setMySupportedAgentTypes(new ArrayList<AgentType>());
+		setAllSupportedAgentTypes(new ArrayList<AgentTypeDTO>());
+		setMyRunningAgents(new ArrayList<AgentInterface>());
+		setAllRunningAgents(new ArrayList<AID>());
 		System.out.println("---------SINGLETON TOUCHED----------");
 	}
 	
@@ -38,7 +52,7 @@ public class AgentsService {
 	public void onDelete() {
 		System.out.println("----------SINGLETON DELETED----------");
 	}
-	
+
 	public Host getMainNode() {
 		return mainNode;
 	}
@@ -47,20 +61,20 @@ public class AgentsService {
 		this.mainNode = mainNode;
 	}
 
+	public Host getMyHostInfo() {
+		return myHostInfo;
+	}
+
+	public void setMyHostInfo(Host myHostInfo) {
+		this.myHostInfo = myHostInfo;
+	}
+
 	public ArrayList<Host> getSlaveNodes() {
 		return slaveNodes;
 	}
 
 	public void setSlaveNodes(ArrayList<Host> slaveNodes) {
 		this.slaveNodes = slaveNodes;
-	}
-	
-	public ArrayList<AgentType> getAllSupportedAgentTypes() {
-		return allSupportedAgentTypes;
-	}
-
-	public void setAllSupportedAgentTypes(ArrayList<AgentType> allSupportedAgentTypes) {
-		this.allSupportedAgentTypes = allSupportedAgentTypes;
 	}
 
 	public ArrayList<AgentType> getMySupportedAgentTypes() {
@@ -71,11 +85,27 @@ public class AgentsService {
 		this.mySupportedAgentTypes = mySupportedAgentTypes;
 	}
 
-	public ArrayList<AgentInterface> getRunningAgents() {
-		return runningAgents;
+	public ArrayList<AgentTypeDTO> getAllSupportedAgentTypes() {
+		return allSupportedAgentTypes;
 	}
 
-	public void setRunningAgents(ArrayList<AgentInterface> runningAgents) {
-		this.runningAgents = runningAgents;
-	}		
+	public void setAllSupportedAgentTypes(ArrayList<AgentTypeDTO> allSupportedAgentTypes) {
+		this.allSupportedAgentTypes = allSupportedAgentTypes;
+	}
+
+	public ArrayList<AgentInterface> getMyRunningAgents() {
+		return myRunningAgents;
+	}
+
+	public void setMyRunningAgents(ArrayList<AgentInterface> myRunningAgents) {
+		this.myRunningAgents = myRunningAgents;
+	}
+
+	public ArrayList<AID> getAllRunningAgents() {
+		return allRunningAgents;
+	}
+
+	public void setAllRunningAgents(ArrayList<AID> allRunningAgents) {
+		this.allRunningAgents = allRunningAgents;
+	}	
 }
