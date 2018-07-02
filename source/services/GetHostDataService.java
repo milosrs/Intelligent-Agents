@@ -21,27 +21,25 @@ import beans.AID;
 import beans.AgentType;
 import beans.Host;
 import beans.PongAgent;
+import beans.enums.NodeType;
+import registrators.NodeRegistrator;
+import requestSenders.AdminConsoleRequestSender;
 //import beans.enums.NodeType;
 //import registrators.NodeRegistrator;
 import requestSenders.RestHandshakeRequestSender;
 
 public class GetHostDataService implements Runnable {
-
 	@Inject
 	private RestHandshakeRequestSender requestSender;
-	
-	/*@Inject
-	private NodeRegistrator nodeRegistrator;*/
-	
+	@Inject
+	private NodeRegistrator nodeRegistrator;
 	private AgentsService agentsService;
-	
 	private Host host;
-	
 	private String mainNodeDetails;
-	
 	private String ip;
-	
 	private String hostname;
+	private final int maxPingTrials = 100;
+	private AdminConsoleRequestSender adminRequestSender;
 	
 	public GetHostDataService (String ip, String hostname) {
 		this.hostname = hostname;
@@ -53,24 +51,12 @@ public class GetHostDataService implements Runnable {
 	
 	@Override
 	public void run() {
+		
 		try {
-			Thread.sleep(30000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		try {
-			this.host = getHostData();
-		} catch (InstanceNotFoundException e) {
-			e.printStackTrace();
-		} catch (AttributeNotFoundException e) {
-			e.printStackTrace();
-		} catch (MalformedObjectNameException e) {
-			e.printStackTrace();
-		} catch (ReflectionException e) {
-			e.printStackTrace();
-		} catch (MBeanException e) {
-			e.printStackTrace();
-		} catch (CommandLineException e) {
+			Host test = getHostData();
+		} catch (InstanceNotFoundException | AttributeNotFoundException | MalformedObjectNameException
+				| ReflectionException | MBeanException | CommandLineException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.mainNodeDetails = getMainNodeDetails();
@@ -85,7 +71,7 @@ public class GetHostDataService implements Runnable {
 			
 			//get my agent types + start handshake
 			
-			//setSlavery(mainNode);
+			setSlavery(mainNode);
 		}
 		else { //i am the master, save my data
 			Host me = new Host("ME", this.host.getAlias());
@@ -99,11 +85,11 @@ public class GetHostDataService implements Runnable {
 			
 			//get my agent types
 			
-			//setMastery(me);
+			setMastery(me);
 		}
 	}
 	
-	/*private void setMastery(Host mainNode) {
+	private void setMastery(Host mainNode) {
 		nodeRegistrator.setNodeType(NodeType.MASTER);
 		nodeRegistrator.setMaster(mainNode);
 		nodeRegistrator.setThisNodeInfo(mainNode);
@@ -114,13 +100,26 @@ public class GetHostDataService implements Runnable {
 		nodeRegistrator.setMaster(mainNode);
 		nodeRegistrator.setThisNodeInfo(host);
 		requestSender.registerSlaveNode(this.mainNodeDetails, this.host);
-	}*/
+	}
 
 	public Host getHostData() throws CommandLineException, InstanceNotFoundException, AttributeNotFoundException, MalformedObjectNameException, ReflectionException, MBeanException {
 		Host ret = new Host();
 		String port;
 		String host;
 		String portOffset;
+		boolean isUpAndRunning = false;
+		
+		adminRequestSender = new AdminConsoleRequestSender();
+		isUpAndRunning = adminRequestSender.isWildflyRunning();
+		
+		try {
+			while(!isUpAndRunning) {
+				Thread.sleep(500);
+				isUpAndRunning = adminRequestSender.isWildflyRunning();
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		
 		port =  ManagementFactory.getPlatformMBeanServer()
 				   .getAttribute(new ObjectName("jboss.as:socket-binding-group=standard-sockets,socket-binding=http"), "port")

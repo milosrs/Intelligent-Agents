@@ -1,0 +1,17 @@
+.Header1 {
+    text-align: center;
+}
+
+.NoFlex {
+    display: block;
+}
+
+.ToolBox {
+    background-color: #EEEEEE;
+}
+
+.Console {
+    background-color: #00796B;
+    color: #ffffff;
+    height: 400px;
+}

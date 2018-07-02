@@ -1,0 +1,105 @@
+<div class="container-flex">
+  <div class="row CRUDInterface">
+
+    <div class="row Header">
+      {{header}}
+    </div>
+
+    <div class="row Interface">
+      <div class="col-6" *ngIf="CRUD.indexOf('R') > -1">
+        <app-list
+          [header]="'Read'"
+          [items]='this.listitems'
+          [selectedRequestType]='requestType'
+          [additionalPassParam]="'Read'"
+          (onElementClickEvent)='elclick($event)'
+          [dynamicStyle]= "getListStyle()"> </app-list>
+      </div>
+      <div class="col-6 OperationWrapper" *ngIf="CRUD.indexOf('C') > -1">
+        <div class="row TinyInterfaceHeader">
+          Create
+        </div>
+        <div class="row">
+          <div class="col-sm-9">
+            <app-list
+              [header]="null"
+              [items]='this.listitems'
+              [selectedRequestType]='requestType'
+              [additionalPassParam]="'Create'"
+              (onElementClickEvent)="elclick($event)"
+              [dynamicStyle]= "getListStyle()"> </app-list>
+          </div>
+          <div class="col-sm-3">
+            <div class="row TinyInterfaceButtonGroup">
+              <div class="col-sm-8">Add {{entityName}}</div>
+              <div class="col-sm-4">
+                <button type="button" class="btn-success" data-toggle="modal" 
+                        data-target="#exampleModal" (click)="onOperationClick('Create')">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 OperationWrapper" *ngIf="CRUD.indexOf('U') > -1">
+        <div class="row TinyInterfaceHeader">
+          Update
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <app-list
+              [header]="null"
+              [items]='this.listitems'
+              [selectedRequestType]='requestType'
+              [additionalPassParam]="'Update'"
+              (onElementClickEvent)="elclick($event)"
+              [dynamicStyle]= "getListStyle()"> </app-list>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 OperationWrapper" *ngIf="CRUD.indexOf('D') > -1">
+          <app-list
+            [header]="'Delete'"
+            [items]='this.listitems'
+            [selectedRequestType]='requestType'
+            [additionalPassParam]="'Delete'"
+            (onElementClickEvent)='elclick($event)'
+            [dynamicStyle]= "getListStyle()"> </app-list>
+      </div>
+    </div>
+  </div>
+    
+    <!-- Modal CREATE UPDATE MODAL-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{activeOperation}} Item</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+
+              <div class="form-group row" *ngFor="let key of keyList">
+                <label for="key" class="col-sm-5 col-form-label">{{key}}</label>
+                <div class="col-sm-7"  *ngIf="getObjectKeyType(key) === 'string'">
+                    <input type="text" class="form-control" id="{{key}}" name="{{key}}" 
+                          [(ngModel)]="objectToSend[key]"/>
+                </div>
+                <div class="col-sm-7"  *ngIf="getObjectKeyType(key) === 'number'">
+                    <input type="number" class="form-control" id="{{key}}" name="{{key}}" 
+                          [(ngModel)]="objectToSend[key]"/>
+                </div>
+              </div>
+
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" (click)="onOkClick($event)" data-dismiss="modal">{{activeOperation}}</button>
+          </div>
+        </div>
+      </div>
+    </div>  
+</div>
