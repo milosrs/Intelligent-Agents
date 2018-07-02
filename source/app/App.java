@@ -31,6 +31,9 @@ public class App extends Application {
 	
 	@Inject
 	private RestHandshakeRequestSender requestSender;
+		
+	@Inject
+	private AgentsService as;	
 	
 	@PostConstruct
 	public void init() {
@@ -40,8 +43,11 @@ public class App extends Application {
 			hostname = InetAddress.getLocalHost().getHostName();
 			System.out.println("Hostname/IP: " + ip + " Hostname: " + hostname);
 			
+			//touch singleton to work properly
+			as.hackz();
+			
 			//await for jboss to start and then get the port and initialize the node-handshake
-			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname);
+			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname, as);
 			Thread t = new Thread(getHostDataService);
 			t.start();
 			

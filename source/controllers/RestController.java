@@ -9,6 +9,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,10 +19,12 @@ import javax.ws.rs.core.Response;
 
 import beans.AgentType;
 import beans.Host;
+import factories.AgentsFactory;
 import interfaces.AgentInterface;
 import requestSenders.RestHandshakeRequestSender;
 import services.AgentsService;
 import services.RestHandshakeService;
+import sun.management.Agent;
 
 @Path("/app")
 public class RestController {
@@ -44,6 +47,19 @@ public class RestController {
 	}
 	
 	@GET
+	@Path("/agents/classes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<AgentType> getAllAgentTypes(){
+		
+		ArrayList<AgentType> retList = new ArrayList<AgentType>();
+		
+		for (Iterator<AgentType> i = agentsService.getAllSupportedAgentTypes().iterator(); i.hasNext();)
+		    retList.add(i.next());
+		
+		return retList;
+	}
+	
+	@GET
 	@Path("/agents/running")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<AgentInterface> getRunningAgents(){
@@ -54,6 +70,25 @@ public class RestController {
 		    retList.add(i.next());
 		
 		return retList;
+	}
+	
+	@PUT
+	@Path("/agents/running/{type}/{name}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public boolean putNewAgent(@PathParam(value = "type") String type, @PathParam(value = "name") String name){
+		
+		boolean retVal = true;
+		
+		Host myHostData = agentsService.getMainNode();
+		for (Iterator<AgentType> i = agentsService.getAllSupportedAgentTypes().iterator(); i.hasNext();) {
+			AgentType item = i.next();
+			if(item.getName().equals(name)) {
+				AgentInterface myAgent = AgentsFactory.createAgent(name, myHostData, item);
+			}
+		}
+		
+		return retVal;
 	}
 	
 	@POST
