@@ -45,6 +45,7 @@ public class RestHandshakeService {
 		return nodeRegistrator.getSlaves();
 	}
 	
+	
 	public boolean sendRegisteredSlaveToSlaves(Host newSlave) {
 		boolean isSuccess = true;
 		

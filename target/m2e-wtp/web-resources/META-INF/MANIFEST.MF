@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 Manifest-Version: 1.0
 Built-By: Tima
 Build-Jdk: 1.8.0_171
 Created-By: Maven Integration for Eclipse
 
+=======
+Manifest-Version: 1.0
+Built-By: D1
+Build-Jdk: 1.8.0_161
+Created-By: Maven Integration for Eclipse
+
+>>>>>>> ab946150f24c93e35963bee50ca1cb9b4d12d1f5

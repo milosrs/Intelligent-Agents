@@ -16,6 +16,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.AgentType;
 import beans.Host;
 import interfaces.AgentInterface;
 import requestSenders.RestHandshakeRequestSender;
@@ -95,14 +96,14 @@ public class RestController {
 	@Path("/node/{alias}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean deleteNode(@PathParam(value = "alias") String alias, ArrayList<AgentInterface> agentsToDelete){
+	public boolean deleteNode(@PathParam(value = "alias") String alias, ArrayList<AgentType> agentsToDelete){
 		
 		boolean retVal = true;
 				
 		boolean hasDeleted = agentsService.getSlaveNodes().removeIf(x -> x.getAlias().equals(alias));
 		boolean hasRemoved = true;
 		if(!agentsToDelete.isEmpty())
-			hasRemoved = agentsService.getAllAgents().remove(agentsToDelete);
+			hasRemoved = agentsService.getAllSupportedAgentTypes().remove(agentsToDelete);
 			
 		if(!hasDeleted || !hasRemoved)
 			retVal = false;
