@@ -4,6 +4,8 @@ import interfaces.AgentInterface;
 
 public class PongAgent extends AgentClass implements AgentInterface{
 
+	private static final long serialVersionUID = 1L;
+	
 	private AID aid;
 		
 	public PongAgent(AID aid) {

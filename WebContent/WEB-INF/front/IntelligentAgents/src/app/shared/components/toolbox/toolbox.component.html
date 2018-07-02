@@ -6,7 +6,7 @@
       &nbsp;
   </div>
   <div class="row NoFlex FormText">
-    <form class="form-control Background" *ngIf='isRunningAgent;else form2'>
+    <form class="form-control Background" *ngIf='!isRunningAgent;else form2'>
       <h3>Agent type: <b class="AgentTypeText">Type1</b></h3>
       &nbsp;
       <h3>Agent name</h3>

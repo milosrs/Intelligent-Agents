@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 //import javax.ejb.Stateless;
@@ -15,6 +16,7 @@ import javax.management.MBeanException;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.management.ReflectionException;
+import javax.naming.NamingException;
 
 import org.jboss.as.cli.CommandLineException;
 
@@ -35,6 +37,8 @@ public class GetHostDataService implements Runnable {
 	/*@Inject
 	private NodeRegistrator nodeRegistrator;*/
 	
+	private JndiTreeParser jndiTreeParser;
+	
 	private AgentsService agentsService;
 	
 	private Host host;
@@ -51,6 +55,7 @@ public class GetHostDataService implements Runnable {
 		this.mainNodeDetails = "";
 		this.host = null;
 		this.agentsService = as;
+		this.jndiTreeParser = new JndiTreeParser();
 	}
 	
 	@Override
@@ -83,11 +88,22 @@ public class GetHostDataService implements Runnable {
 		if(!this.mainNodeDetails.equals(this.host.getHostAddress())) {
 			//add me to the slaves list
 			this.agentsService.getSlaveNodes().add(this.host);
+			
 			//add the main node to the service
 			Host mainNode = new Host(this.mainNodeDetails, "mainNode");
 			this.agentsService.setMainNode(mainNode);
 			
-			//get my agent types + start handshake
+			//get and set my agent types
+			ArrayList<AgentType> myAgentTypes = new ArrayList<AgentType>();
+			try {
+				myAgentTypes = (ArrayList<AgentType>)jndiTreeParser.parse();
+			} catch (NamingException e) {
+				e.printStackTrace();
+			}		
+			this.agentsService.setMySupportedAgentTypes(myAgentTypes);
+			this.agentsService.setAllSupportedAgentTypes(myAgentTypes);
+			
+			//start rest handshake
 			
 			//setSlavery(mainNode);
 		}
@@ -103,7 +119,15 @@ public class GetHostDataService implements Runnable {
 			agentsList.add(pongAgent);
 			this.agentsService.setRunningAgents(agentsList);
 			
-			//get my agent types
+			//get and set my agent types
+			ArrayList<AgentType> myAgentTypes = new ArrayList<AgentType>();
+			try {
+				myAgentTypes = (ArrayList<AgentType>)jndiTreeParser.parse();
+			} catch (NamingException e) {
+				e.printStackTrace();
+			}		
+			this.agentsService.setMySupportedAgentTypes(myAgentTypes);
+			this.agentsService.setAllSupportedAgentTypes(myAgentTypes);
 			
 			//setMastery(me);
 		}
