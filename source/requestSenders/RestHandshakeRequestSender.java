@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -24,14 +25,17 @@ public class RestHandshakeRequestSender {
 	private static String HTTP_URL = "http://";
 	private static String NODE_URL = "/Inteligent_Agents/rest/app";
 	
-	public Response getRunningAgents(String hostAddress) {
+	@PostConstruct
+	public void init() {
 		restClient = ClientBuilder.newClient();
+	}
+	
+	public Response getRunningAgents(String hostAddress) {
 		webTarget = restClient.target(HTTP_URL + hostAddress + NODE_URL + "/agents/running");
 		return webTarget.request(MediaType.APPLICATION_JSON).get();
 	}
 	
 	public Response deleteAgents(Host host, ArrayList<AgentType> agentsToDelete) {
-		restClient = ClientBuilder.newClient();
 		webTarget = restClient.target(HTTP_URL + host.getHostAddress() + NODE_URL + "/node/{" + host.getAlias() + "}");
 		return webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agentsToDelete, MediaType.APPLICATION_JSON));
 	}
@@ -40,7 +44,6 @@ public class RestHandshakeRequestSender {
 	public List<Host> registerSlaveNode(String url, Host newSlave) {
 		List<Host> slaves = null;
 		
-		restClient = ClientBuilder.newClient();
 		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/node");
 		Response regResp = webTarget.request(MediaType.APPLICATION_JSON)
 										.post(Entity.entity(newSlave, MediaType.APPLICATION_JSON));
@@ -64,7 +67,6 @@ public class RestHandshakeRequestSender {
 	public List<AgentType> fetchAgentTypeList(String url) {
 		List<AgentType> retList = null;
 		
-		restClient = ClientBuilder.newClient();
 		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/agents/classes");
 		Response resp = webTarget.request().get();
 		
@@ -86,7 +88,6 @@ public class RestHandshakeRequestSender {
 	public boolean sendNewAgentTypesToSlave(String url, List<AgentType> agents) {
 		boolean success = true;
 
-		restClient = ClientBuilder.newClient();
 		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/agents/classes");
 		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agents, MediaType.APPLICATION_JSON));
 		

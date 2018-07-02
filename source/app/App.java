@@ -43,8 +43,8 @@ public class App extends Application {
 			hostname = InetAddress.getLocalHost().getHostName();
 			System.out.println("Hostname/IP: " + ip + " Hostname: " + hostname);
 			
-			//touch singleton to work properly
-			as.hackz();
+//			//touch singleton to work properly
+//			as.hackz();
 			
 			//await for jboss to start and then get the port and initialize the node-handshake
 			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname, as);

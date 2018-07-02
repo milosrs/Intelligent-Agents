@@ -24,13 +24,10 @@ import beans.AID;
 import beans.AgentType;
 import beans.Host;
 import beans.PongAgent;
-<<<<<<< HEAD
 import beans.enums.NodeType;
 import registrators.NodeRegistrator;
 import requestSenders.AdminConsoleRequestSender;
-=======
 import interfaces.AgentInterface;
->>>>>>> e73c930e996e3b62f961b7a8608e56a936ff9123
 //import beans.enums.NodeType;
 //import registrators.NodeRegistrator;
 import requestSenders.RestHandshakeRequestSender;
@@ -38,17 +35,9 @@ import requestSenders.RestHandshakeRequestSender;
 public class GetHostDataService implements Runnable {
 	@Inject
 	private RestHandshakeRequestSender requestSender;
-<<<<<<< HEAD
 	@Inject
 	private NodeRegistrator nodeRegistrator;
-=======
-	
-	/*@Inject
-	private NodeRegistrator nodeRegistrator;*/
-	
 	private JndiTreeParser jndiTreeParser;
-	
->>>>>>> e73c930e996e3b62f961b7a8608e56a936ff9123
 	private AgentsService agentsService;
 	private Host host;
 	private String mainNodeDetails;
@@ -70,15 +59,13 @@ public class GetHostDataService implements Runnable {
 	public void run() {
 		
 		try {
-			Host test = getHostData();
+			host = getHostData();
 		} catch (InstanceNotFoundException | AttributeNotFoundException | MalformedObjectNameException
 				| ReflectionException | MBeanException | CommandLineException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.mainNodeDetails = getMainNodeDetails();
-		
-		this.agentsService.hackz();
 		
 		//i am a slave node, initialize handshake
 		if(!this.mainNodeDetails.equals(this.host.getHostAddress())) {
