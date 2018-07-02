@@ -4,7 +4,8 @@ import { HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 
-import { Agent } from '../shared/model/agent';
+import { AgentTypeDTO } from '../shared/model/agent-type-dto';
+import { Aid } from '../shared/model/aid';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -20,7 +21,11 @@ export class RestServiceService {
 
   constructor(private http: HttpClient) {}
 
+  getAllAgentTypes () {
+    return this.http.get<AgentTypeDTO[]>(this.SERVER_URL + '/agents/classes');
+  }
+
   getRunningAgents () {
-    return this.http.get<Agent[]>(this.SERVER_URL + '/agents/running');
+    return this.http.get<Aid[]>(this.SERVER_URL + '/agents/running');
   }
 }

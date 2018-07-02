@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ListItem } from '../../model/list-item';
 import { HelperFunctions } from '../../util/helper-functions';
 import { HttpClient } from '@angular/common/http';
-import { Agent } from '../../model/agent';
+import { AgentTypeDTO } from '../../model/agent-type-dto';
+import { Aid } from '../../model/aid';
 import { RestServiceService } from '../../../services/rest-service.service';
 
 @Component({
@@ -12,17 +13,25 @@ import { RestServiceService } from '../../../services/rest-service.service';
 })
 export class HomeComponent implements OnInit {
 
-  private mockItems: ListItem[];
+  // private mockItems: ListItem[];
 
-  private runningAgents: Agent[];
+  // private dummyObj =  {'name' : 'Djes bracooo!'};
 
-  private dummyObj =  {'name' : 'Djes bracooo!'};
+  private agentTypes: AgentTypeDTO[];
+
+  private runningAgents: Aid[];
 
   constructor(private http: HttpClient, private restService: RestServiceService) { }
 
   ngOnInit() {
-    this.mockItems = HelperFunctions.createDummyTest(this.dummyObj);
+    // this.mockItems = HelperFunctions.createDummyTest(this.dummyObj);
+    this.getAgentTypes();
     this.getRunningAgents();
+  }
+
+  getAgentTypes(): void {
+    this.restService.getAllAgentTypes()
+      .subscribe(agentTypes => {console.log(agentTypes); this.agentTypes = agentTypes; });
   }
 
   getRunningAgents(): void {

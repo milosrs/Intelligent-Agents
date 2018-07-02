@@ -2,7 +2,7 @@ package beans;
 
 import interfaces.AgentInterface;
 
-public class PongAgent extends AgentClass implements AgentInterface{
+public class PongAgent implements AgentInterface{
 
 	private static final long serialVersionUID = 1L;
 	

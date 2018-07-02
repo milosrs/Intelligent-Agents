@@ -1,12 +1,19 @@
 package beans;
 
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
+import javax.inject.Inject;
 
-import interfaces.AgentInterface;
-
-@Stateless
-public abstract class AgentClass{
+@Stateful
+public abstract class AgentClass {
 
 	private AID aid;
 	
+	@Inject
+	public AgentClass (AID aid) {
+		this.aid = aid;
+	}
+	
+	public AgentClass () {
+		this.aid = null;
+	}
 }
