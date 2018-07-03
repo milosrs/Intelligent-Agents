@@ -15,6 +15,7 @@ import { SearchComponent } from './shared/components/search/search.component';
 import { HomeComponent } from './components/home/home.component';
 import { ToolboxComponent } from './components/toolbox/toolbox.component';
 import { ConsoleComponent } from './components/console/console.component';
+import { SocketService } from './services/socket.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,7 @@ import { ConsoleComponent } from './components/console/console.component';
   ],
   exports: [
   ],
-  providers: [
+  providers: [ SocketService
   ],
   bootstrap: [AppComponent]
 })
