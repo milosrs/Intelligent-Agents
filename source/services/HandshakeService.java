@@ -34,54 +34,15 @@ public class HandshakeService {
 		List<Host> slaves = agentsService.getSlaveNodes();
 			
 		for (Host slave : slaves) {
-			if (slave.getHostAddress().equals(newSlave.getHostAddress())
-					|| slave.getAlias().equals(newSlave.getAlias())) {
+			if (slave.equals(newSlave)) {
 				isSuccess = false;
 				break;
 			}
 		}
 
 		if (isSuccess) {
-			int currentHandshakeAttempt = 0;
-			int option = 0;
-			
 			if(agentsService.getNodeType().equals(NodeType.MASTER)) {
-				while(currentHandshakeAttempt < 3 && option <= 5) {
-					switch(option) {
-					case 0: {
-						List<AgentTypeDTO> dtos = new ArrayList<AgentTypeDTO>();
-						supported = requestSender.fetchAgentTypeList(newSlave.getHostAddress());
-						supported.stream().forEach(type -> {
-							AgentTypeDTO addme = new AgentTypeDTO();
-							addme.convertToDTO(type, newSlave);
-							dtos.add(addme);	
-						});
-						this.agentsService.addNewAgentTypes(dtos);
-						
-						break;
-					}
-					case 1: isSuccess = sendRegisteredSlaveToSlaves(newSlave); break;
-					case 2: isSuccess = sendNewAgentTypesToAllSlaves(supported);  break;
-					case 3: isSuccess = sendSlaveListToNewSlave(newSlave.getHostAddress()); break;
-					case 4: isSuccess = sendAgentTypesToNewSlave(newSlave.getHostAddress(), agentsService.getAllSupportedAgentTypes()); break;
-					case 5: isSuccess = sendRunningAgentsToNewSlave(newSlave.getHostAddress(), agentsService.getAllRunningAgents()); break;
-					default: System.out.println("Handshake successfull!"); break;
-					}
-					
-					if(!isSuccess) {
-						currentHandshakeAttempt++;
-						try {
-							System.out.println("Retrying handshake in 1.5s");
-							Thread.sleep(1500);
-						} catch(Exception e) {
-							System.out.println("Error in handshake, at sleeping");
-							e.printStackTrace();
-						}
-						continue;
-					} else {
-						option++;
-					}
-				}
+				isSuccess = tryHandshake(newSlave);	
 			}
 			if(isSuccess) {
 				agentsService.getSlaveNodes().add(newSlave);	
@@ -94,6 +55,56 @@ public class HandshakeService {
 		return agentsService.getSlaveNodes();
 	}
 	
+	private boolean tryHandshake(Host newSlave) {
+		boolean isSuccess = true;
+		int currentHandshakeAttempt = 0;
+		int option = 0;
+		
+		if(agentsService.getNodeType().equals(NodeType.MASTER)) {
+			System.out.println("Initializing handshake for slave: " + newSlave.getAlias());
+			while(currentHandshakeAttempt < 3 && option <= 5) {
+				switch(option) {
+				case 0: {
+					List<AgentTypeDTO> dtos = new ArrayList<AgentTypeDTO>();
+					supported = requestSender.fetchAgentTypeList(newSlave.getHostAddress());
+					
+					if (supported != null) {
+						supported.stream().forEach(type -> {
+							AgentTypeDTO addme = new AgentTypeDTO();
+							addme.convertToDTO(type, newSlave);
+							dtos.add(addme);	
+						});
+						this.agentsService.addNewAgentTypes(dtos);	
+					}
+					
+					break;
+				}
+				case 1: isSuccess = sendRegisteredSlaveToSlaves(newSlave); break;
+				case 2: isSuccess = sendNewAgentTypesToAllSlaves(supported);  break;
+				case 3: isSuccess = sendSlaveListToNewSlave(newSlave.getHostAddress()); break;
+				case 4: isSuccess = sendAgentTypesToNewSlave(newSlave.getHostAddress(), agentsService.getAllSupportedAgentTypes()); break;
+				case 5: isSuccess = sendRunningAgentsToNewSlave(newSlave.getHostAddress(), agentsService.getAllRunningAgents()); break;
+				default: System.out.println("Handshake successfull!"); break;
+				}
+				
+				if(!isSuccess) {
+					currentHandshakeAttempt++;
+					try {
+						System.out.println("Retrying handshake in 1.5s");
+						Thread.sleep(1500);
+					} catch(Exception e) {
+						System.out.println("Error in handshake, at sleeping");
+						e.printStackTrace();
+					}
+					continue;
+				} else {
+					option++;
+				}
+			}
+		}
+		
+		return isSuccess;
+	}
 	
 //	private void rollback(int option, Host newSlave) {
 //		if(option > 2) {

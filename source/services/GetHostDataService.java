@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -118,6 +119,13 @@ public class GetHostDataService implements Runnable {
 		}		
 		this.agentsService.setMySupportedAgentTypes(myAgentTypes);
 		
+		List<AgentTypeDTO> dtos = new ArrayList<AgentTypeDTO>();
+		this.agentsService.getMySupportedAgentTypes().stream().forEach(type -> {
+			AgentTypeDTO dto = new AgentTypeDTO();
+			dto.convertToDTO(type, this.host);
+		});
+		this.agentsService.setAllSupportedAgentTypes(dtos);
+		
 		for(Iterator<AgentType> i = myAgentTypes.iterator(); i.hasNext();) {
 			AgentTypeDTO listItem = new AgentTypeDTO();
 			listItem.convertToDTO(i.next(), this.host);
@@ -143,6 +151,13 @@ public class GetHostDataService implements Runnable {
 		}		
 		this.agentsService.setMySupportedAgentTypes(myAgentTypes);
 		
+		List<AgentTypeDTO> dtos = new ArrayList<AgentTypeDTO>();
+		this.agentsService.getMySupportedAgentTypes().stream().forEach(type -> {
+			AgentTypeDTO dto = new AgentTypeDTO();
+			dto.convertToDTO(type, this.host);
+		});
+		this.agentsService.setAllSupportedAgentTypes(dtos);
+		
 		for(Iterator<AgentType> i = myAgentTypes.iterator(); i.hasNext();) {
 			AgentTypeDTO listItem = new AgentTypeDTO();
 			listItem.convertToDTO(i.next(), this.host);
@@ -152,14 +167,18 @@ public class GetHostDataService implements Runnable {
 
 	public boolean sendAdminRequest(int portOffset) {
 		boolean isUpAndRunning = false;
-		
+		int currentManagementPing = 0;
 		adminRequestSender = new AdminConsoleRequestSender();
 		isUpAndRunning = adminRequestSender.isWildflyRunning(null, portOffset);
 		
 		try {
-			while(!isUpAndRunning) {
+			while(!isUpAndRunning && currentManagementPing < 50) {
 				Thread.sleep(500);
 				isUpAndRunning = adminRequestSender.isWildflyRunning(null, portOffset);
+			}
+			if(!isUpAndRunning) {
+				System.out.println("Application start failed.\nReason 1: You must have a management user.\nReason 2: Deploy failed");
+				System.exit(1);
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
