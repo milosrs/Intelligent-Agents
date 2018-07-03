@@ -12,11 +12,13 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.AID;
 import beans.AgentType;
+import beans.AgentTypeDTO;
 import beans.Host;
 
 @Stateless
-public class RestHandshakeRequestSender {
+public class HandshakeRequestSender {
 	private Client restClient;
 	private WebTarget webTarget;
 	private static String HTTP_URL = "http://";
@@ -97,6 +99,69 @@ public class RestHandshakeRequestSender {
 		} catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("Error posting agent types list to slave: " + url);
+			success = false;
+		}
+		
+		return success;
+	}
+	
+	public boolean sendExistingSlavesToNewSlave(String url, List<Host> slaves) {
+		boolean success = true;
+
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/agents/classes");
+		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(slaves, MediaType.APPLICATION_JSON));
+		
+		try {
+			Object responseEntity = resp.getEntity();
+			
+			if(responseEntity instanceof Boolean) {
+				success = (Boolean) responseEntity;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Error posting slave list to slave: " + url);
+			success = false;
+		}
+		
+		return success;
+	}
+	
+	public boolean sendAllRunningAgentsToNewSlave(String url, List<AID> runningAgents) {
+		boolean success = true;
+
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/agents/running");
+		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(runningAgents, MediaType.APPLICATION_JSON));
+		
+		try {
+			Object responseEntity = resp.getEntity();
+			
+			if(responseEntity instanceof Boolean) {
+				success = (Boolean) responseEntity;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Error posting slave list to slave: " + url);
+			success = false;
+		}
+		
+		return success;
+	}
+
+	public boolean sendAgentTypesToNewSlave(String url, List<AgentTypeDTO> allSupportedAgentTypes) {
+		boolean success = true;
+
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/agents/running");
+		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(allSupportedAgentTypes, MediaType.APPLICATION_JSON));
+		
+		try {
+			Object responseEntity = resp.getEntity();
+			
+			if(responseEntity instanceof Boolean) {
+				success = (Boolean) responseEntity;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Error posting slave list to slave: " + url);
 			success = false;
 		}
 		

@@ -6,6 +6,7 @@ import { AgentTypeDTO } from '../../model/agent-type-dto';
 import { Aid } from '../../model/aid';
 import { RestServiceService } from '../../services/rest-service.service';
 import { ToolboxComponent } from '../toolbox/toolbox.component';
+import { SocketService } from '../../services/socket.service';
 
 @Component({
   selector: 'app-home',
@@ -17,11 +18,12 @@ export class HomeComponent implements OnInit {
   private runningAgents: Aid[];
   @ViewChild(ToolboxComponent) toolboxComp: ToolboxComponent;
 
-  constructor(private http: HttpClient, private restService: RestServiceService) { }
+  constructor(private http: HttpClient, private restService: RestServiceService, private socketService : SocketService) { }
 
   ngOnInit() {
     this.getAgentTypes();
     this.getRunningAgents();
+    this.startSocket();
   }
 
   getAgentTypes(): void {
@@ -53,4 +55,13 @@ export class HomeComponent implements OnInit {
   startAgentEvent(agent: Aid) {
     this.runningAgents.push(agent);
   }
+
+  startSocket(){
+    this.socketService.initSocket();
+
+    this.socketService.getSocket().onmessage = (event) => { 
+      console.log("agsg");
+    }
+  }
+
 }

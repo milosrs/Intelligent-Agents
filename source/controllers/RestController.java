@@ -23,9 +23,9 @@ import beans.Host;
 import factories.AgentsFactory;
 import interfaces.AgentInterface;
 import requestSenders.ClientRequestSender;
-import requestSenders.RestHandshakeRequestSender;
+import requestSenders.HandshakeRequestSender;
 import services.AgentsService;
-import services.RestHandshakeService;
+import services.HandshakeService;
 
 @Path("/app")
 public class RestController {
@@ -34,10 +34,10 @@ public class RestController {
 	private AgentsService agentsService;
 	
 	@Inject
-	private RestHandshakeService restHandshakeService;
+	private HandshakeService restHandshakeService;
 	
 	@Inject
-	private RestHandshakeRequestSender requestSender;
+	private HandshakeRequestSender requestSender;
 	
 	@Inject
 	private ClientRequestSender clientRequestSender;
@@ -48,19 +48,6 @@ public class RestController {
 	public String node() {
 		
 		return "ACTIVE";
-	}
-	
-	@GET
-	@Path("/agents/classes")
-	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<AgentTypeDTO> getAllAgentTypes(){
-		
-		ArrayList<AgentTypeDTO> retList = new ArrayList<AgentTypeDTO>();
-		
-		for (Iterator<AgentTypeDTO> i = agentsService.getAllSupportedAgentTypes().iterator(); i.hasNext();)
-		    retList.add(i.next());
-		
-		return retList;
 	}
 	
 	@GET
@@ -132,16 +119,6 @@ public class RestController {
 		return retStr;
 	}
 	
-	@POST
-	@Path("/agents/running")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void postRunningAgents(ArrayList<AID> agentsList){
-		
-		for (Iterator<AID> i = agentsList.iterator(); i.hasNext();)
-			agentsService.getAllRunningAgents().add(i.next());
-		
-	}
-	
 	/*@POST
 	@Path("/agents/running")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -182,24 +159,4 @@ public class RestController {
 		
 		return retList;
 	}*/
-	
-	@SuppressWarnings("unlikely-arg-type")
-	@DELETE
-	@Path("/node/{alias}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public boolean deleteNode(@PathParam(value = "alias") String alias, ArrayList<AgentType> agentsToDelete){
-		
-		boolean retVal = true;
-				
-		boolean hasDeleted = agentsService.getSlaveNodes().removeIf(x -> x.getAlias().equals(alias));
-		boolean hasRemoved = true;
-		if(!agentsToDelete.isEmpty())
-			hasRemoved = agentsService.getAllSupportedAgentTypes().remove(agentsToDelete);
-			
-		if(!hasDeleted || !hasRemoved)
-			retVal = false;
-			
-		return retVal;
-	}
 }

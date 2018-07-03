@@ -27,11 +27,11 @@ import beans.Host;
 import beans.enums.NodeType;
 import config.HeartbeatInvoker;
 import requestSenders.AdminConsoleRequestSender;
-import requestSenders.RestHandshakeRequestSender;
+import requestSenders.HandshakeRequestSender;
 
 public class GetHostDataService implements Runnable {
 	
-	private RestHandshakeRequestSender requestSender;
+	private HandshakeRequestSender requestSender;
 	private HeartbeatInvoker heartbeat;	
 	private JndiTreeParser jndiTreeParser;
 	private AgentsService agentsService;
@@ -43,7 +43,7 @@ public class GetHostDataService implements Runnable {
 	private AdminConsoleRequestSender adminRequestSender;
 	
 	public GetHostDataService (String ip, String hostname, AgentsService as, 
-			JndiTreeParser jtp, HeartbeatInvoker hbi, RestHandshakeRequestSender rhs) {
+			JndiTreeParser jtp, HeartbeatInvoker hbi, HandshakeRequestSender rhs) {
 		this.hostname = hostname;
 		this.ip = ip;
 		this.mainNodeDetails = "";
@@ -81,7 +81,7 @@ public class GetHostDataService implements Runnable {
 			this.mainNodeDetails = getMainNodeDetails();
 			
 			//i am a slave node, initialize handshake
-			if(!this.mainNodeDetails.contains(this.host.getHostAddress().split(":")[1])) {
+			if(!this.mainNodeDetails.equals(this.host.getHostAddress())) {
 				//set my data
 				setSlaveData();
 				
@@ -93,7 +93,7 @@ public class GetHostDataService implements Runnable {
 				
 				//initialize heartbeat
 				ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-				executor.scheduleAtFixedRate(heartbeat, 0, 180, TimeUnit.SECONDS);
+				executor.scheduleAtFixedRate(heartbeat, 180, 180, TimeUnit.SECONDS);
 			}	
 		}
 		else {//kill the app
@@ -189,7 +189,8 @@ public class GetHostDataService implements Runnable {
 		this.portOffset = portOffset;
 		this.agentsService.setPortOffset(portOffset);
 		
-		String address = this.ip.toString().split("/")[1] + ":" + portValue;
+//		String address = this.ip.toString().split("/")[1] + ":" + portValue;	Domain scenario
+		String address = "localhost:" + portValue;
 		String alias = host + "/" + this.hostname;
 		ret.setAlias(alias);
 		ret.setHostAddress(address);
