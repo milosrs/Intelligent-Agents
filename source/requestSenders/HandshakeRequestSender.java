@@ -9,8 +9,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.json.simple.JSONArray;
 
 import beans.AID;
 import beans.AgentType;
@@ -70,9 +73,10 @@ public class HandshakeRequestSender {
 		Response resp = webTarget.request().get();
 		
 		try {
-			Object responseEntity = resp.getEntity();
+			Object responseEntity = resp.readEntity(new GenericType<List<AgentTypeDTO>>() {});
 			
-			if(responseEntity instanceof List<?>) {
+			
+			if(responseEntity instanceof ArrayList || responseEntity instanceof List) {
 				retList = (List<AgentType>) responseEntity;
 			}
 		} catch(Exception e) {
