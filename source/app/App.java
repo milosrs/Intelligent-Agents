@@ -14,7 +14,6 @@ import javax.ws.rs.core.Response;
 
 import beans.Host;
 import config.HeartbeatInvoker;
-import registrators.NodeRegistrator;
 import requestSenders.RestHandshakeRequestSender;
 import services.AgentsService;
 import services.GetHostDataService;

@@ -81,7 +81,7 @@ public class GetHostDataService implements Runnable {
 			this.mainNodeDetails = getMainNodeDetails();
 			
 			//i am a slave node, initialize handshake
-			if(!this.mainNodeDetails.equals(this.host.getHostAddress())) {
+			if(!this.mainNodeDetails.contains(this.host.getHostAddress().split(":")[1])) {
 				//set my data
 				setSlaveData();
 				
