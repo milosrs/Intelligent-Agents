@@ -46,9 +46,20 @@ public class HandshakeService {
 			int option = 0;
 			
 			if(agentsService.getNodeType().equals(NodeType.MASTER)) {
-				while(currentHandshakeAttempt < 3) {
+				while(currentHandshakeAttempt < 3 && option <= 5) {
 					switch(option) {
-					case 0: supported = requestSender.fetchAgentTypeList(newSlave.getHostAddress()); break;
+					case 0: {
+						List<AgentTypeDTO> dtos = new ArrayList<AgentTypeDTO>();
+						supported = requestSender.fetchAgentTypeList(newSlave.getHostAddress());
+						supported.stream().forEach(type -> {
+							AgentTypeDTO addme = new AgentTypeDTO();
+							addme.convertToDTO(type, newSlave);
+							dtos.add(addme);	
+						});
+						this.agentsService.addNewAgentTypes(dtos);
+						
+						break;
+					}
 					case 1: isSuccess = sendRegisteredSlaveToSlaves(newSlave); break;
 					case 2: isSuccess = sendNewAgentTypesToAllSlaves(supported);  break;
 					case 3: isSuccess = sendSlaveListToNewSlave(newSlave.getHostAddress()); break;
@@ -60,6 +71,7 @@ public class HandshakeService {
 					if(!isSuccess) {
 						currentHandshakeAttempt++;
 						try {
+							System.out.println("Retrying handshake in 1.5s");
 							Thread.sleep(1500);
 						} catch(Exception e) {
 							System.out.println("Error in handshake, at sleeping");
