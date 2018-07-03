@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.AgentType;
+import beans.AgentTypeDTO;
 import beans.Host;
 import interfaces.AgentInterface;
 import services.RestHandshakeService;
@@ -46,7 +47,7 @@ public class HandshakeController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/agents/classes")
-	public Response registerNewAgentClasses(List<AgentType> agentTypes) {
+	public Response registerNewAgentClasses(List<AgentTypeDTO> agentTypes) {
 		boolean success = handshakeService.addNewAgentTypes(agentTypes);
 		
 		return Response.ok(success).build();

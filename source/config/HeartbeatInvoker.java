@@ -1,18 +1,17 @@
 package config;
 
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import services.AgentsService;
 
-import registrators.NodeRegistrator;
-
-@Stateless
 public class HeartbeatInvoker implements Runnable {
 
-	@Inject
-	private NodeRegistrator registrator;
+	private AgentsService agentsService;
+	
+	public void init (AgentsService as) {
+		this.agentsService = as;
+	}
 	
 	@Override
 	public void run() {
-		registrator.checkSlavesHealth();
+		agentsService.checkSlavesHealth();
 	}
 }

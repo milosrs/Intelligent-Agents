@@ -13,6 +13,8 @@ import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Response;
 
 import beans.Host;
+import config.HeartbeatInvoker;
+import registrators.NodeRegistrator;
 import requestSenders.RestHandshakeRequestSender;
 import services.AgentsService;
 import services.GetHostDataService;
@@ -39,6 +41,9 @@ public class App extends Application {
 	@Inject
 	private JndiTreeParser jtp;
 	
+	@Inject
+	private RestHandshakeRequestSender rhs;
+	
 	@PostConstruct
 	public void init() {
 		try {
@@ -51,7 +56,7 @@ public class App extends Application {
 			as.firstTouch();
 			
 			//await for jboss to start and then get the port and initialize the node-handshake
-			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname, as, jtp);
+			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname, as, jtp, new HeartbeatInvoker(), rhs);
 			Thread t = new Thread(getHostDataService);
 			t.start();
 			

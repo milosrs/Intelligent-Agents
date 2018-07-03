@@ -11,7 +11,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
 import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanException;
@@ -22,27 +21,18 @@ import javax.naming.NamingException;
 
 import org.jboss.as.cli.CommandLineException;
 
-import beans.AID;
 import beans.AgentType;
 import beans.AgentTypeDTO;
 import beans.Host;
-import beans.PongAgent;
 import beans.enums.NodeType;
 import config.HeartbeatInvoker;
-import registrators.NodeRegistrator;
 import requestSenders.AdminConsoleRequestSender;
-import interfaces.AgentInterface;
 import requestSenders.RestHandshakeRequestSender;
 
 public class GetHostDataService implements Runnable {
 	
-	@Inject
 	private RestHandshakeRequestSender requestSender;
-	@Inject
-	private NodeRegistrator nodeRegistrator;
-	@Inject
-	private HeartbeatInvoker heartbeat;
-	
+	private HeartbeatInvoker heartbeat;	
 	private JndiTreeParser jndiTreeParser;
 	private AgentsService agentsService;
 	private Host host;
@@ -50,10 +40,10 @@ public class GetHostDataService implements Runnable {
 	private String ip;
 	private String hostname;
 	private int portOffset;
-	private final int maxPingTrials = 100;
 	private AdminConsoleRequestSender adminRequestSender;
 	
-	public GetHostDataService (String ip, String hostname, AgentsService as, JndiTreeParser jtp) {
+	public GetHostDataService (String ip, String hostname, AgentsService as, 
+			JndiTreeParser jtp, HeartbeatInvoker hbi, RestHandshakeRequestSender rhs) {
 		this.hostname = hostname;
 		this.ip = ip;
 		this.mainNodeDetails = "";
@@ -61,6 +51,9 @@ public class GetHostDataService implements Runnable {
 		this.portOffset = 0;
 		this.agentsService = as;
 		this.jndiTreeParser = jtp;
+		this.heartbeat = hbi;
+		this.heartbeat.init(this.agentsService);
+		this.requestSender = rhs;
 	}
 	
 	@Override
@@ -68,103 +61,96 @@ public class GetHostDataService implements Runnable {
 		
 		//await for jboss startup
 		try {
-			Thread.sleep(30000);
+			Thread.sleep(15000);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		
+		//try reading host data from socket-bindings
 		try {
 			host = getHostData();
 		} catch (InstanceNotFoundException | AttributeNotFoundException | MalformedObjectNameException
 				| ReflectionException | MBeanException | CommandLineException e) {
 			e.printStackTrace();
 		}
-		this.mainNodeDetails = getMainNodeDetails();
 		
-		//i am a slave node, initialize handshake
-		if(!this.mainNodeDetails.equals(this.host.getHostAddress())) {
-			//add my host data
-			this.agentsService.setMyHostInfo(this.host);
+		//check if server is up and running
+		boolean isRunning = sendAdminRequest(this.portOffset);
+		
+		if(isRunning) {//startup settings
+			this.mainNodeDetails = getMainNodeDetails();
 			
-			//add the main node data
-			Host mainNode = new Host(this.mainNodeDetails, "mainNode");
-			this.agentsService.setMainNode(mainNode);
-			
-			//get and set my agent types
-			ArrayList<AgentType> myAgentTypes = new ArrayList<AgentType>();
-			try {
-				myAgentTypes = (ArrayList<AgentType>)jndiTreeParser.parse();
-			} catch (NamingException e) {
-				e.printStackTrace();
-			}		
-			this.agentsService.setMySupportedAgentTypes(myAgentTypes);
-			
-			for(Iterator<AgentType> i = myAgentTypes.iterator(); i.hasNext();) {
-				AgentTypeDTO listItem = new AgentTypeDTO();
-				listItem.convertToDTO(i.next(), this.host);
-				this.agentsService.getAllSupportedAgentTypes().add(listItem);
+			//i am a slave node, initialize handshake
+			if(!this.mainNodeDetails.equals(this.host.getHostAddress())) {
+				//set my data
+				setSlaveData();
+				
+				//start rest handshake
+				requestSender.registerSlaveNode(this.mainNodeDetails, this.host);
 			}
-			
-			//start rest handshake
-
+			else { //i am the master, save my data
+				setMasterData();
+				
+				//initialize heartbeat
+				ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+				executor.scheduleAtFixedRate(heartbeat, 0, 180, TimeUnit.SECONDS);
+			}	
 		}
-		else { //i am the master, save my data
-			//add the main node data
-			this.agentsService.setMainNode(this.host);
-			
-			//add my host data
-			this.agentsService.setMyHostInfo(this.host);
-			
-			/*//mock of runningAgents
-			AgentType pong = new AgentType("pong1", "PONG");
-			AID aid = new AID("pongAgent", this.host, pong);
-			ArrayList<AID> allAgentsList = new ArrayList<AID>();			
-			allAgentsList.add(aid);
-			this.agentsService.setAllRunningAgents(allAgentsList);
-			
-			PongAgent pongAgent = new PongAgent(aid);
-			ArrayList<AgentInterface> agentsList = new ArrayList<AgentInterface>();
-			agentsList.add(pongAgent);
-			this.agentsService.setMyRunningAgents(agentsList);
-			//end mock*/
-			
-			
-			//get and set my agent types
-			ArrayList<AgentType> myAgentTypes = new ArrayList<AgentType>();
-			try {
-				myAgentTypes = (ArrayList<AgentType>)jndiTreeParser.parse();
-			} catch (NamingException e) {
-				e.printStackTrace();
-			}		
-			this.agentsService.setMySupportedAgentTypes(myAgentTypes);
-			
-			for(Iterator<AgentType> i = myAgentTypes.iterator(); i.hasNext();) {
-				AgentTypeDTO listItem = new AgentTypeDTO();
-				listItem.convertToDTO(i.next(), this.host);
-				this.agentsService.getAllSupportedAgentTypes().add(listItem);
-			}
-			
+		else {//kill the app
+			System.exit(1);
 		}
 	}
 	
-	/*private void setMastery(Host mainNode) {
-		nodeRegistrator.setNodeType(NodeType.MASTER);
-		nodeRegistrator.setMaster(mainNode);
-		nodeRegistrator.setThisNodeInfo(mainNode);
+	private void setMasterData() {
+		//add the main node data
+		this.agentsService.setMainNode(this.host);
 		
-		//Ako sve uspe, zapocni heartbeat
-		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-		executor.scheduleAtFixedRate(heartbeat, 0, 180, TimeUnit.SECONDS);
+		//add my host data
+		this.agentsService.setMyHostInfo(this.host);					
+		this.agentsService.setNodeType(NodeType.MASTER);
+		
+		//get and set my agent types
+		ArrayList<AgentType> myAgentTypes = new ArrayList<AgentType>();
+		try {
+			myAgentTypes = (ArrayList<AgentType>)jndiTreeParser.parse();
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}		
+		this.agentsService.setMySupportedAgentTypes(myAgentTypes);
+		
+		for(Iterator<AgentType> i = myAgentTypes.iterator(); i.hasNext();) {
+			AgentTypeDTO listItem = new AgentTypeDTO();
+			listItem.convertToDTO(i.next(), this.host);
+			this.agentsService.getAllSupportedAgentTypes().add(listItem);
+		}
 	}
 
-	private void setSlavery(Host mainNode) {
-		nodeRegistrator.setNodeType(NodeType.SLAVE);
-		nodeRegistrator.setMaster(mainNode);
-		nodeRegistrator.setThisNodeInfo(host);
-		requestSender.registerSlaveNode(this.mainNodeDetails, this.host);
-	}*/
+	private void setSlaveData() {
+		//add my host data
+		this.agentsService.setMyHostInfo(this.host);
+		this.agentsService.setNodeType(NodeType.SLAVE);
+		
+		//add the main node data
+		Host mainNode = new Host(this.mainNodeDetails, "mainNode");
+		this.agentsService.setMainNode(mainNode);
+		
+		//get and set my agent types
+		ArrayList<AgentType> myAgentTypes = new ArrayList<AgentType>();
+		try {
+			myAgentTypes = (ArrayList<AgentType>)jndiTreeParser.parse();
+		} catch (NamingException e) {
+			e.printStackTrace();
+		}		
+		this.agentsService.setMySupportedAgentTypes(myAgentTypes);
+		
+		for(Iterator<AgentType> i = myAgentTypes.iterator(); i.hasNext();) {
+			AgentTypeDTO listItem = new AgentTypeDTO();
+			listItem.convertToDTO(i.next(), this.host);
+			this.agentsService.getAllSupportedAgentTypes().add(listItem);
+		}
+	}
 
-	public void sendAdminRequest(int portOffset) {
+	public boolean sendAdminRequest(int portOffset) {
 		boolean isUpAndRunning = false;
 		
 		adminRequestSender = new AdminConsoleRequestSender();
@@ -178,6 +164,8 @@ public class GetHostDataService implements Runnable {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+		return isUpAndRunning;
 	}
 	
 	public Host getHostData() throws CommandLineException, InstanceNotFoundException, AttributeNotFoundException, MalformedObjectNameException, ReflectionException, MBeanException {
@@ -198,12 +186,13 @@ public class GetHostDataService implements Runnable {
 						.toString());
 		int portValue = Integer.parseInt(port) + portOffset;
 		
-		
+		this.portOffset = portOffset;
+		this.agentsService.setPortOffset(portOffset);
 		
 		String address = this.ip.toString().split("/")[1] + ":" + portValue;
 		String alias = host + "/" + this.hostname;
 		ret.setAlias(alias);
-		ret.setHostAddress(address);		
+		ret.setHostAddress(address);
 		
 		return ret;
     }
@@ -230,6 +219,6 @@ public class GetHostDataService implements Runnable {
 			return "ERROR";
 		}
 		else
-			return line;
+			return "localhost:" + line;
 	}
 }
