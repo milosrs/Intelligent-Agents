@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -14,26 +15,61 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import beans.AID;
 import beans.AgentType;
 import beans.AgentTypeDTO;
 import beans.Host;
 import interfaces.AgentInterface;
-import services.RestHandshakeService;
+import services.AgentsService;
+import services.HandshakeService;
 
 @Path("/handshake")
 public class HandshakeController {
 
 	@Inject
-	private RestHandshakeService handshakeService;
+	private HandshakeService handshakeService;
+	
+	@Inject
+	private AgentsService agentsService;
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/node")
 	public Response registerSlaveNode(Host newSlave) {
-		List<Host> slavesList = handshakeService.registerSlaveNode(newSlave);
+		List<Host> slavesList = handshakeService.startHandshake(newSlave);
 		
 		return Response.ok(slavesList).build();
+	}
+	
+	@GET
+	@Path("/agents/classes")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<AgentTypeDTO> getAllAgentTypes(){
+		
+		ArrayList<AgentTypeDTO> retList = new ArrayList<AgentTypeDTO>();
+		
+		for (Iterator<AgentTypeDTO> i = agentsService.getAllSupportedAgentTypes().iterator(); i.hasNext();)
+		    retList.add(i.next());
+		
+		return retList;
+	}
+	
+	@POST
+	@Path("/agents/running")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response postRunningAgents(ArrayList<AID> agentsList){
+		Response resp = null;
+		
+		try {
+			for (Iterator<AID> i = agentsList.iterator(); i.hasNext();)
+				agentsService.getAllRunningAgents().add(i.next());	
+			resp = Response.ok(true).build();
+		} catch(Exception e) {
+			resp = Response.serverError().entity(false).build();
+		}
+		
+		return resp;
 	}
 	
 	@GET
@@ -53,26 +89,24 @@ public class HandshakeController {
 		return Response.ok(success).build();
 	}
 	
-	@POST
-	@Path("/agents/sendSupportedAgents")		//Mora putanja da se promeni, opet nema smisla, jedino da gadjamo drugi kontroler, ali zasto bi :D
-	public void sendSupportedAgentsList() {
-		
-	}
-	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/agents/running")
-	public Response postRunningAgents(String myHostAddress) {
-		return Response.ok(handshakeService.sendRunningAgents(myHostAddress)).build();		
-	}
-	
+	@SuppressWarnings("unlikely-arg-type")
 	@DELETE
 	@Path("/node/{alias}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response rollback(@PathParam(value = "alias") String alias, ArrayList<AgentType> agentsToDelete) {
-		return Response.ok(handshakeService.deleteNode(alias, agentsToDelete)).build();
+	public boolean deleteNode(@PathParam(value = "alias") String alias, ArrayList<AgentType> agentsToDelete){
+		
+		boolean retVal = true;
+				
+		boolean hasDeleted = agentsService.getSlaveNodes().removeIf(x -> x.getAlias().equals(alias));
+		boolean hasRemoved = true;
+		if(!agentsToDelete.isEmpty())
+			hasRemoved = agentsService.getAllSupportedAgentTypes().remove(agentsToDelete);
+			
+		if(!hasDeleted || !hasRemoved)
+			retVal = false;
+			
+		return retVal;
 	}
 	
 	

@@ -14,7 +14,7 @@ import javax.ws.rs.core.Response;
 
 import beans.Host;
 import config.HeartbeatInvoker;
-import requestSenders.RestHandshakeRequestSender;
+import requestSenders.HandshakeRequestSender;
 import services.AgentsService;
 import services.GetHostDataService;
 import services.JndiTreeParser;
@@ -32,7 +32,7 @@ public class App extends Application {
 	private AgentsService agentsService;
 	
 	@Inject
-	private RestHandshakeRequestSender requestSender;
+	private HandshakeRequestSender requestSender;
 		
 	@Inject
 	private AgentsService as;	
@@ -41,7 +41,7 @@ public class App extends Application {
 	private JndiTreeParser jtp;
 	
 	@Inject
-	private RestHandshakeRequestSender rhs;
+	private HandshakeRequestSender rhs;
 	
 	@PostConstruct
 	public void init() {

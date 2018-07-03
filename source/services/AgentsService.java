@@ -98,12 +98,17 @@ public class AgentsService {
 		if(this.nodeType.equals(NodeType.MASTER)) {
 			System.out.println("*************** CHECKING SLAVE HEALTH STATUS ****************");
 			this.slaveNodes.stream().forEach(slave -> {
-				System.out.println("-* Checking health status for: " + slave.getAlias());
-				int portOffset = 0;
-				boolean isAlive = adminConsoleSender.isWildflyRunning(slave.getHostAddress(), portOffset);
+				System.out.println("-* ACTION: Checking health status for: " + slave.getAlias());
+				String[] hostParts = slave.getHostAddress().split(":");
+				String ipAddress = hostParts[0];
+				int port = Integer.parseInt(hostParts[1]);
+				
+				boolean isAlive = adminConsoleSender.isWildflyRunning(ipAddress, port);
 				
 				if(!isAlive) {
-					System.out.println("-* Slave dead, deleting.");
+					System.out.println("-* RESULT: Slave dead, deleting.");
+				} else {
+					System.out.println("-* RESULT: ALIVE!");
 				}
 			});
 			System.out.println("*************** ENDING SLAVE HEALTH STATUS ****************");	

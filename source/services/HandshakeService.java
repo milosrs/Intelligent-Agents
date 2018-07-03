@@ -9,26 +9,26 @@ import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
+import beans.AID;
 import beans.AgentType;
 import beans.AgentTypeDTO;
 import beans.Host;
 import beans.enums.NodeType;
 import interfaces.AgentInterface;
-import requestSenders.RestHandshakeRequestSender;
+import requestSenders.HandshakeRequestSender;
 
 @Stateful
-public class RestHandshakeService {
-	
+public class HandshakeService {
+	private final int handshakeAttempts = 3;
 	@Inject
-	private RestHandshakeRequestSender requestSender;
-	
+	private HandshakeRequestSender requestSender;
 	@Inject
 	private AgentsService agentsService;
-	
 	@Inject
 	private JndiTreeParser treeParser;
+	private List<AgentType> supported = null;
 
-	public List<Host> registerSlaveNode(Host newSlave) {
+	public List<Host> startHandshake(Host newSlave) {
 		boolean isSuccess = true;
 		
 		List<Host> slaves = agentsService.getSlaveNodes();
@@ -42,13 +42,40 @@ public class RestHandshakeService {
 		}
 
 		if (isSuccess) {
+			int currentHandshakeAttempt = 0;
+			int option = 0;
+			
 			if(agentsService.getNodeType().equals(NodeType.MASTER)) {
-				isSuccess = sendRegisteredSlaveToSlaves(newSlave);
+				while(currentHandshakeAttempt < 3) {
+					switch(option) {
+					case 0: supported = requestSender.fetchAgentTypeList(newSlave.getHostAddress()); break;
+					case 1: isSuccess = sendRegisteredSlaveToSlaves(newSlave); break;
+					case 2: isSuccess = sendNewAgentTypesToAllSlaves(supported);  break;
+					case 3: isSuccess = sendSlaveListToNewSlave(newSlave.getHostAddress()); break;
+					case 4: isSuccess = sendAgentTypesToNewSlave(newSlave.getHostAddress(), agentsService.getAllSupportedAgentTypes()); break;
+					case 5: isSuccess = sendRunningAgentsToNewSlave(newSlave.getHostAddress(), agentsService.getAllRunningAgents()); break;
+					default: System.out.println("Handshake successfull!"); break;
+					}
+					
+					if(!isSuccess) {
+						currentHandshakeAttempt++;
+						try {
+							Thread.sleep(1500);
+						} catch(Exception e) {
+							System.out.println("Error in handshake, at sleeping");
+							e.printStackTrace();
+						}
+						continue;
+					} else {
+						option++;
+					}
+				}
 			}
 			if(isSuccess) {
 				agentsService.getSlaveNodes().add(newSlave);	
 			} else {
-				return null;
+//				rollback(option, newSlave);
+				System.out.println("Should rollback!");
 			}
 		}
 		
@@ -56,6 +83,38 @@ public class RestHandshakeService {
 	}
 	
 	
+//	private void rollback(int option, Host newSlave) {
+//		if(option > 2) {
+//			option = 2;
+//		}
+//		
+//		while(option > 0) {
+//			switch(option) {
+//			case 0: break;
+//			case 1: deleteRegisteredSlaveFromSlaves(newSlave); break;
+//			case 2: deleteNewAgentTypesFromAllSlaves(supported); break;
+//			}
+//			
+//			option++;
+//		}
+//		
+//	}
+
+	private boolean sendRunningAgentsToNewSlave(String hostAddress, List<AID> allRunningAgents) {
+		return requestSender.sendAllRunningAgentsToNewSlave(hostAddress, allRunningAgents);
+	}
+
+
+	private boolean sendAgentTypesToNewSlave(String hostAddress, List<AgentTypeDTO> allSupportedAgentTypes) {
+		return requestSender.sendAgentTypesToNewSlave(hostAddress, allSupportedAgentTypes);
+	}
+
+
+	private boolean sendSlaveListToNewSlave(String hostAddress) {
+		return requestSender.sendExistingSlavesToNewSlave(hostAddress, this.agentsService.getSlaveNodes());
+	}
+
+
 	public boolean sendRegisteredSlaveToSlaves(Host newSlave) {
 		boolean isSuccess = true;
 		
@@ -73,7 +132,7 @@ public class RestHandshakeService {
 	
 	public List<AgentType> fetchAgentTypeList() {
 		try {
-			return treeParser.parse();	
+			return agentsService.getMySupportedAgentTypes();
 		} catch(Exception e) {
 			return null;
 		}
