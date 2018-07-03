@@ -109,6 +109,9 @@ public class RestController {
 					AID aid = new AID(name, myHostData, new AgentType(item.getName(), item.getModule()));
 					AgentInterface myAgent = AgentsFactory.createAgent(aid);
 					agentsService.getMyRunningAgents().add(myAgent);
+					agentsService.getAllRunningAgents().add(aid);
+					
+					//initialize WEB-SOCKET
 					
 					ArrayList<AID> postList = new ArrayList<AID>();
 					postList.add(aid);

@@ -17,7 +17,7 @@ import interfaces.AgentInterface;
 @Stateless
 public class JndiTreeParser {
 
-	private String EXP = "java:global/";
+	private String EXP = "java:jboss/exported/";
 	private String INTF = "!" + AgentInterface.class.getName();
 	private Context context;
 	
