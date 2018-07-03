@@ -1,7 +1,6 @@
 package requestSenders;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -10,13 +9,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.AgentType;
 import beans.Host;
-import interfaces.AgentInterface;
 
 @Stateless
 public class RestHandshakeRequestSender {
@@ -35,7 +32,7 @@ public class RestHandshakeRequestSender {
 		return webTarget.request(MediaType.APPLICATION_JSON).get();
 	}
 	
-	public Response deleteAgents(Host host, ArrayList<AgentType> agentsToDelete) {
+	public Response deleteAgents(Host host, List<AgentType> agentsToDelete) {
 		webTarget = restClient.target(HTTP_URL + host.getHostAddress() + NODE_URL + "/node/{" + host.getAlias() + "}");
 		return webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agentsToDelete, MediaType.APPLICATION_JSON));
 	}

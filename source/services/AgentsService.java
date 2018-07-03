@@ -1,6 +1,7 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -13,30 +14,100 @@ import beans.AID;
 import beans.AgentType;
 import beans.AgentTypeDTO;
 import beans.Host;
+import beans.enums.NodeType;
 import interfaces.AgentInterface;
+import requestSenders.AdminConsoleRequestSender;
 
 @Singleton
 @ApplicationScoped
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class AgentsService {
 
+	private int portOffset;
+	
+	private NodeType nodeType;
+	
+	private AdminConsoleRequestSender adminConsoleSender;
+	
 	private Host mainNode;
 	
 	private Host myHostInfo;
 	
-	private ArrayList<Host> slaveNodes;
+	private List<Host> slaveNodes;
 	
-	private ArrayList<AgentType> mySupportedAgentTypes;
+	private List<AgentType> mySupportedAgentTypes;
 	
-	private ArrayList<AgentTypeDTO> allSupportedAgentTypes;
+	private List<AgentTypeDTO> allSupportedAgentTypes;
 	
-	private ArrayList<AgentInterface> myRunningAgents;
+	private List<AgentInterface> myRunningAgents;
 	
-	private ArrayList<AID> allRunningAgents;
-
+	private List<AID> allRunningAgents;
+	
 	@PostConstruct
-	public void onInit() {
+	public void constructMissingAttributes() {
 		System.out.println("----------SINGLETON CONSTRUCTED----------");
+		adminConsoleSender = new AdminConsoleRequestSender();
+	}
+	
+	public boolean setSlavesSentFromMaster(List<Host> slavesList) {
+		Host thisNode = this.myHostInfo;
+		boolean success = true;
+		
+		try {
+			if(nodeType.equals(NodeType.SLAVE)) {
+				if(slavesList.indexOf(thisNode) > -1) {
+					slavesList.remove(thisNode);
+				}
+				
+				this.slaveNodes = slavesList;
+			} else {
+				success = false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			success = false;
+		}
+		
+		return success;
+	}
+	
+	public List<AgentTypeDTO> addNewAgentTypes(List<AgentTypeDTO> agentTypes) {
+		List<AgentTypeDTO> nonSupported = new ArrayList<AgentTypeDTO>();
+		
+		if (agentTypes != null) {
+			try {
+				for(AgentTypeDTO type : agentTypes) {
+					if(!this.allSupportedAgentTypes.contains(type)) {						
+						allSupportedAgentTypes.add(type);
+						nonSupported.add(type);
+					}
+				}	
+			} catch(Exception e ) {
+				e.printStackTrace();
+				System.out.println("Error adding agentTypes");
+			}	
+		}
+		
+		return nonSupported;
+	}
+	
+	/***
+	 * Metoda koja treba da se poziva za heartbeat protokol
+	 */
+	public void checkSlavesHealth() {
+		if(this.nodeType.equals(NodeType.MASTER)) {
+			System.out.println("*************** CHECKING SLAVE HEALTH STATUS ****************");
+			this.slaveNodes.stream().forEach(slave -> {
+				System.out.println("-* Checking health status for: " + slave.getAlias());
+				int portOffset = 0;
+				boolean isAlive = adminConsoleSender.isWildflyRunning(slave.getHostAddress(), portOffset);
+				
+				if(!isAlive) {
+					System.out.println("-* Slave dead, deleting.");
+				}
+			});
+			System.out.println("*************** ENDING SLAVE HEALTH STATUS ****************");	
+		}
 	}
 	
 	public void firstTouch() {
@@ -51,6 +122,22 @@ public class AgentsService {
 	@PreDestroy
 	public void onDelete() {
 		System.out.println("----------SINGLETON DELETED----------");
+	}	
+	
+	public NodeType getNodeType() {
+		return nodeType;
+	}
+
+	public void setNodeType(NodeType nodeType) {
+		this.nodeType = nodeType;
+	}
+
+	public int getPortOffset() {
+		return portOffset;
+	}
+
+	public void setPortOffset(int portOffset) {
+		this.portOffset = portOffset;
 	}
 
 	public Host getMainNode() {
@@ -69,43 +156,43 @@ public class AgentsService {
 		this.myHostInfo = myHostInfo;
 	}
 
-	public ArrayList<Host> getSlaveNodes() {
+	public List<Host> getSlaveNodes() {
 		return slaveNodes;
 	}
 
-	public void setSlaveNodes(ArrayList<Host> slaveNodes) {
+	public void setSlaveNodes(List<Host> slaveNodes) {
 		this.slaveNodes = slaveNodes;
 	}
 
-	public ArrayList<AgentType> getMySupportedAgentTypes() {
+	public List<AgentType> getMySupportedAgentTypes() {
 		return mySupportedAgentTypes;
 	}
 
-	public void setMySupportedAgentTypes(ArrayList<AgentType> mySupportedAgentTypes) {
+	public void setMySupportedAgentTypes(List<AgentType> mySupportedAgentTypes) {
 		this.mySupportedAgentTypes = mySupportedAgentTypes;
 	}
 
-	public ArrayList<AgentTypeDTO> getAllSupportedAgentTypes() {
+	public List<AgentTypeDTO> getAllSupportedAgentTypes() {
 		return allSupportedAgentTypes;
 	}
 
-	public void setAllSupportedAgentTypes(ArrayList<AgentTypeDTO> allSupportedAgentTypes) {
+	public void setAllSupportedAgentTypes(List<AgentTypeDTO> allSupportedAgentTypes) {
 		this.allSupportedAgentTypes = allSupportedAgentTypes;
 	}
 
-	public ArrayList<AgentInterface> getMyRunningAgents() {
+	public List<AgentInterface> getMyRunningAgents() {
 		return myRunningAgents;
 	}
 
-	public void setMyRunningAgents(ArrayList<AgentInterface> myRunningAgents) {
+	public void setMyRunningAgents(List<AgentInterface> myRunningAgents) {
 		this.myRunningAgents = myRunningAgents;
 	}
 
-	public ArrayList<AID> getAllRunningAgents() {
+	public List<AID> getAllRunningAgents() {
 		return allRunningAgents;
 	}
 
-	public void setAllRunningAgents(ArrayList<AID> allRunningAgents) {
+	public void setAllRunningAgents(List<AID> allRunningAgents) {
 		this.allRunningAgents = allRunningAgents;
 	}	
 }

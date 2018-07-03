@@ -10,10 +10,10 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 import beans.AgentType;
+import beans.AgentTypeDTO;
 import beans.Host;
 import beans.enums.NodeType;
 import interfaces.AgentInterface;
-import registrators.NodeRegistrator;
 import requestSenders.RestHandshakeRequestSender;
 
 @Stateful
@@ -23,7 +23,7 @@ public class RestHandshakeService {
 	private RestHandshakeRequestSender requestSender;
 	
 	@Inject
-	private NodeRegistrator nodeRegistrator;
+	private AgentsService agentsService;
 	
 	@Inject
 	private JndiTreeParser treeParser;
@@ -31,7 +31,7 @@ public class RestHandshakeService {
 	public List<Host> registerSlaveNode(Host newSlave) {
 		boolean isSuccess = true;
 		
-		List<Host> slaves = nodeRegistrator.getSlaves();
+		List<Host> slaves = agentsService.getSlaveNodes();
 			
 		for (Host slave : slaves) {
 			if (slave.getHostAddress().equals(newSlave.getHostAddress())
@@ -42,25 +42,25 @@ public class RestHandshakeService {
 		}
 
 		if (isSuccess) {
-			if(nodeRegistrator.getNodeType().equals(NodeType.MASTER)) {
+			if(agentsService.getNodeType().equals(NodeType.MASTER)) {
 				isSuccess = sendRegisteredSlaveToSlaves(newSlave);
 			}
 			if(isSuccess) {
-				nodeRegistrator.getSlaves().add(newSlave);	
+				agentsService.getSlaveNodes().add(newSlave);	
 			} else {
 				return null;
 			}
 		}
 		
-		return nodeRegistrator.getSlaves();
+		return agentsService.getSlaveNodes();
 	}
 	
 	
 	public boolean sendRegisteredSlaveToSlaves(Host newSlave) {
 		boolean isSuccess = true;
 		
-		if(nodeRegistrator.getNodeType().equals(NodeType.MASTER)) {
-			for(Host slave : nodeRegistrator.getSlaves()) {
+		if(agentsService.getNodeType().equals(NodeType.MASTER)) {
+			for(Host slave : agentsService.getSlaveNodes()) {
 				isSuccess = requestSender.registerSlaveNode(slave.getHostAddress(), newSlave) != null;
 				if(!isSuccess) {
 					break;
@@ -80,10 +80,10 @@ public class RestHandshakeService {
 	}
 	
 	public boolean sendNewAgentTypesToAllSlaves(List<AgentType> newTypes) {
-		boolean success = nodeRegistrator.getNodeType().equals(NodeType.MASTER);
+		boolean success = agentsService.getNodeType().equals(NodeType.MASTER);
 		
 		if(success) {
-			for(Host slave : nodeRegistrator.getSlaves()) {
+			for(Host slave : agentsService.getSlaveNodes()) {
 				success = requestSender.sendNewAgentTypesToSlave(slave.getHostAddress(), newTypes);
 				if(!success) {
 					System.err.println("Error at sending agent types to slave with host: " + slave.getHostAddress());
@@ -95,8 +95,8 @@ public class RestHandshakeService {
 		return success;
 	}
 	
-	public boolean addNewAgentTypes(List<AgentType> agentTypes) {
-		List<AgentType> ret = nodeRegistrator.addNewAgentTypes(agentTypes);
+	public boolean addNewAgentTypes(List<AgentTypeDTO> agentTypes) {
+		List<AgentTypeDTO> ret = agentsService.addNewAgentTypes(agentTypes);
 		
 		return ret == null;
 	}
@@ -106,11 +106,11 @@ public class RestHandshakeService {
 		ArrayList<AgentInterface> retList = new ArrayList<AgentInterface>();
 				
 		//add my running agents
-		for (Iterator<AgentInterface> i = nodeRegistrator.getRunningAgents().iterator(); i.hasNext();)
+		for (Iterator<AgentInterface> i = agentsService.getMyRunningAgents().iterator(); i.hasNext();)
 				retList.add(i.next());
 
 		//only sending to other slaves (if I am the main node I will skip the slave who initiated the call)
-		for (Iterator<Host> h = nodeRegistrator.getSlaves().iterator(); h.hasNext();) {
+		for (Iterator<Host> h = agentsService.getSlaveNodes().iterator(); h.hasNext();) {
 			Host item = h.next();
 				if(!item.getHostAddress().equals(myHostAddress)) {
 					Response resp = requestSender.getRunningAgents(item.getHostAddress());
@@ -121,8 +121,8 @@ public class RestHandshakeService {
 		}
 				
 		//i am a slave node, send also to the main node
-		if(!nodeRegistrator.getMaster().getHostAddress().equals("ME")) {
-			Host main = nodeRegistrator.getMaster();
+		if(agentsService.getNodeType().equals(NodeType.SLAVE)) {
+			Host main = agentsService.getMainNode();
 			Response resp = requestSender.getRunningAgents(main.getHostAddress());
 			ArrayList<AgentInterface> respAgents = resp.readEntity(new GenericType<ArrayList<AgentInterface>>() {});
 			for(Iterator<AgentInterface> ra = respAgents.iterator(); ra.hasNext();)
@@ -137,10 +137,10 @@ public class RestHandshakeService {
 		
 		boolean retVal = true;
 				
-		boolean hasDeleted = nodeRegistrator.getSlaves().removeIf(x -> x.getAlias().equals(alias));
+		boolean hasDeleted = agentsService.getSlaveNodes().removeIf(x -> x.getAlias().equals(alias));
 		boolean hasRemoved = true;
 		if(!agentsToDelete.isEmpty())
-			hasRemoved = nodeRegistrator.getSupportedAgentTypes().remove(agentsToDelete);
+			hasRemoved = agentsService.getMySupportedAgentTypes().remove(agentsToDelete);
 			
 		if(!hasDeleted || !hasRemoved)
 			retVal = false;
