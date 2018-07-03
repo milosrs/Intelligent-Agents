@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
@@ -27,6 +31,7 @@ import beans.AgentTypeDTO;
 import beans.Host;
 import beans.PongAgent;
 import beans.enums.NodeType;
+import config.HeartbeatInvoker;
 import registrators.NodeRegistrator;
 import requestSenders.AdminConsoleRequestSender;
 import interfaces.AgentInterface;
@@ -37,6 +42,9 @@ public class GetHostDataService implements Runnable {
 	private RestHandshakeRequestSender requestSender;
 	@Inject
 	private NodeRegistrator nodeRegistrator;
+	@Inject
+	private HeartbeatInvoker heartbeat;
+	
 	private JndiTreeParser jndiTreeParser;
 	private AgentsService agentsService;
 	private Host host;
@@ -138,6 +146,10 @@ public class GetHostDataService implements Runnable {
 		nodeRegistrator.setNodeType(NodeType.MASTER);
 		nodeRegistrator.setMaster(mainNode);
 		nodeRegistrator.setThisNodeInfo(mainNode);
+		
+		//Ako sve uspe, zapocni heartbeat
+		ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+		executor.scheduleAtFixedRate(heartbeat, 0, 180, TimeUnit.SECONDS);
 	}
 
 	private void setSlavery(Host mainNode) {

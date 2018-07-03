@@ -76,12 +76,12 @@ public class NodeRegistrator {
 	public void checkSlavesHealth() { 
 		System.out.println("*************** CHECKING SLAVE HEALTH STATUS ****************");
 		slaves.stream().forEach(slave -> {
-			System.out.println("Checking health status for: " + slave.getAlias());
+			System.out.println("-* Checking health status for: " + slave.getAlias());
 			int portOffset = 0;
 			boolean isAlive = adminConsoleSender.isWildflyRunning(slave.getHostAddress(), portOffset);
 			
 			if(!isAlive) {
-				//Treba ga ubiti
+				System.out.println("-* Slave dead, deleting.");
 			}
 		});
 		System.out.println("*************** ENDING SLAVE HEALTH STATUS ****************");
