@@ -15,7 +15,7 @@ import { SocketService } from '../../services/socket.service';
 })
 export class HomeComponent implements OnInit {
   private agentTypes: AgentTypeDTO[];
-  private runningAgents: Aid[];
+  private runningAgents: Aid[] = [];
   @ViewChild(ToolboxComponent) toolboxComp: ToolboxComponent;
 
   constructor(private http: HttpClient, private restService: RestServiceService, private socketService : SocketService) { }
@@ -56,12 +56,35 @@ export class HomeComponent implements OnInit {
     this.runningAgents.push(agent);
   }
 
+  stopAgentEvent(agent : Aid){
+    var index = this.containsAid(agent);
+    if(index!=-1){
+      this.runningAgents.splice(index,1);
+    }
+  }
+
   startSocket(){
     this.socketService.initSocket();
 
     this.socketService.getSocket().onmessage = (event) => { 
-      console.log("agsg");
+      var resp = JSON.parse(event.data);
+      if(resp.messageType==="startAgent"){
+        this.startAgentEvent(JSON.parse(resp.content));
+      }else if(resp.messageType==="stopAgent"){
+        this.stopAgentEvent(JSON.parse(resp.content));
+      }
     }
+  }
+
+  containsAid(aid:Aid):number{
+    var index = 0;
+    for(let listAid of this.runningAgents){
+      if(listAid.name===aid.name && listAid.type.name===aid.type.name && listAid.type.module===aid.type.module && listAid.host.hostAddress===aid.host.hostAddress && listAid.host.alias===aid.host.alias){
+        return index;
+      }
+      index++;
+    }
+    return -1;
   }
 
 }
