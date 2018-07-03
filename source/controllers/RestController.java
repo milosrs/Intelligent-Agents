@@ -112,7 +112,7 @@ public class RestController {
 						Session s = iterator.next();
 						s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("startAgent", mapper.writeValueAsString(aid))));
 					}
-					
+					System.out.println("gasg");
 					
 					ArrayList<AID> postList = new ArrayList<AID>();
 					postList.add(aid);
