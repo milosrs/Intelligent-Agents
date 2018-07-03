@@ -17,7 +17,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class RestServiceService {
-  private SERVER_URL = 'http://localhost:8082/Inteligent_Agents/rest/app';
+  private SERVER_URL = 'http://localhost:8080/Inteligent_Agents/rest/app';
 
   constructor(private http: HttpClient) {}
 
@@ -27,5 +27,9 @@ export class RestServiceService {
 
   getRunningAgents () {
     return this.http.get<Aid[]>(this.SERVER_URL + '/agents/running');
+  }
+
+  startAgent(aid: Aid, agentName: string) {
+    return this.http.put(this.SERVER_URL + '/agents/running/' + aid.name + '/' + agentName, null);
   }
 }

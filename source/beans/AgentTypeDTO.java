@@ -2,29 +2,66 @@ package beans;
 
 public class AgentTypeDTO {
 
-	private AgentType type;
+	private String name;
+	private String module;
+	private String hostAddress;
+	private String alias;
 	
-	private Host host;
-
-	public AgentTypeDTO(AgentType type, Host host) {
+	public AgentTypeDTO() {
 		super();
-		this.type = type;
-		this.host = host;
 	}
 
-	public AgentType getType() {
-		return type;
+	public AgentTypeDTO(String name, String module, String hostAddress, String alias) {
+		super();
+		this.name = name;
+		this.module = module;
+		this.hostAddress = hostAddress;
+		this.alias = alias;
+	}
+	
+	public String getName() {
+		return name;
 	}
 
-	public void setType(AgentType type) {
-		this.type = type;
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public Host getHost() {
-		return host;
+
+	public String getModule() {
+		return module;
 	}
 
-	public void setHost(Host host) {
-		this.host = host;
-	}		
+
+	public void setModule(String module) {
+		this.module = module;
+	}
+
+
+	public String getHostAddress() {
+		return hostAddress;
+	}
+
+
+	public void setHostAddress(String hostAddress) {
+		this.hostAddress = hostAddress;
+	}
+
+
+	public String getAlias() {
+		return alias;
+	}
+
+
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+	
+	public void convertToDTO(AgentType type, Host host) {
+		this.name = type.getName();
+		this.module = type.getModule();
+		this.hostAddress = host.getHostAddress();
+		this.alias = host.getAlias();
+	}
 }

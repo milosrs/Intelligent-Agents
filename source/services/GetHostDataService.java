@@ -8,6 +8,8 @@ import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
@@ -84,12 +86,13 @@ public class GetHostDataService implements Runnable {
 			this.agentsService.setMySupportedAgentTypes(myAgentTypes);
 			
 			for(Iterator<AgentType> i = myAgentTypes.iterator(); i.hasNext();) {
-				AgentTypeDTO listItem = new AgentTypeDTO(i.next(), this.host);
+				AgentTypeDTO listItem = new AgentTypeDTO();
+				listItem.convertToDTO(i.next(), this.host);
 				this.agentsService.getAllSupportedAgentTypes().add(listItem);
 			}
 			
 			//start rest handshake
-			setSlavery(mainNode);
+//			setSlavery(mainNode);
 		}
 		else { //i am the master, save my data
 			//add the main node data
@@ -122,7 +125,8 @@ public class GetHostDataService implements Runnable {
 			this.agentsService.setMySupportedAgentTypes(myAgentTypes);
 			
 			for(Iterator<AgentType> i = myAgentTypes.iterator(); i.hasNext();) {
-				AgentTypeDTO listItem = new AgentTypeDTO(i.next(), this.host);
+				AgentTypeDTO listItem = new AgentTypeDTO();
+				listItem.convertToDTO(i.next(), this.host);
 				this.agentsService.getAllSupportedAgentTypes().add(listItem);
 			}
 			
@@ -147,17 +151,12 @@ public class GetHostDataService implements Runnable {
 		Host ret = new Host();
 		String port;
 		String host;
-		String portOffset;
+		int portOffset;
 		boolean isUpAndRunning = false;
 		
-		adminRequestSender = new AdminConsoleRequestSender();
-		isUpAndRunning = adminRequestSender.isWildflyRunning();
-		
+		//Sacekaj server da se upali
 		try {
-			while(!isUpAndRunning) {
-				Thread.sleep(500);
-				isUpAndRunning = adminRequestSender.isWildflyRunning();
-			}
+			Thread.sleep(5000);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -169,11 +168,22 @@ public class GetHostDataService implements Runnable {
 								.getAttribute(new ObjectName("jboss.as:interface=public"), "inet-address")
 								.toString();
 		
-		portOffset = ManagementFactory.getPlatformMBeanServer()
+		portOffset = Integer.parseInt(ManagementFactory.getPlatformMBeanServer()
 						.getAttribute(new ObjectName("jboss.as:socket-binding-group=standard-sockets"), "port-offset")
-						.toString();	
+						.toString());
+		int portValue = Integer.parseInt(port) + portOffset;
 		
-		int portValue = Integer.parseInt(port) + Integer.parseInt(portOffset);
+		adminRequestSender = new AdminConsoleRequestSender();
+		isUpAndRunning = adminRequestSender.isWildflyRunning(null, portOffset);
+		
+		try {
+			while(!isUpAndRunning) {
+				Thread.sleep(500);
+				isUpAndRunning = adminRequestSender.isWildflyRunning(null, portValue);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		
 		String address = this.ip.toString().split("/")[1] + ":" + portValue;
 		String alias = host + "/" + this.hostname;

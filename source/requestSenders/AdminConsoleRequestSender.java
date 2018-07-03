@@ -9,7 +9,7 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 
 public class AdminConsoleRequestSender {
-	private final String STATUS_URL = "http://localhost:9990/management?operation=attribute&name=server-state";
+	private String STATUS_URL = "http://{0}:{1}/management?operation=attribute&name=server-state";
 	private Client restClient;
 	private WebTarget webTarget;
 	private HttpAuthenticationFeature feature;
@@ -21,7 +21,11 @@ public class AdminConsoleRequestSender {
 		restClient.register(feature);
 	}
 	
-	public boolean isWildflyRunning() {
+	public boolean isWildflyRunning(String ipAddress, int portOffset) {
+		if (ipAddress == null) {
+			STATUS_URL = STATUS_URL.replace("{0}", "localhost");
+		}
+		STATUS_URL = STATUS_URL.replace("{1}", Integer.toString(9990 + portOffset));
 		
 		boolean success = isUpAndRunning(STATUS_URL);
 		

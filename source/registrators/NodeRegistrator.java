@@ -3,12 +3,14 @@ package registrators;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 
 import beans.AgentType;
 import beans.Host;
 import beans.enums.NodeType;
 import interfaces.AgentInterface;
+import requestSenders.AdminConsoleRequestSender;
 
 @Singleton
 public class NodeRegistrator {
@@ -19,6 +21,12 @@ public class NodeRegistrator {
 	private Host master;
 	private Host thisNodeInfo;
 	private ArrayList<AgentInterface> runningAgents;
+	private AdminConsoleRequestSender adminConsoleSender;
+	
+	@PostConstruct
+	public void constructMissingAttributes() {
+		adminConsoleSender = new AdminConsoleRequestSender();
+	}
 	
 	public boolean setSlavesSentFromMaster(List<Host> slavesList) {
 		Host thisNode = thisNodeInfo;
@@ -60,6 +68,27 @@ public class NodeRegistrator {
 		}
 		
 		return nonSupported;
+	}
+	
+	/***
+	 * Metoda koja treba da se poziva za heartbeat protokol
+	 */
+	public void checkSlavesHealth() { 
+		System.out.println("*************** CHECKING SLAVE HEALTH STATUS ****************");
+		slaves.stream().forEach(slave -> {
+			System.out.println("Checking health status for: " + slave.getAlias());
+			int portOffset = 0;
+			boolean isAlive = adminConsoleSender.isWildflyRunning(slave.getHostAddress(), portOffset);
+			
+			if(!isAlive) {
+				//Treba ga ubiti
+			}
+		});
+		System.out.println("*************** ENDING SLAVE HEALTH STATUS ****************");
+	}
+	
+	public void firstTouch() {
+		System.out.println("NodeRegistrator first touch!");
 	}
 	
 	public NodeType getNodeType() {

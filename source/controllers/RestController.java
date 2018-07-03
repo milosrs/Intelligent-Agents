@@ -104,9 +104,9 @@ public class RestController {
 			
 			for (Iterator<AgentTypeDTO> i = agentsService.getAllSupportedAgentTypes().iterator(); i.hasNext();) {
 				AgentTypeDTO item = i.next();
-				if(item.getType().getName().equals(name)) {
+				if(item.getName().equals(name)) {
 					//add agent to my list
-					AID aid = new AID(name, myHostData, item.getType());
+					AID aid = new AID(name, myHostData, new AgentType(item.getName(), item.getModule()));
 					AgentInterface myAgent = AgentsFactory.createAgent(aid);
 					agentsService.getMyRunningAgents().add(myAgent);
 					

@@ -10,18 +10,21 @@
             <app-list
             [header]="'All agents'"
             [type]="listType"
-            [items]="agentTypes"></app-list>
+            [items]="allAgentsListItem()"
+            (onElementClickEvent)="selectNewAgent($event)"></app-list>
           </div> 
           <div class="col-6">
             <app-list
             [header]="'Running agents'"
             [type]="listType"
-            [items]="runningAgents"></app-list>
+            [items]="runningAgentsToList()"
+            (onElementClickEvent)="selectRunningAgent($event)"></app-list>
           </div>
         </div>
     </div>
     <div class="col-4 ToolBox">
-        <app-toolbox></app-toolbox> 
+        <app-toolbox
+          (onStartAgentEvent)="startAgentEvent($event)"></app-toolbox> 
     </div>
   </div>
   <div class="row NoFlex">

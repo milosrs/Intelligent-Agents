@@ -5,28 +5,33 @@
   <div class="row NoFlex">
       &nbsp;
   </div>
+  <div class="row" *ngIf="selectedObject === undefined">
+    <h2>Please, make a selection</h2>
+  </div>
   <div class="row NoFlex FormText">
-    <form class="form-control Background" *ngIf='!isRunningAgent;else form2'>
-      <h3>Agent type: <b class="AgentTypeText">Type1</b></h3>
+    
+    <form class="form-control Background" *ngIf='selectedObject !== undefined && !isRunningAgent'>
+      <h3>Agent type: <b class="AgentTypeText">{{selectedObject.name}}</b></h3>
       &nbsp;
       <h3>Agent name</h3>
-      <input type="text" class="form-control"/>
+      <input type="text"name="AgentName" id="agentName" class="form-control" [(ngModel)]="agentName"/>
       &nbsp;
-      <input type="submit" value="Start agent" class="btn-success form-control"/>
+      <button  class="btn btn-success form-control"
+            (click)="startAgentEvent($event)"> Start agent </button>
     </form>
-    <ng-template #form2>
-      <form class="form-control BackgroundMessage">
-        <h3>Agent type: <b class="AgentTypeText">Type1</b></h3>
-        &nbsp;
-        <h3>AID: <b class="AIDtext">AID1</b></h3>
-        &nbsp;
-        <h3>Message</h3>
-        <textarea class="form-control Textarea"></textarea>
-        &nbsp;
-        <input type="submit" value="Send ACL message" class="btn-primary form-control"/>
-        &nbsp;
-        <input type="submit" value="Stop agent" class="btn-danger form-control"/>
-      </form>
-    </ng-template>
+    
+    <form class="form-control BackgroundMessage" *ngIf='selectedObject !== undefined && isRunningAgent'>
+      <h3>Agent type: <b class="AgentTypeText">{{selectedObject.type.name}}</b></h3>
+      &nbsp;
+      <h3>AID: <b class="AIDtext">{{selectedObject.name}}</b></h3>
+      &nbsp;
+      <h3>Message</h3>
+      <textarea class="form-control Textarea"></textarea>
+      &nbsp;
+      <input type="submit" value="Send ACL message" class="btn-primary form-control"/>
+      &nbsp;
+      <input type="submit" value="Stop agent" class="btn-danger form-control"/>
+    </form>
+  
   </div>
 </div>
