@@ -17,19 +17,19 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class RestServiceService {
-  private SERVER_URL = 'rest/app';
+  private SERVER_URL = 'rest/';
 
   constructor(private http: HttpClient) {}
 
   getAllAgentTypes () {
-    return this.http.get<AgentTypeDTO[]>(this.SERVER_URL + '/agents/classes');
+    return this.http.get<AgentTypeDTO[]>(this.SERVER_URL + 'handshake/agents/classes');
   }
 
   getRunningAgents () {
-    return this.http.get<Aid[]>(this.SERVER_URL + '/agents/running');
+    return this.http.get<Aid[]>(this.SERVER_URL + 'app/agents/running');
   }
 
   startAgent(aid: Aid, agentName: string) {
-    return this.http.put(this.SERVER_URL + '/agents/running/' + aid.name + '/' + agentName, null);
+    return this.http.put(this.SERVER_URL + 'app/agents/running/' + aid.name + '/' + agentName, null);
   }
 }

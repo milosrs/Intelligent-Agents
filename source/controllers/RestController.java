@@ -1,9 +1,11 @@
 package controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.inject.Inject;
+import javax.websocket.Session;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,10 +18,14 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import beans.AID;
 import beans.AgentType;
 import beans.AgentTypeDTO;
 import beans.Host;
+import beans.Message;
 import factories.AgentsFactory;
 import interfaces.AgentInterface;
 import requestSenders.ClientRequestSender;
@@ -41,6 +47,8 @@ public class RestController {
 	
 	@Inject
 	private ClientRequestSender clientRequestSender;
+	
+	private ObjectMapper mapper = new ObjectMapper();
 	
 	@GET
 	@Path("/node")
@@ -67,7 +75,7 @@ public class RestController {
 	@Path("/agents/running/{type}/{name}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String putNewAgent(@PathParam(value = "type") String type, @PathParam(value = "name") String name){
+	public String putNewAgent(@PathParam(value = "type") String type, @PathParam(value = "name") String name) throws JsonProcessingException, IOException{
 		
 		String retStr = "";
 		
@@ -99,6 +107,12 @@ public class RestController {
 					agentsService.getAllRunningAgents().add(aid);
 					
 					//initialize WEB-SOCKET
+					Iterator<Session> iterator = WebSocketController.sessions.iterator();
+					while(iterator.hasNext()) {
+						Session s = iterator.next();
+						s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("startAgent", mapper.writeValueAsString(aid))));
+					}
+					System.out.println("gasg");
 					
 					ArrayList<AID> postList = new ArrayList<AID>();
 					postList.add(aid);

@@ -9,8 +9,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.json.simple.JSONArray;
 
 import beans.AID;
 import beans.AgentType;
@@ -22,7 +25,7 @@ public class HandshakeRequestSender {
 	private Client restClient;
 	private WebTarget webTarget;
 	private static String HTTP_URL = "http://";
-	private static String NODE_URL = "/Inteligent_Agents/rest";
+	private static String NODE_URL = "/Inteligent_Agents/rest/handshake";
 	
 	@PostConstruct
 	public void init() {
@@ -43,7 +46,7 @@ public class HandshakeRequestSender {
 	public List<Host> registerSlaveNode(String url, Host newSlave) {
 		List<Host> slaves = null;
 		
-		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/node");
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/node");
 		Response regResp = webTarget.request(MediaType.APPLICATION_JSON)
 										.post(Entity.entity(newSlave, MediaType.APPLICATION_JSON));
 		
@@ -66,13 +69,14 @@ public class HandshakeRequestSender {
 	public List<AgentType> fetchAgentTypeList(String url) {
 		List<AgentType> retList = null;
 		
-		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/agents/classes");
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/agents/classes");
 		Response resp = webTarget.request().get();
 		
 		try {
-			Object responseEntity = resp.getEntity();
+			Object responseEntity = resp.readEntity(new GenericType<List<AgentTypeDTO>>() {});
 			
-			if(responseEntity instanceof List<?>) {
+			
+			if(responseEntity instanceof ArrayList || responseEntity instanceof List) {
 				retList = (List<AgentType>) responseEntity;
 			}
 		} catch(Exception e) {
@@ -87,7 +91,7 @@ public class HandshakeRequestSender {
 	public boolean sendNewAgentTypesToSlave(String url, List<AgentType> agents) {
 		boolean success = true;
 
-		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/agents/classes");
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/agents/classes");
 		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agents, MediaType.APPLICATION_JSON));
 		
 		try {
@@ -108,7 +112,7 @@ public class HandshakeRequestSender {
 	public boolean sendExistingSlavesToNewSlave(String url, List<Host> slaves) {
 		boolean success = true;
 
-		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/agents/classes");
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/agents/classes");
 		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(slaves, MediaType.APPLICATION_JSON));
 		
 		try {
@@ -129,7 +133,7 @@ public class HandshakeRequestSender {
 	public boolean sendAllRunningAgentsToNewSlave(String url, List<AID> runningAgents) {
 		boolean success = true;
 
-		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/agents/running");
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/agents/running");
 		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(runningAgents, MediaType.APPLICATION_JSON));
 		
 		try {
@@ -150,7 +154,7 @@ public class HandshakeRequestSender {
 	public boolean sendAgentTypesToNewSlave(String url, List<AgentTypeDTO> allSupportedAgentTypes) {
 		boolean success = true;
 
-		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/handshake/agents/running");
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/agents/running");
 		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(allSupportedAgentTypes, MediaType.APPLICATION_JSON));
 		
 		try {
