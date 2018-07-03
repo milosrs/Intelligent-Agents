@@ -20,7 +20,7 @@ public class RestHandshakeRequestSender {
 	private Client restClient;
 	private WebTarget webTarget;
 	private static String HTTP_URL = "http://";
-	private static String NODE_URL = "/Inteligent_Agents/rest/app";
+	private static String NODE_URL = "/Inteligent_Agents/rest";
 	
 	@PostConstruct
 	public void init() {
@@ -28,12 +28,12 @@ public class RestHandshakeRequestSender {
 	}
 	
 	public Response getRunningAgents(String hostAddress) {
-		webTarget = restClient.target(HTTP_URL + hostAddress + NODE_URL + "/agents/running");
+		webTarget = restClient.target(HTTP_URL + hostAddress + NODE_URL + "/app/agents/running");
 		return webTarget.request(MediaType.APPLICATION_JSON).get();
 	}
 	
 	public Response deleteAgents(Host host, List<AgentType> agentsToDelete) {
-		webTarget = restClient.target(HTTP_URL + host.getHostAddress() + NODE_URL + "/node/{" + host.getAlias() + "}");
+		webTarget = restClient.target(HTTP_URL + host.getHostAddress() + NODE_URL + "/app/node/{" + host.getAlias() + "}");
 		return webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agentsToDelete, MediaType.APPLICATION_JSON));
 	}
 	
