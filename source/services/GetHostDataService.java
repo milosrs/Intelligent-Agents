@@ -7,13 +7,10 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import javax.ejb.EJB;
-import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.management.AttributeNotFoundException;
 import javax.management.InstanceNotFoundException;
@@ -38,6 +35,7 @@ import interfaces.AgentInterface;
 import requestSenders.RestHandshakeRequestSender;
 
 public class GetHostDataService implements Runnable {
+	
 	@Inject
 	private RestHandshakeRequestSender requestSender;
 	@Inject
@@ -51,6 +49,7 @@ public class GetHostDataService implements Runnable {
 	private String mainNodeDetails;
 	private String ip;
 	private String hostname;
+	private int portOffset;
 	private final int maxPingTrials = 100;
 	private AdminConsoleRequestSender adminRequestSender;
 	
@@ -59,6 +58,7 @@ public class GetHostDataService implements Runnable {
 		this.ip = ip;
 		this.mainNodeDetails = "";
 		this.host = null;
+		this.portOffset = 0;
 		this.agentsService = as;
 		this.jndiTreeParser = jtp;
 	}
@@ -66,11 +66,17 @@ public class GetHostDataService implements Runnable {
 	@Override
 	public void run() {
 		
+		//await for jboss startup
+		try {
+			Thread.sleep(30000);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 		try {
 			host = getHostData();
 		} catch (InstanceNotFoundException | AttributeNotFoundException | MalformedObjectNameException
 				| ReflectionException | MBeanException | CommandLineException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.mainNodeDetails = getMainNodeDetails();
@@ -100,7 +106,7 @@ public class GetHostDataService implements Runnable {
 			}
 			
 			//start rest handshake
-//			setSlavery(mainNode);
+
 		}
 		else { //i am the master, save my data
 			//add the main node data
@@ -138,11 +144,10 @@ public class GetHostDataService implements Runnable {
 				this.agentsService.getAllSupportedAgentTypes().add(listItem);
 			}
 			
-//			setMastery(me);
 		}
 	}
 	
-	private void setMastery(Host mainNode) {
+	/*private void setMastery(Host mainNode) {
 		nodeRegistrator.setNodeType(NodeType.MASTER);
 		nodeRegistrator.setMaster(mainNode);
 		nodeRegistrator.setThisNodeInfo(mainNode);
@@ -157,21 +162,29 @@ public class GetHostDataService implements Runnable {
 		nodeRegistrator.setMaster(mainNode);
 		nodeRegistrator.setThisNodeInfo(host);
 		requestSender.registerSlaveNode(this.mainNodeDetails, this.host);
-	}
+	}*/
 
+	public void sendAdminRequest(int portOffset) {
+		boolean isUpAndRunning = false;
+		
+		adminRequestSender = new AdminConsoleRequestSender();
+		isUpAndRunning = adminRequestSender.isWildflyRunning(null, portOffset);
+		
+		try {
+			while(!isUpAndRunning) {
+				Thread.sleep(500);
+				isUpAndRunning = adminRequestSender.isWildflyRunning(null, portOffset);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public Host getHostData() throws CommandLineException, InstanceNotFoundException, AttributeNotFoundException, MalformedObjectNameException, ReflectionException, MBeanException {
 		Host ret = new Host();
 		String port;
 		String host;
 		int portOffset;
-		boolean isUpAndRunning = false;
-		
-		//Sacekaj server da se upali
-		try {
-			Thread.sleep(5000);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
 		
 		port =  ManagementFactory.getPlatformMBeanServer()
 				   .getAttribute(new ObjectName("jboss.as:socket-binding-group=standard-sockets,socket-binding=http"), "port")
@@ -185,22 +198,12 @@ public class GetHostDataService implements Runnable {
 						.toString());
 		int portValue = Integer.parseInt(port) + portOffset;
 		
-		adminRequestSender = new AdminConsoleRequestSender();
-		isUpAndRunning = adminRequestSender.isWildflyRunning(null, portOffset);
 		
-		try {
-			while(!isUpAndRunning) {
-				Thread.sleep(500);
-				isUpAndRunning = adminRequestSender.isWildflyRunning(null, portValue);
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
 		
 		String address = this.ip.toString().split("/")[1] + ":" + portValue;
 		String alias = host + "/" + this.hostname;
 		ret.setAlias(alias);
-		ret.setHostAddress(address);
+		ret.setHostAddress(address);		
 		
 		return ret;
     }

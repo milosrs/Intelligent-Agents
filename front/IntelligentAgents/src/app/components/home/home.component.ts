@@ -50,7 +50,7 @@ export class HomeComponent implements OnInit {
     this.toolboxComp.setSelection(agent, false);
   }
 
-  startAgentEvent(agent:Aid) {
+  startAgentEvent(agent: Aid) {
     this.runningAgents.push(agent);
   }
 }

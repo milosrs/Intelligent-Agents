@@ -1,26 +1,24 @@
 package factories;
 
+import java.lang.reflect.Constructor;
+
 import beans.AID;
-import beans.ContractnetAgent;
-import beans.PingAgent;
-import beans.PongAgent;
-import interfaces.AgentInterface;
+import beans.AgentClass;
 
 public class AgentsFactory {
 
-	public static AgentInterface createAgent(AID aid) {
-		if(aid.getType().getName().equals("PONG")) {
-			return new PongAgent(aid);
+	@SuppressWarnings("rawtypes")
+	public static AgentClass createAgent(AID aid) {
+
+		AgentClass retObj;
+		try {
+			Constructor c = Class.forName(aid.getType().getName()).getConstructor(AID.class);
+			retObj = (AgentClass) c.newInstance(aid);
+		} catch (Exception e) {
+			System.out.println("Invalid Agent Type!");
+			retObj = null;
 		}
-		else if(aid.getType().getName().equals("PING")) {
-			PingAgent retObj = new PingAgent();
-			retObj.init(aid);
-			return retObj;
-		}
-		else if(aid.getType().getName().equals("CONTRACTNET")) {
-			return new ContractnetAgent(aid);
-		}
-		else
-			return null;
+		
+		return retObj;
 	}
 }

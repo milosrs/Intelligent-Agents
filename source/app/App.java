@@ -47,8 +47,6 @@ public class App extends Application {
 			hostname = InetAddress.getLocalHost().getHostName();
 			System.out.println("Hostname/IP: " + ip + " Hostname: " + hostname);
 			
-//			//touch singleton to work properly
-//			as.hackz();
 			//touch singleton to work properly
 			as.firstTouch();
 			

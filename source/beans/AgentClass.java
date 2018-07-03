@@ -3,9 +3,12 @@ package beans;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 
-@Stateful
-public abstract class AgentClass {
+import interfaces.AgentInterface;
 
+@Stateful
+public abstract class AgentClass implements AgentInterface {
+
+	private static final long serialVersionUID = 1L;
 	private AID aid;
 	
 	@Inject

@@ -2,10 +2,8 @@ package beans;
 
 import javax.ejb.Stateful;
 
-import interfaces.AgentInterface;
-
 @Stateful
-public class PingAgent extends AgentClass implements AgentInterface {
+public class PingAgent extends AgentClass {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -15,9 +13,5 @@ public class PingAgent extends AgentClass implements AgentInterface {
 	public void handleMessage(ACLMessage message) {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	public void init(AID aid) {
-		this.aid = aid;
 	}
 }

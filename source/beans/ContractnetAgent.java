@@ -1,25 +1,13 @@
 package beans;
 
-import interfaces.AgentInterface;
+import javax.ejb.Stateful;
 
-public class ContractnetAgent implements AgentInterface {
+@Stateful
+public class ContractnetAgent extends AgentClass {
 
 	private static final long serialVersionUID = 1L;
 	
 	private AID aid;
-		
-	public ContractnetAgent(AID aid) {
-		super();
-		this.aid = aid;
-	}
-
-	public AID getAid() {
-		return aid;
-	}
-
-	public void setAid(AID aid) {
-		this.aid = aid;
-	}
 	
 	@Override
 	public void handleMessage(ACLMessage message) {
