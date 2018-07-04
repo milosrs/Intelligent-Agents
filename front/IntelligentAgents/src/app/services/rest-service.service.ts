@@ -32,4 +32,9 @@ export class RestServiceService {
   startAgent(aid: Aid, agentName: string) {
     return this.http.put(this.SERVER_URL + 'app/agents/running/' + aid.name + '/' + agentName, null);
   }
+
+  deleteRunningAgent (aid: Aid) {
+    return this.http.delete(this.SERVER_URL + 'app/agents/running/' + aid.name + '__' + aid.host.hostAddress + '__'
+    + aid.host.alias + '__' + aid.type.name, httpOptions);
+  }
 }

@@ -23,4 +23,9 @@ public class PingAgent extends AgentClass {
 	public void setAid(AID aid) {
 		this.aid = aid;
 	}
+
+	@Override
+	public AID getAid() {
+		return this.aid;
+	}
 }

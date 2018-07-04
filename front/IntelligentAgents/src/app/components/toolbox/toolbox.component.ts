@@ -15,6 +15,7 @@ export class ToolboxComponent implements OnInit {
   private selectedObject: any;
   private agentName: string;
   @Output() onStartAgentEvent: EventEmitter<any> = new EventEmitter();
+  @Output() onDeleteRunningAgentEvent: EventEmitter<any> = new EventEmitter();
 
   constructor(protected service: RestServiceService) { }
 
@@ -31,12 +32,24 @@ export class ToolboxComponent implements OnInit {
     this.service.startAgent(this.selectedObject, this.agentName)
         .subscribe(resp => {
           console.log(resp);
-          if(!HelperFunctions.isEmptyValue(resp)) {
+          if (!HelperFunctions.isEmptyValue(resp)) {
             this.onStartAgentEvent.emit(resp);
             this.agentName = undefined;
           } else {
             alert('Vracen null iz nekog razloga.');
           }
         });
+  }
+
+  deleteRunningAgentEvent(event) {
+    this.service.deleteRunningAgent(this.selectedObject)
+    .subscribe(resp => {
+      console.log(resp);
+      if (!HelperFunctions.isEmptyValue(resp)) {
+        this.onDeleteRunningAgentEvent.emit(resp);
+      } else {
+        alert('Vracen null iz nekog razloga.');
+      }
+    });
   }
 }
