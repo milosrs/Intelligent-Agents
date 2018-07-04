@@ -24,9 +24,7 @@ public class HandshakeService {
 	private HandshakeRequestSender requestSender;
 	@Inject
 	private AgentsService agentsService;
-	@Inject
-	private JndiTreeParser treeParser;
-	private List<AgentType> supported = null;
+	private List<AgentTypeDTO> supported = null;
 
 	public List<Host> startHandshake(Host newSlave) {
 		boolean isSuccess = true;
@@ -63,28 +61,25 @@ public class HandshakeService {
 		if(agentsService.getNodeType().equals(NodeType.MASTER)) {
 			System.out.println("Initializing handshake for slave: " + newSlave.getAlias());
 			while(currentHandshakeAttempt < 3 && option <= 5) {
-				switch(option) {
-				case 0: {
-					List<AgentTypeDTO> dtos = new ArrayList<AgentTypeDTO>();
-					supported = requestSender.fetchAgentTypeList(newSlave.getHostAddress());
-					
-					if (supported != null) {
-						supported.stream().forEach(type -> {
-							AgentTypeDTO addme = new AgentTypeDTO();
-							addme.convertToDTO(type, newSlave);
-							dtos.add(addme);	
-						});
-						this.agentsService.addNewAgentTypes(dtos);	
+				try {
+					switch(option) {
+					case 0: {
+						List<AgentTypeDTO> dtos = new ArrayList<AgentTypeDTO>();
+						supported = requestSender.fetchAgentTypeList(newSlave.getHostAddress());
+						agentsService.addNewAgentTypes(supported);
+						
+						break;
 					}
-					
-					break;
-				}
-				case 1: isSuccess = sendRegisteredSlaveToSlaves(newSlave); break;
-				case 2: isSuccess = sendNewAgentTypesToAllSlaves(supported);  break;
-				case 3: isSuccess = sendSlaveListToNewSlave(newSlave.getHostAddress()); break;
-				case 4: isSuccess = sendAgentTypesToNewSlave(newSlave.getHostAddress(), agentsService.getAllSupportedAgentTypes()); break;
-				case 5: isSuccess = sendRunningAgentsToNewSlave(newSlave.getHostAddress(), agentsService.getAllRunningAgents()); break;
-				default: System.out.println("Handshake successfull!"); break;
+					case 1: isSuccess = sendRegisteredSlaveToSlaves(newSlave); break;
+					case 2: isSuccess = sendNewAgentTypesToAllSlaves(supported);  break;
+					case 3: isSuccess = sendSlaveListToNewSlave(newSlave.getHostAddress()); break;
+					case 4: isSuccess = sendAgentTypesToNewSlave(newSlave.getHostAddress(), agentsService.getAllSupportedAgentTypes()); break;
+					case 5: isSuccess = sendRunningAgentsToNewSlave(newSlave.getHostAddress(), agentsService.getAllRunningAgents()); break;
+					default: System.out.println("Handshake successfull!"); break;
+					}
+				} catch(Exception e) {
+					e.printStackTrace();
+					isSuccess = false;
 				}
 				
 				if(!isSuccess) {
@@ -92,6 +87,7 @@ public class HandshakeService {
 					try {
 						System.out.println("Retrying handshake in 1.5s");
 						Thread.sleep(1500);
+						isSuccess = true;
 					} catch(Exception e) {
 						System.out.println("Error in handshake, at sleeping");
 						e.printStackTrace();
@@ -103,7 +99,7 @@ public class HandshakeService {
 			}
 		}
 		
-		return isSuccess;
+		return isSuccess && currentHandshakeAttempt < 3;
 	}
 	
 //	private void rollback(int option, Host newSlave) {
@@ -161,12 +157,15 @@ public class HandshakeService {
 		}
 	}
 	
-	public boolean sendNewAgentTypesToAllSlaves(List<AgentType> newTypes) {
+	public boolean sendNewAgentTypesToAllSlaves(List<AgentTypeDTO> newTypes) {
 		boolean success = agentsService.getNodeType().equals(NodeType.MASTER);
 		
 		if(success) {
+			List<AgentType> toSend = new ArrayList<AgentType>();
+			newTypes.stream().forEach(t -> toSend.add(new AgentType(t.getName(), t.getModule())));
+			
 			for(Host slave : agentsService.getSlaveNodes()) {
-				success = requestSender.sendNewAgentTypesToSlave(slave.getHostAddress(), newTypes);
+				success = requestSender.sendNewAgentTypesToSlave(slave.getHostAddress(), toSend);
 				if(!success) {
 					System.err.println("Error at sending agent types to slave with host: " + slave.getHostAddress());
 					break;
@@ -180,7 +179,7 @@ public class HandshakeService {
 	public boolean addNewAgentTypes(List<AgentTypeDTO> agentTypes) {
 		List<AgentTypeDTO> ret = agentsService.addNewAgentTypes(agentTypes);
 		
-		return ret == null;
+		return ret != null;
 	}
 	
 	public ArrayList<AgentInterface> sendRunningAgents(String myHostAddress){
