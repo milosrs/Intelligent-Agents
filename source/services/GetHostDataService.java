@@ -43,9 +43,11 @@ public class GetHostDataService implements Runnable {
 	private String hostname;
 	private int portOffset;
 	private AdminConsoleRequestSender adminRequestSender;
+	private ResultPredictionService resultPredictionService;
 	
 	public GetHostDataService (String ip, String hostname, AgentsService as, 
-			JndiTreeParser jtp, HeartbeatInvoker hbi, HandshakeRequestSender rhs) {
+			JndiTreeParser jtp, HeartbeatInvoker hbi, HandshakeRequestSender rhs,
+			ResultPredictionService rps) {
 		this.hostname = hostname;
 		this.ip = ip;
 		this.mainNodeDetails = "";
@@ -56,6 +58,7 @@ public class GetHostDataService implements Runnable {
 		this.heartbeat = hbi;
 		this.heartbeat.init(this.agentsService);
 		this.requestSender = rhs;
+		this.resultPredictionService = rps;
 	}
 	
 	@Override
@@ -75,6 +78,9 @@ public class GetHostDataService implements Runnable {
 				| ReflectionException | MBeanException | CommandLineException e) {
 			e.printStackTrace();
 		}
+		
+		//test read results
+		resultPredictionService.readResults();
 		
 		//check if server is up and running
 		boolean isRunning = sendAdminRequest(this.portOffset);

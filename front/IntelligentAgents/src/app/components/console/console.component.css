@@ -5,3 +5,8 @@
 .NoFlex {
     display: block;
 }
+
+.TextMargins {
+    margin-left: 10%;
+    margin-right: 10%;
+}

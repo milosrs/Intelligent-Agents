@@ -18,6 +18,7 @@ import requestSenders.HandshakeRequestSender;
 import services.AgentsService;
 import services.GetHostDataService;
 import services.JndiTreeParser;
+import services.ResultPredictionService;
 
 @ApplicationPath("/rest")
 @Singleton
@@ -43,6 +44,9 @@ public class App extends Application {
 	@Inject
 	private HandshakeRequestSender rhs;
 	
+	@Inject
+	private ResultPredictionService rps;
+	
 	@PostConstruct
 	public void init() {
 		try {
@@ -55,7 +59,7 @@ public class App extends Application {
 			as.firstTouch();
 			
 			//await for jboss to start and then get the port and initialize the node-handshake
-			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname, as, jtp, new HeartbeatInvoker(), rhs);
+			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname, as, jtp, new HeartbeatInvoker(), rhs, rps);
 			Thread t = new Thread(getHostDataService);
 			t.start();
 			
