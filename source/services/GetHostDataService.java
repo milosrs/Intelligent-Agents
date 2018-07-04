@@ -38,6 +38,7 @@ public class GetHostDataService implements Runnable {
 	private AgentsService agentsService;
 	private Host host;
 	private String mainNodeDetails;
+	@SuppressWarnings("unused")
 	private String ip;
 	private String hostname;
 	private int portOffset;
@@ -210,7 +211,7 @@ public class GetHostDataService implements Runnable {
 		
 //		String address = this.ip.toString().split("/")[1] + ":" + portValue;	Domain scenario
 		String address = "localhost:" + portValue;
-		String alias = host + "/" + this.hostname;
+		String alias = host + "|" + this.hostname;
 		ret.setAlias(alias);
 		ret.setHostAddress(address);
 		

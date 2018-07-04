@@ -9,41 +9,34 @@ import javax.websocket.Session;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+
+import org.json.simple.parser.ParseException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.AID;
+import beans.AgentClass;
 import beans.AgentType;
 import beans.AgentTypeDTO;
 import beans.Host;
 import beans.Message;
+import beans.enums.NodeType;
 import factories.AgentsFactory;
 import interfaces.AgentInterface;
 import requestSenders.ClientRequestSender;
-import requestSenders.HandshakeRequestSender;
 import services.AgentsService;
-import services.HandshakeService;
 
 @Path("/app")
 public class RestController {
 
 	@Inject
 	private AgentsService agentsService;
-	
-	@Inject
-	private HandshakeService restHandshakeService;
-	
-	@Inject
-	private HandshakeRequestSender requestSender;
 	
 	@Inject
 	private ClientRequestSender clientRequestSender;
@@ -128,6 +121,76 @@ public class RestController {
 					break;
 				}
 			}	
+		}
+		
+		return retStr;
+	}
+	
+	@DELETE
+	@Path("/agents/running/{aid}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String deleteRunningAgent(@PathParam(value = "aid") String aid) throws ParseException, 
+	JsonProcessingException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+		
+		String retStr = "";
+		
+		String[] splits = aid.split("__");
+		String agentName = splits[0];
+		String hostAddress = splits[1];
+		String alias = splits[2];
+		String agentType = splits[3];
+		
+		AID queryAid = agentsService.getAllRunningAgents().stream()
+				.filter(o -> o.getHost().getHostAddress().equals(hostAddress)
+					&& o.getHost().getAlias().equals(alias)
+						&& o.getName().equals(agentName))
+							.findFirst().orElse(null);			
+		
+		if(queryAid == null)
+			retStr = "Can't find the agent by given AID.";		
+		else{
+			agentsService.getAllRunningAgents().remove(queryAid);
+			
+			//WEBSOCKET GOES HERE
+			
+			//check if this is my Agent and delete from that list
+			boolean isMyAgent = false;
+			if(agentsService.getMyHostInfo().getHostAddress().equals(hostAddress)
+					&& agentsService.getMyHostInfo().getAlias().equals(alias))
+					isMyAgent = true;
+			
+			if(isMyAgent) {
+				for (Iterator<AgentInterface> i = agentsService.getMyRunningAgents().iterator(); i.hasNext();) {
+					AgentInterface item = i.next();
+					if(item.getClass().isInstance(Class.forName("beans." + agentType).newInstance())) {
+						AgentClass agentObj = (AgentClass) Class.forName("beans." + agentType).cast(item);
+						AID myAid = agentObj.getAid();
+						if(myAid.getName().equals(agentName)) {
+							agentsService.getMyRunningAgents().remove(item);
+							break;
+						}
+					}
+				}
+			}
+			
+			boolean isMainNode = false;
+			if(agentsService.getNodeType().equals(NodeType.MASTER))
+				isMainNode = true;
+			
+			//send delete request to all (other) slaves
+			for(Iterator<Host> i = agentsService.getSlaveNodes().iterator(); i.hasNext();) {
+				String resp = clientRequestSender.deleteRunningAgents(i.next(), queryAid);
+				System.out.println(resp);
+			}
+			
+			//if I am a slave, send to the main node also
+			if(!isMainNode) {
+				String resp = clientRequestSender.deleteRunningAgents(agentsService.getMainNode(), queryAid);
+				System.out.println(resp);
+			}
+			
+			retStr = aid;
 		}
 		
 		return retStr;

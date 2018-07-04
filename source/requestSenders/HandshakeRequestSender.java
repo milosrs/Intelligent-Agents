@@ -30,13 +30,13 @@ public class HandshakeRequestSender {
 	}
 	
 	public Response getRunningAgents(String hostAddress) {
-		webTarget = restClient.target(HTTP_URL + hostAddress + NODE_URL + "/agents/running");
+		webTarget = restClient.target(HTTP_URL + hostAddress + NODE_URL + "/app/agents/running");
 		return webTarget.request(MediaType.APPLICATION_JSON).get();
 	}
 	
 	public Response deleteAgents(Host host, List<AgentType> agentsToDelete) {
-		webTarget = restClient.target(HTTP_URL + host.getHostAddress() + NODE_URL + "/node/{" + host.getAlias() + "}");
-		return webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agentsToDelete, MediaType.APPLICATION_JSON));
+		webTarget = restClient.target(HTTP_URL + host.getHostAddress() + NODE_URL + "/app/node/{alias}");
+		return webTarget.resolveTemplate("alias", host.getAlias()).request(MediaType.APPLICATION_JSON).post(Entity.entity(agentsToDelete, MediaType.APPLICATION_JSON));
 	}
 	
 	public List<Host> registerSlaveNode(String url, Host newSlave) {
