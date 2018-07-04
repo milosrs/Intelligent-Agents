@@ -45,8 +45,8 @@ public class HandshakeService {
 			if(isSuccess) {
 				agentsService.getSlaveNodes().add(newSlave);	
 			} else {
-//				rollback(option, newSlave);
-				System.out.println("Should rollback!");
+				System.out.println("ERROR: Handshake failed. Initializing rollback.");
+				rollback(newSlave);
 			}
 		}
 		
@@ -102,22 +102,23 @@ public class HandshakeService {
 		return isSuccess && currentHandshakeAttempt < 3;
 	}
 	
-//	private void rollback(int option, Host newSlave) {
-//		if(option > 2) {
-//			option = 2;
-//		}
-//		
-//		while(option > 0) {
-//			switch(option) {
-//			case 0: break;
-//			case 1: deleteRegisteredSlaveFromSlaves(newSlave); break;
-//			case 2: deleteNewAgentTypesFromAllSlaves(supported); break;
-//			}
-//			
-//			option++;
-//		}
-//		
-//	}
+	private void rollback(Host newSlave) {
+		String alias = newSlave.getHostAddress();
+		List<AgentTypeDTO> toDelete = new ArrayList<AgentTypeDTO>();
+		
+		agentsService.getAllSupportedAgentTypes().forEach(type -> {
+			if(type.getAlias().equals(alias) || type.getHostAddress().equals(alias)) {
+				toDelete.add(type);
+			}
+		});
+		
+		agentsService.getAllSupportedAgentTypes().removeAll(toDelete);	//Delete supported agents
+		agentsService.getSlaveNodes().removeIf(x -> x.getHostAddress().equals(alias));	//Delete node
+			
+		agentsService.getSlaveNodes().forEach(slave -> {
+			requestSender.deleteBadNode(slave.getHostAddress(), alias);
+		});
+	}
 
 	private boolean sendRunningAgentsToNewSlave(String hostAddress, List<AID> allRunningAgents) {
 		return requestSender.sendAllRunningAgentsToNewSlave(hostAddress, allRunningAgents);
