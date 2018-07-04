@@ -16,6 +16,7 @@ import { HomeComponent } from './components/home/home.component';
 import { ToolboxComponent } from './components/toolbox/toolbox.component';
 import { ConsoleComponent } from './components/console/console.component';
 import { SocketService } from './services/socket.service';
+import { MessagingComponent } from './components/messaging/messaging.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { SocketService } from './services/socket.service';
     HomeComponent,
     ToolboxComponent,
     ConsoleComponent,
+    MessagingComponent,
   ],
   imports: [
     BrowserModule,
