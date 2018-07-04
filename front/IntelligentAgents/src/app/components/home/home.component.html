@@ -23,8 +23,7 @@
         </div>
     </div>
     <div class="col-6 ToolBox">
-        <app-toolbox
-          (onStartAgentEvent)="startAgentEvent($event)"></app-toolbox> 
+        <app-toolbox [runningAgents]="runningAgents"></app-toolbox> 
     </div>
   </div>
   <div class="row NoFlex">
