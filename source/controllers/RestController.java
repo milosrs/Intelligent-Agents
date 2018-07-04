@@ -32,6 +32,7 @@ import beans.enums.NodeType;
 import beans.enums.Performative;
 import factories.AgentsFactory;
 import interfaces.AgentInterface;
+import jms.JMSTopic;
 import requestSenders.ClientRequestSender;
 import services.AgentsService;
 
@@ -43,6 +44,9 @@ public class RestController {
 	
 	@Inject
 	private ClientRequestSender clientRequestSender;
+	
+	@Inject
+	private JMSTopic jmsTopic;
 	
 	private ObjectMapper mapper = new ObjectMapper();
 	
@@ -216,6 +220,8 @@ public class RestController {
 			Session s = iterator.next();
 			s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("aclMessage", mapper.writeValueAsString(aclMessage))));
 		}
+		
+		jmsTopic.send(aclMessage);
 		
 		return "Success";
 	}
