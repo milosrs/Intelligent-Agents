@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 
 import { AgentTypeDTO } from '../model/agent-type-dto';
 import { Aid } from '../model/aid';
+import { AclMessage } from '../model/acl-message';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -31,5 +32,9 @@ export class RestServiceService {
 
   startAgent(aid: Aid, agentName: string) {
     return this.http.put(this.SERVER_URL + 'app/agents/running/' + aid.name + '/' + agentName, null);
+  }
+
+  sendAclMessage(aclMessage : AclMessage){
+    return this.http.post(this.SERVER_URL + 'app/messages', aclMessage);
   }
 }
