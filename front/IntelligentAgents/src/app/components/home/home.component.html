@@ -21,9 +21,12 @@
             (onElementClickEvent)="selectRunningAgent($event)"></app-list>
           </div>
         </div>
+        <div class="Background">
+          <app-toolbox></app-toolbox>
+        </div>
     </div>
-    <div class="col-6 ToolBox">
-        <app-toolbox [runningAgents]="runningAgents"></app-toolbox> 
+    <div class="col-6 Background">
+        <app-messaging [runningAgents]="runningAgents"></app-messaging> 
     </div>
   </div>
   <div class="row NoFlex">

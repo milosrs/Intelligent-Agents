@@ -26,49 +26,14 @@
     margin-bottom: 5%;
 }
 
-.Background {
-    background-color: rgba(200,230,201, 0.4);
+.Margin {
+    margin-top: 5%;
 }
 
-.BackgroundMessage {
-    background-color: rgba(179,229,252, 0.3);
+.BackgroundStart {
+    background-color:rgba(67,160,71, 0.3);
 }
 
 .BackgroundDelete {
     background-color: rgba(239,83,80, 0.2);
 }
-
-.Textarea {
-    overflow-y: scroll;
-    resize: none;
-}
-
-  .selectBox {
-    position: relative;
-  }
-  
-  .selectBox select {
-    width: 100%;
-    font-weight: bold;
-  }
-  
-  .overSelect {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-  }
-  
-  #checkboxes {
-    display: none;
-    border: 1px #dadada solid;
-  }
-  
-  #checkboxes label {
-    display: block;
-  }
-  
-  #checkboxes label:hover {
-    background-color: #1e90ff;
-  }

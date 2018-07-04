@@ -75,11 +75,14 @@ public class AgentsService {
 		if (agentTypes != null) {
 			try {
 				for(AgentTypeDTO type : agentTypes) {
-					if(!this.allSupportedAgentTypes.contains(type)) {						
-						allSupportedAgentTypes.add(type);
-						nonSupported.add(type);
-					}
-				}	
+					this.allSupportedAgentTypes.stream().forEach(alltype -> {
+						if(!type.getModule().equals(alltype.getModule()) 
+							&& !type.getName().equals(alltype.getName())) {
+							allSupportedAgentTypes.add(type);
+							nonSupported.add(type);
+						}
+					});
+				}
 			} catch(Exception e ) {
 				e.printStackTrace();
 				System.out.println("Error adding agentTypes");

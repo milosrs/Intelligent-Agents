@@ -1,0 +1,85 @@
+<div class="container-fluid">
+  <div class="row NoFlex TextCenter">
+      <h2 class="Title">Messaging:</h2>
+    </div>
+    <div class="row NoFlex">
+        &nbsp;
+    </div>
+  <div class="row NoFlex FormText">
+    <form class="form-control BackgroundMessage">
+      <div class="row">
+        <div class="col-lg-6 mx-auto">
+          <div class="selectBox" (click)="showCheckboxes()">
+            <label for="receivers">Receivers</label>
+            <select class="form-control" name="receivers" id="receivers">
+            </select>
+            <div class="overSelect"></div>
+          </div>
+          <div id="checkboxes">
+            <div *ngFor="let aid of runningAgents; let i = index">
+              <label [for]="i">
+              <input type="checkbox" [id]="i" (click)="bindReceiver(aid)"/>{{aid.name}}</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 mx-auto">
+            <label for="replyTo">ReplyTo</label>
+            <select class="form-control" name="replyTo" id="replyTo" [(ngModel)]="aclMessage.replyTo">
+                <option *ngFor="let aid of runningAgents" [ngValue]="aid">{{aid.name}}</option>
+            </select>
+        </div>  
+      </div>
+      &nbsp;
+      <div class="row">
+        <div class="col-lg-6 mx-auto">
+          <select class="form-control" name="performative" id="performative" [(ngModel)]="aclMessage.performative">
+            <option selected disabled value="">Performative</option>
+            <option value="REQUEST">REQUEST</option>
+            <option value="REFUSE">REFUSE</option>
+          </select>
+        </div>
+        <div class="col-lg-6 mx-auto">
+          <input type="text" class="form-control" name="content" id="content" placeholder="Content" [(ngModel)]="aclMessage.content"> 
+        </div>
+      </div>
+      &nbsp;
+      <div class="row">
+        <div class="col-lg-6 mx-auto">
+          <input type="text" class="form-control" name="language" id="language" placeholder="Language" [(ngModel)]="aclMessage.language">
+        </div>
+        <div class="col-lg-6 mx-auto">
+          <input type="text" class="form-control" name="encoding" id="encoding" placeholder="Encoding" [(ngModel)]="aclMessage.encoding">
+        </div>
+      </div>
+      &nbsp;
+      <div class="row">
+          <div class="col-lg-6 mx-auto">
+            <input type="text" class="form-control" name="ontology" id="ontology" placeholder="Ontology" [(ngModel)]="aclMessage.ontology">
+          </div>
+          <div class="col-lg-6 mx-auto">
+            <input type="text" class="form-control" name="protocol" id="protocol" placeholder="Protocol" [(ngModel)]="aclMessage.protocol">
+          </div>
+      </div>
+      &nbsp;
+      <div class="row">
+          <div class="col-lg-6 mx-auto">
+            <input type="text" class="form-control" name="conversationId" id="conversationId" placeholder="ConversationId" [(ngModel)]="aclMessage.conversationId">
+          </div>
+          <div class="col-lg-6 mx-auto">
+            <input type="text" class="form-control" name="replyWith" id="replyWith" placeholder="ReplyWith" [(ngModel)]="aclMessage.replyWith">
+          </div>
+      </div>
+      &nbsp;
+      <div class="row">
+          <div class="col-lg-6 mx-auto">
+            <input type="text" class="form-control" name="inReplyTo" id="inReplyTo" placeholder="InReplyTo" [(ngModel)]="aclMessage.inReplyTo">
+          </div>
+          <div class="col-lg-6 mx-auto">
+            <input type="text" class="form-control" name="replyBy" id="replyBy" placeholder="ReplyBy" [(ngModel)]="aclMessage.replyBy">
+          </div>
+      </div>
+      &nbsp;
+      <input type="submit" value="Send ACL message" class="btn-primary form-control" (click)="sendMessage()"/>
+    </form>
+  </div>
+</div>
