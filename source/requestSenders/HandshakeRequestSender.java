@@ -141,6 +141,35 @@ public class HandshakeRequestSender {
 		return success;
 	}
 	
+	/***
+	 * Brise cvor koristeci njegov alias ili pun url.
+	 * @param url URL cvora kojem saljemo zahtev
+	 * @param nodeAlias Cvor koji treba obrisati
+	 * @param agentsToDelete Tipovi agenata cvora kog treba obrisati.
+	 * @return Uspeh operacije
+	 */
+	public boolean deleteBadNode(String url, String nodeAlias) {
+		boolean success = true;
+		
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/node/" + nodeAlias);
+		Response resp = webTarget.request(MediaType.APPLICATION_JSON).delete();
+		
+		try {
+			success = resp.readEntity(boolean.class);
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Error deleting node.");
+			success = false;
+		}
+		
+		return success;
+	}
+	
+	/***
+	 * Metoda koja se koristi za Heartbeat protokol. Pinguje cvor na url-u.
+	 * @param url URL cvora kog treba pingovati
+	 * @return Status zivota cvora (true-ziv, false-nije ziv)
+	 */
 	public boolean isAlive(String url) {
 		boolean success = true;
 

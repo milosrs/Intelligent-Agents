@@ -66,4 +66,5 @@ export class ListComponent implements OnInit {
       c.resetButtons();
     } );
   }
+
 }

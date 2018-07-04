@@ -13,10 +13,12 @@ export class MessagingComponent implements OnInit {
   @Input() runningAgents;
   private aclMessage;
   private expanded = false;
+  private performatives : any[];
 
   constructor(protected service: RestServiceService) { }
 
   ngOnInit() {
+    this.getPerformatives();
     this.aclMessage = new AclMessage();
   }
 
@@ -54,7 +56,18 @@ export class MessagingComponent implements OnInit {
     return -1;
   }
 
+  getPerformatives(){
+    this.service.getPerformatives().subscribe((res:any)=>{
+      this.performatives = res;
+    })
+  }
+
   sendMessage() {
-    console.log(this.aclMessage);
+    this.service.sendAclMessage(this.aclMessage).subscribe((res:any)=>{
+      if(res==="Success"){
+        this.aclMessage = {};
+      }
+      this.aclMessage = {};
+    })
   }
 }

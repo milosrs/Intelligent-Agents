@@ -40,6 +40,8 @@ public class ACLMessage implements Serializable {
 	
 	private Long replyBy;
 
+	public ACLMessage() {}
+	
 	public ACLMessage(Performative performative, AID sender, ArrayList<AID> receivers, AID replyTo, String content,
 			Object contentObj, HashMap<String, Object> userArgs, String language, String encoding, String ontology,
 			String protocol, String conversationId, String replyWith, String inReplyTo, Long replyBy) {

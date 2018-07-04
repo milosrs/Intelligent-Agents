@@ -46,6 +46,7 @@ public class AgentsService {
 	
 	private List<AID> allRunningAgents;
 	
+	
 	public boolean setSlavesSentFromMaster(List<Host> slavesList) {
 		Host thisNode = this.myHostInfo;
 		boolean success = true;

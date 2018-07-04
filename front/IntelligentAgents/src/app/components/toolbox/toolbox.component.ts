@@ -28,8 +28,6 @@ export class ToolboxComponent implements OnInit {
   setSelection(selection: any, isRunningAgent: boolean) {
     this.selectedObject = selection;
     this.isRunningAgent = isRunningAgent;
-    // this.aclMessage = new AclMessage();
-    // this.aclMessage.sender = this.selectedObject;
   }
 
   startAgentEvent(event) {

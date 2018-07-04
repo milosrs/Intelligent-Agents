@@ -16,6 +16,7 @@ import { SocketService } from '../../services/socket.service';
 export class HomeComponent implements OnInit {
   private agentTypes: AgentTypeDTO[];
   private runningAgents: Aid[] = [];
+  private aclMessages : any[] = [];
   @ViewChild(ToolboxComponent) toolboxComp: ToolboxComponent;
 
   constructor(private http: HttpClient, private restService: RestServiceService, private socketService : SocketService) { }
@@ -63,6 +64,10 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  aclMessageEvent(aclMessage:any){
+    this.aclMessages.push(aclMessage);
+  }
+
   startSocket(){
     this.socketService.initSocket();
 
@@ -72,6 +77,8 @@ export class HomeComponent implements OnInit {
         this.startAgentEvent(JSON.parse(resp.content));
       }else if(resp.messageType==="stopAgent"){
         this.stopAgentEvent(JSON.parse(resp.content));
+      }else if(resp.messageType==="aclMessage"){
+        this.aclMessageEvent(JSON.parse(resp.content));
       }
     }
   }

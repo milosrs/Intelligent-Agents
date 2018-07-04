@@ -8,6 +8,15 @@
   <div class="row NoFlex FormText">
     <form class="form-control BackgroundMessage">
       <div class="row">
+          <div class="col-lg-12 mx-auto">
+              <label for="sender">Sender</label>
+              <select class="form-control" name="sender" id="sender" [(ngModel)]="aclMessage.sender">
+                  <option *ngFor="let aid of runningAgents" [ngValue]="aid">{{aid.name}}</option>
+              </select>
+          </div>  
+      </div>
+      &nbsp;
+      <div class="row">
         <div class="col-lg-6 mx-auto">
           <div class="selectBox" (click)="showCheckboxes()">
             <label for="receivers">Receivers</label>
@@ -34,8 +43,7 @@
         <div class="col-lg-6 mx-auto">
           <select class="form-control" name="performative" id="performative" [(ngModel)]="aclMessage.performative">
             <option selected disabled value="">Performative</option>
-            <option value="REQUEST">REQUEST</option>
-            <option value="REFUSE">REFUSE</option>
+            <option *ngFor="let performative of performatives" value="{{performative}}">{{performative}}</option>
           </select>
         </div>
         <div class="col-lg-6 mx-auto">
@@ -79,7 +87,7 @@
           </div>
       </div>
       &nbsp;
-      <input type="submit" value="Send ACL message" class="btn-primary form-control" (click)="sendMessage()"/>
+      <input type="submit" value="Send ACL message" class="btn-primary form-control" [disabled]="runningAgents?.length==0" (click)="sendMessage()"/>
     </form>
   </div>
 </div>
