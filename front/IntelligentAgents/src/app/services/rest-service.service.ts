@@ -37,4 +37,9 @@ export class RestServiceService {
   sendAclMessage(aclMessage : AclMessage){
     return this.http.post(this.SERVER_URL + 'app/messages', aclMessage);
   }
+  
+  deleteRunningAgent (aid: Aid) {
+    return this.http.delete(this.SERVER_URL + 'app/agents/running/' + aid.name + '__' + aid.host.hostAddress + '__'
+    + aid.host.alias + '__' + aid.type.name, httpOptions);
+  }
 }

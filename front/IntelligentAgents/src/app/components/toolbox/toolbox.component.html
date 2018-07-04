@@ -99,7 +99,8 @@
       &nbsp;
       <input type="submit" value="Send ACL message" class="btn-primary form-control" (click)="sendMessage()"/>
       &nbsp;
-      <input type="submit" value="Stop agent" class="btn-danger form-control"/>
+      <button class="btn btn-danger form-control"
+            (click)="deleteRunningAgentEvent($event)"> Stop agent </button>
     </form>
   
   </div>

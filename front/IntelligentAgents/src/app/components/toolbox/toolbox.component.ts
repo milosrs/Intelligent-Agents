@@ -19,6 +19,8 @@ export class ToolboxComponent implements OnInit {
   private agentName: string;
   private aclMessage;
   private expanded : boolean = false;
+  @Output() onStartAgentEvent: EventEmitter<any> = new EventEmitter();
+  @Output() onDeleteRunningAgentEvent: EventEmitter<any> = new EventEmitter();
 
   constructor(protected service: RestServiceService) { }
 
@@ -72,5 +74,17 @@ containsAid(aid:Aid):number{
 
   sendMessage(){
     console.log(this.aclMessage);
+  }
+
+  deleteRunningAgentEvent(event) {
+    this.service.deleteRunningAgent(this.selectedObject)
+    .subscribe(resp => {
+      console.log(resp);
+      if (!HelperFunctions.isEmptyValue(resp)) {
+        this.onDeleteRunningAgentEvent.emit(resp);
+      } else {
+        alert('Vracen null iz nekog razloga.');
+      }
+    });
   }
 }
