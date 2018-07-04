@@ -38,6 +38,10 @@ export class RestServiceService {
     return this.http.post(this.SERVER_URL + 'app/messages', aclMessage);
   }
   
+  getPerformatives(){
+    return this.http.get(this.SERVER_URL + 'app/messages');
+  }
+
   deleteRunningAgent (aid: Aid) {
     return this.http.delete(this.SERVER_URL + 'app/agents/running/' + aid.name + '__' + aid.host.hostAddress + '__'
     + aid.host.alias + '__' + aid.type.name, httpOptions);

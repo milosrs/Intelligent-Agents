@@ -20,6 +20,7 @@ import org.json.simple.parser.ParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.ACLMessage;
 import beans.AID;
 import beans.AgentClass;
 import beans.AgentType;
@@ -27,6 +28,7 @@ import beans.AgentTypeDTO;
 import beans.Host;
 import beans.Message;
 import beans.enums.NodeType;
+import beans.enums.Performative;
 import factories.AgentsFactory;
 import interfaces.AgentInterface;
 import requestSenders.ClientRequestSender;
@@ -194,6 +196,32 @@ public class RestController {
 		
 		return retStr;
 	}
+	
+	
+	@PUT
+	@Path("/messages")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String sendMessage(ACLMessage aclMessage) throws JsonProcessingException, IOException{
+		
+		Iterator<Session> iterator = WebSocketController.sessions.iterator();
+		while(iterator.hasNext()) {
+			Session s = iterator.next();
+			s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("aclMessage", mapper.writeValueAsString(aclMessage))));
+		}
+		
+		return "Success";
+	}
+	
+	@GET
+	@Path("/messages")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Performative[] getMessages() {
+		
+		return Performative.values();
+	}
+	
+	
 	
 	/*@POST
 	@Path("/agents/running")
