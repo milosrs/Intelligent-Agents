@@ -9,6 +9,7 @@ import javax.websocket.Session;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -132,7 +133,7 @@ public class RestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String deleteRunningAgent(@PathParam(value = "aid") String aid) throws ParseException, 
-	JsonProcessingException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+	InstantiationException, IllegalAccessException, ClassNotFoundException, IOException {
 		
 		String retStr = "";
 		
@@ -154,6 +155,12 @@ public class RestController {
 			agentsService.getAllRunningAgents().remove(queryAid);
 			
 			//WEBSOCKET GOES HERE
+			
+			Iterator<Session> iterator = WebSocketController.sessions.iterator();
+			while(iterator.hasNext()) {
+				Session s = iterator.next();
+				s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("stopAgent", mapper.writeValueAsString(queryAid))));
+			}
 			
 			//check if this is my Agent and delete from that list
 			boolean isMyAgent = false;
@@ -198,10 +205,10 @@ public class RestController {
 	}
 	
 	
-	@PUT
+	@POST
 	@Path("/messages")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public String sendMessage(ACLMessage aclMessage) throws JsonProcessingException, IOException{
 		
 		Iterator<Session> iterator = WebSocketController.sessions.iterator();

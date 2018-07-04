@@ -2,9 +2,6 @@ package beans.enums;
 
 public enum Performative {
 
-	PING,
-	PONG,
-	CONTRACTNET,
 	ACCEPT_PROPOSAL,
 	AGREE,
 	CANCEL,

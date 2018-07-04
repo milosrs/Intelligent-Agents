@@ -3,6 +3,8 @@
     <h2 class="Header1">Console:</h2>
   </div>
   <div class="row NoFlex">
-    &nbsp;
+    <div class="mx-auto" *ngFor="let aclMessage of aclMessages">
+      {{aclMessage | json}}
+    </div>
   </div>
 </div>

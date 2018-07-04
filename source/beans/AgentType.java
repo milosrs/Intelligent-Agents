@@ -8,6 +8,8 @@ public class AgentType implements Serializable {
 	private String name;
 	private String module;
 
+	public AgentType() {}
+	
 	public AgentType(String name, String module) {
 		super();
 		this.name = name;
