@@ -152,6 +152,8 @@ public class RestController {
 		else{
 			agentsService.getAllRunningAgents().remove(queryAid);
 			
+			//WEBSOCKET GOES HERE
+			
 			//check if this is my Agent and delete from that list
 			boolean isMyAgent = false;
 			if(agentsService.getMyHostInfo().getHostAddress().equals(hostAddress)
