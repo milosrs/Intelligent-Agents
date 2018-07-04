@@ -9,6 +9,7 @@ import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 import beans.AID;
 import beans.AgentType;
@@ -17,6 +18,7 @@ import beans.Host;
 import beans.enums.NodeType;
 import interfaces.AgentInterface;
 import requestSenders.AdminConsoleRequestSender;
+import requestSenders.HandshakeRequestSender;
 
 @Singleton
 @ApplicationScoped
@@ -26,8 +28,9 @@ public class AgentsService {
 	private int portOffset;
 	
 	private NodeType nodeType;
-	
-	private AdminConsoleRequestSender adminConsoleSender;
+
+	@Inject
+	private HandshakeRequestSender requestSender;
 	
 	private Host mainNode;
 	
@@ -42,12 +45,6 @@ public class AgentsService {
 	private List<AgentInterface> myRunningAgents;
 	
 	private List<AID> allRunningAgents;
-	
-	@PostConstruct
-	public void constructMissingAttributes() {
-		System.out.println("----------SINGLETON CONSTRUCTED----------");
-		adminConsoleSender = new AdminConsoleRequestSender();
-	}
 	
 	public boolean setSlavesSentFromMaster(List<Host> slavesList) {
 		Host thisNode = this.myHostInfo;
@@ -85,6 +82,7 @@ public class AgentsService {
 			} catch(Exception e ) {
 				e.printStackTrace();
 				System.out.println("Error adding agentTypes");
+				return null;
 			}	
 		}
 		
@@ -99,11 +97,8 @@ public class AgentsService {
 			System.out.println("*************** CHECKING SLAVE HEALTH STATUS ****************");
 			this.slaveNodes.stream().forEach(slave -> {
 				System.out.println("-* ACTION: Checking health status for: " + slave.getAlias());
-				String[] hostParts = slave.getHostAddress().split(":");
-				String ipAddress = hostParts[0];
-				int port = Integer.parseInt(hostParts[1]);
 				
-				boolean isAlive = adminConsoleSender.isWildflyRunning(ipAddress, port);
+				boolean isAlive = requestSender.isAlive(slave.getHostAddress());
 				
 				if(!isAlive) {
 					System.out.println("-* RESULT: Slave dead, deleting.");
@@ -123,11 +118,6 @@ public class AgentsService {
 		setAllRunningAgents(new ArrayList<AID>());
 		System.out.println("---------SINGLETON TOUCHED----------");
 	}
-	
-	@PreDestroy
-	public void onDelete() {
-		System.out.println("----------SINGLETON DELETED----------");
-	}	
 	
 	public NodeType getNodeType() {
 		return nodeType;

@@ -1,6 +1,5 @@
 package requestSenders;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -12,8 +11,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.json.simple.JSONArray;
 
 import beans.AID;
 import beans.AgentType;
@@ -42,7 +39,6 @@ public class HandshakeRequestSender {
 		return webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agentsToDelete, MediaType.APPLICATION_JSON));
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Host> registerSlaveNode(String url, Host newSlave) {
 		List<Host> slaves = null;
 		
@@ -51,11 +47,7 @@ public class HandshakeRequestSender {
 										.post(Entity.entity(newSlave, MediaType.APPLICATION_JSON));
 		
 		try {
-			Object responseEntity = regResp.getEntity();
-			
-			if(responseEntity instanceof List<?>) {
-				slaves = (List<Host>) responseEntity;
-			}	
+			slaves = regResp.readEntity(new GenericType<List<Host>>(){});	
 		} catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("Error fetching response body for list of slave nodes.");
@@ -65,20 +57,14 @@ public class HandshakeRequestSender {
 		return slaves;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<AgentType> fetchAgentTypeList(String url) {
-		List<AgentType> retList = null;
+	public List<AgentTypeDTO> fetchAgentTypeList(String url) {
+		List<AgentTypeDTO> retList = null;
 		
 		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/agents/classes");
 		Response resp = webTarget.request().get();
 		
 		try {
-			Object responseEntity = resp.readEntity(new GenericType<List<AgentTypeDTO>>() {});
-			
-			
-			if(responseEntity instanceof ArrayList || responseEntity instanceof List) {
-				retList = (List<AgentType>) responseEntity;
-			}
+			retList = resp.readEntity(new GenericType<List<AgentTypeDTO>>() {});
 		} catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("Error fetching response body for agent type list");
@@ -95,11 +81,7 @@ public class HandshakeRequestSender {
 		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agents, MediaType.APPLICATION_JSON));
 		
 		try {
-			Object responseEntity = resp.getEntity();
-			
-			if(responseEntity instanceof Boolean) {
-				success = (Boolean) responseEntity;
-			}
+			success = resp.readEntity(boolean.class);
 		} catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("Error posting agent types list to slave: " + url);
@@ -112,15 +94,11 @@ public class HandshakeRequestSender {
 	public boolean sendExistingSlavesToNewSlave(String url, List<Host> slaves) {
 		boolean success = true;
 
-		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/agents/classes");
-		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(slaves, MediaType.APPLICATION_JSON));
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/node");
+		Response resp = webTarget.request(MediaType.APPLICATION_JSON).put(Entity.entity(slaves, MediaType.APPLICATION_JSON));
 		
 		try {
-			Object responseEntity = resp.getEntity();
-			
-			if(responseEntity instanceof Boolean) {
-				success = (Boolean) responseEntity;
-			}
+			success = resp.readEntity(boolean.class);
 		} catch(Exception e) {
 			e.printStackTrace();
 			System.out.println("Error posting slave list to slave: " + url);
@@ -137,14 +115,10 @@ public class HandshakeRequestSender {
 		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(runningAgents, MediaType.APPLICATION_JSON));
 		
 		try {
-			Object responseEntity = resp.getEntity();
-			
-			if(responseEntity instanceof Boolean) {
-				success = (Boolean) responseEntity;
-			}
+			success = resp.readEntity(boolean.class);
 		} catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Error posting slave list to slave: " + url);
+			System.out.println("Error posting running agents list to slave: " + url);
 			success = false;
 		}
 		
@@ -154,22 +128,36 @@ public class HandshakeRequestSender {
 	public boolean sendAgentTypesToNewSlave(String url, List<AgentTypeDTO> allSupportedAgentTypes) {
 		boolean success = true;
 
-		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/agents/running");
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/agents/classes");
 		Response resp = webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(allSupportedAgentTypes, MediaType.APPLICATION_JSON));
 		
 		try {
-			Object responseEntity = resp.getEntity();
-			
-			if(responseEntity instanceof Boolean) {
-				success = (Boolean) responseEntity;
-			}
+			success = resp.readEntity(boolean.class);
 		} catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Error posting slave list to slave: " + url);
 			success = false;
 		}
 		
 		return success;
 	}
 	
+	public boolean isAlive(String url) {
+		boolean success = true;
+
+		try {
+			webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/node");
+			Response resp = webTarget.request(MediaType.APPLICATION_JSON).get();
+			
+			try {
+				success = resp.readEntity(boolean.class);
+			} catch(Exception e) {
+				e.printStackTrace();
+				success = false;
+			}	
+		} catch(Exception e) {
+			success = false;
+		}
+		
+		return success;
+	}
 }

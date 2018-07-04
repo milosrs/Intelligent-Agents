@@ -5,12 +5,14 @@ import java.io.Serializable;
 public class AID implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
 	private String name;
-	
 	private Host host;
-	
 	private AgentType type;
+
+	
+	public AID() {
+		super();
+	}
 
 	public AID(String name, Host host, AgentType type) {
 		super();

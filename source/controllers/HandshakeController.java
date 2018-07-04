@@ -9,9 +9,12 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -32,27 +35,46 @@ public class HandshakeController {
 	@Inject
 	private AgentsService agentsService;
 	
+	@GET
+	@Path("/node")
+	public boolean isAlive() {
+		return true;
+	}
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/node")
 	public Response registerSlaveNode(Host newSlave) {
 		List<Host> slavesList = handshakeService.startHandshake(newSlave);
+		GenericEntity<List<Host>> toSend = new GenericEntity<List<Host>>(slavesList) {};
+
+		return Response.ok(toSend).build();
+	}
+	
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/node")
+	public Response sendSlavesToSlave(List<Host> slaves) {
+		boolean success = agentsService.setSlavesSentFromMaster(slaves);
 		
-		return Response.ok(slavesList).build();
+		return Response.ok(success).build();
 	}
 	
 	@GET
 	@Path("/agents/classes")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<AgentTypeDTO> getAllAgentTypes(){
+	public Response getAllAgentTypes(){
 		
 		ArrayList<AgentTypeDTO> retList = new ArrayList<AgentTypeDTO>();
 		
 		for (Iterator<AgentTypeDTO> i = agentsService.getAllSupportedAgentTypes().iterator(); i.hasNext();)
 		    retList.add(i.next());
 		
-		return retList;
+		GenericEntity<List<AgentTypeDTO>> toSend = new GenericEntity<List<AgentTypeDTO>>(retList) {};
+		
+		return Response.ok(toSend).build();
 	}
 	
 	@POST
