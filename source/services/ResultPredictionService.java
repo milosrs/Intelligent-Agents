@@ -13,15 +13,7 @@ import javax.ejb.Stateful;
 
 import beans.FootballResult;
 
-@Stateful
 public class ResultPredictionService {
-
-	private List<FootballResult> results;
-	
-	@PostConstruct
-	public void init() {
-		results = new ArrayList<FootballResult>();
-	}
 	
 	public List<FootballResult> readResults() {
 		
@@ -77,36 +69,40 @@ public class ResultPredictionService {
 			}
 		}
 		
-		this.results = retList;
-		
 		return retList;
 	}
 	
-	public FootballResult predictResult(String homeTeam, String awayTeam) {
+	public int getMatchRating(ArrayList<FootballResult> results, String homeTeam, String awayTeam) {
 		
-		FootballResult retObj = null;
-		
-		List<FootballResult> filteredResults = this.results.stream()
+		List<FootballResult> homeTeamMatches = results.stream()
 				.filter(o -> o.getHomeCountry().equalsIgnoreCase(homeTeam)
-					&& o.getAwayCountry().equalsIgnoreCase(awayTeam))
+					|| o.getAwayCountry().equalsIgnoreCase(homeTeam))
 						.collect(Collectors.toList());
 		
-		if(!filteredResults.isEmpty()) {
-			retObj = new FootballResult(homeTeam, awayTeam, 0, 0);
-			
+		List<FootballResult> awayTeamMatches = results.stream()
+				.filter(o -> o.getHomeCountry().equalsIgnoreCase(awayTeam)
+					|| o.getAwayCountry().equalsIgnoreCase(awayTeam))
+						.collect(Collectors.toList());
+		
+		int homeTeamRating = 0;
+		int awayTeamRating = 0;
+		
+		for(FootballResult result : homeTeamMatches) {
+			if(result.getHomeCountry().equals(homeTeam)) {
+				homeTeamRating += (result.getHomeResult()-result.getAwayResult());
+			}else{
+				homeTeamRating += (result.getAwayResult()-result.getHomeResult());
+			}		
 		}
 		
-		return retObj;
-	}
-	
-	public FootballResult doRegression(String homeTeam, String awayTeam, List<FootballResult> myResults) {
-		
-		FootballResult retObj = new FootballResult(homeTeam, awayTeam, 0, 0);
-		
-		for (int i = 0; i < myResults.size(); i++) {
-			FootballResult res = myResults.get(i);
+		for(FootballResult result : awayTeamMatches) {
+			if(result.getHomeCountry().equals(awayTeam)) {
+				awayTeamRating += (result.getHomeResult()-result.getAwayResult());
+			}else{
+				awayTeamRating += (result.getAwayResult()-result.getHomeResult());
+			}		
 		}
 		
-		return retObj;
+		return homeTeamRating-awayTeamRating;
 	}
 }

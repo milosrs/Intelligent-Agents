@@ -39,11 +39,11 @@ public class ParticipantAgent extends AgentClass {
 		if(message.getPerformative().equals(Performative.CALL_FOR_PROPOSAL)) {
 			
 			Random random = new Random();
-			int rand = random.nextInt(1);
+			int rand = random.nextInt(100);
 			
-			if(rand==0) {
+			if(rand<=50) {
 				aclMessage.setPerformative(Performative.REFUSE);
-			}else if(rand==1) {
+			}else if(rand>50) {
 				aclMessage.setPerformative(Performative.PROPOSE);
 			}
 			
@@ -53,13 +53,13 @@ public class ParticipantAgent extends AgentClass {
 		}else if(message.getPerformative().equals(Performative.ACCEPT_PROPOSAL)) {
 			
 			Random random = new Random();
-			int rand = random.nextInt(1);
+			int rand = random.nextInt(100);
 			
-			if(rand==0) {
+			if(rand<=50) {
 				aclMessage.setPerformative(Performative.FAILURE);
 				sendSocketMessage(aclMessage);		
 				jmsTopic.send(aclMessage);
-			}else if(rand==1) {
+			}else if(rand>50) {
 				
 				aclMessage.setPerformative(Performative.INFORM);
 				sendSocketMessage(aclMessage);		

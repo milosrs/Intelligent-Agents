@@ -49,11 +49,11 @@ private static final long serialVersionUID = 1L;
 		}else if(message.getPerformative().equals(Performative.PROPOSE)) {
 			
 			Random random = new Random();
-			int rand = random.nextInt(1);
+			int rand = random.nextInt(100);
 			
-			if(rand==0) {
+			if(rand<=50) {
 				aclMessage.setPerformative(Performative.REJECT_PROPOSAL);
-			}else if(rand==1) {
+			}else if(rand>50) {
 				aclMessage.setPerformative(Performative.ACCEPT_PROPOSAL);
 			}
 			

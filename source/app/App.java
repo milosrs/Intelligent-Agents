@@ -44,8 +44,6 @@ public class App extends Application {
 	@Inject
 	private HandshakeRequestSender rhs;
 	
-	@Inject
-	private ResultPredictionService rps;
 	
 	@PostConstruct
 	public void init() {
@@ -59,7 +57,7 @@ public class App extends Application {
 			as.firstTouch();
 			
 			//await for jboss to start and then get the port and initialize the node-handshake
-			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname, as, jtp, new HeartbeatInvoker(), rhs, rps);
+			GetHostDataService getHostDataService = new GetHostDataService(ip, hostname, as, jtp, new HeartbeatInvoker(), rhs);
 			Thread t = new Thread(getHostDataService);
 			t.start();
 			
