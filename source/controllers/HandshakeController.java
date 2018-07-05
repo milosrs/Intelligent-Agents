@@ -104,7 +104,6 @@ public class HandshakeController {
 		return Response.ok(success).build();
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
 	@DELETE
 	@Path("/node/{alias}")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -112,18 +111,24 @@ public class HandshakeController {
 	public boolean deleteNode(@PathParam(value = "alias") String alias){
 		boolean retVal = true;
 		List<AgentTypeDTO> toDelete = new ArrayList<AgentTypeDTO>();
-		
+		List<AID> runningAgentsToDelete = new ArrayList<AID>();
 		agentsService.getAllSupportedAgentTypes().forEach(type -> {
 			if(type.getAlias().equals(alias) || type.getHostAddress().equals(alias)) {
 				toDelete.add(type);
 			}
 		});
+		agentsService.getAllRunningAgents().forEach(agent -> {
+			Host host = agent.getHost();
+			
+			if(alias.equals(host.getHostAddress())) {
+				runningAgentsToDelete.add(agent);
+			}
+		});
 		
+		retVal = agentsService.getAllRunningAgents().removeAll(runningAgentsToDelete);
 		retVal = agentsService.getAllSupportedAgentTypes().removeAll(toDelete);	//Delete supported agents
 		retVal = agentsService.getSlaveNodes().removeIf(x -> x.getHostAddress().equals(alias));	//Delete node
 			
 		return retVal;
 	}
-	
-	
 }
