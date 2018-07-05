@@ -102,7 +102,7 @@ public class RestController {
 				if(item.getName().equals(type)) {
 					//add agent to my list
 					AID aid = new AID(name, myHostData, new AgentType(item.getName(), item.getModule()));
-					AgentInterface myAgent = AgentsFactory.createAgent(aid);
+					AgentInterface myAgent = AgentsFactory.createAgent(aid,jmsTopic,agentsService);
 					agentsService.getMyRunningAgents().add(myAgent);
 					agentsService.getAllRunningAgents().add(aid);
 					

@@ -1,21 +1,29 @@
 package beans;
 
+
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
-
+import beans.enums.Performative;
 import interfaces.AgentInterface;
+import jms.JMSTopic;
+import services.AgentsService;
 
 @Stateful
 @Remote(AgentInterface.class)
 public class PingAgent extends AgentClass {
 	
 	private static final long serialVersionUID = 1L;
+	private AgentsService agentsService;
+	
+	private JMSTopic jmsTopic;
 	
 	private AID aid;
 	
 	@Override
 	public void handleMessage(ACLMessage message) {
-		// TODO Auto-generated method stub
+		if(message.getPerformative().equals(Performative.INFORM)) {
+			sendSocketMessage(message);
+		}
 		
 	}
 
@@ -28,4 +36,11 @@ public class PingAgent extends AgentClass {
 	public AID getAid() {
 		return this.aid;
 	}
+	
+	@Override
+	public void init(JMSTopic topic, AgentsService agentService) {
+		this.jmsTopic = topic;
+		this.agentsService = agentService;
+	}
+	
 }
