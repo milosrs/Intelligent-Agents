@@ -46,6 +46,14 @@ public class AgentsService {
 	
 	private List<AID> allRunningAgents;
 	
+	@PreDestroy
+	public void disconnectFromNetwork() {
+		if(nodeType.equals(NodeType.SLAVE)) {
+			requestSender.deleteBadNode(mainNode.getHostAddress(), myHostInfo.getHostAddress());
+		}
+		
+		slaveNodes.stream().forEach(s -> requestSender.deleteBadNode(s.getHostAddress(), myHostInfo.getHostAddress()));
+	}
 	
 	public boolean setSlavesSentFromMaster(List<Host> slavesList) {
 		Host thisNode = this.myHostInfo;
@@ -106,6 +114,7 @@ public class AgentsService {
 				
 				if(!isAlive) {
 					System.out.println("-* RESULT: Slave dead, deleting.");
+					disconnectNode(slave);
 				} else {
 					System.out.println("-* RESULT: ALIVE!");
 				}
@@ -114,6 +123,41 @@ public class AgentsService {
 		}
 	}
 	
+	private void disconnectNode(Host slave) {
+		this.slaveNodes.stream().forEach(slv -> {
+			if(!slave.equals(slv)) {
+				requestSender.deleteBadNode(slv.getHostAddress(), slave.getHostAddress());
+			}
+		});
+		
+		deleteNode(slave.getHostAddress());
+	}
+	
+	public boolean deleteNode(String alias) {
+		boolean retVal = true;
+		
+		List<AgentTypeDTO> toDelete = new ArrayList<AgentTypeDTO>();
+		List<AID> runningAgentsToDelete = new ArrayList<AID>();
+		this.getAllSupportedAgentTypes().forEach(type -> {
+			if(type.getAlias().equals(alias) || type.getHostAddress().equals(alias)) {
+				toDelete.add(type);
+			}
+		});
+		this.getAllRunningAgents().forEach(agent -> {
+			Host host = agent.getHost();
+			
+			if(alias.equals(host.getHostAddress())) {
+				runningAgentsToDelete.add(agent);
+			}
+		});
+		
+		retVal = this.getAllRunningAgents().removeAll(runningAgentsToDelete);
+		retVal = this.getAllSupportedAgentTypes().removeAll(toDelete);	//Delete supported agents
+		retVal = this.getSlaveNodes().removeIf(x -> x.getHostAddress().equals(alias));	//Delete node
+			
+		return retVal;
+	}
+
 	public void firstTouch() {
 		setSlaveNodes(new ArrayList<Host>());
 		setMySupportedAgentTypes(new ArrayList<AgentType>());

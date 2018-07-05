@@ -1,6 +1,8 @@
 package beans;
 
-public class AgentTypeDTO {
+import java.io.Serializable;
+
+public class AgentTypeDTO implements Serializable {
 
 	private String name;
 	private String module;

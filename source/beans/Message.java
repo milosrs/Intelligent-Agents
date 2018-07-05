@@ -1,6 +1,8 @@
 package beans;
 
-public class Message {
+import java.io.Serializable;
+
+public class Message implements Serializable {
 	
 	private String messageType;
 	private String content;
