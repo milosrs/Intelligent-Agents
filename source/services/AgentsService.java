@@ -10,6 +10,11 @@ import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import beans.AID;
 import beans.AgentType;
@@ -29,6 +34,11 @@ public class AgentsService {
 	
 	private NodeType nodeType;
 
+	private Client restClient;
+	private WebTarget webTarget;
+	private static String HTTP_URL = "http://";
+	private static String NODE_URL = "/Inteligent_Agents/rest/handshake";
+	
 	@Inject
 	private HandshakeRequestSender requestSender;
 	
@@ -46,13 +56,20 @@ public class AgentsService {
 	
 	private List<AID> allRunningAgents;
 	
+	@PostConstruct
+	public void init() {
+		this.restClient = ClientBuilder.newClient();
+	}
+	
 	@PreDestroy
 	public void disconnectFromNetwork() {
+		System.out.println("***** Disconnecting from network *****");
 		if(nodeType.equals(NodeType.SLAVE)) {
-			requestSender.deleteBadNode(mainNode.getHostAddress(), myHostInfo.getHostAddress());
+			deleteBadNode(mainNode.getHostAddress(), myHostInfo.getHostAddress());
 		}
 		
-		slaveNodes.stream().forEach(s -> requestSender.deleteBadNode(s.getHostAddress(), myHostInfo.getHostAddress()));
+		slaveNodes.stream().forEach(s -> deleteBadNode(s.getHostAddress(), myHostInfo.getHostAddress()));
+		System.out.println("***** GGWP *****");
 	}
 	
 	public boolean setSlavesSentFromMaster(List<Host> slavesList) {
@@ -105,22 +122,37 @@ public class AgentsService {
 	 * Metoda koja treba da se poziva za heartbeat protokol
 	 */
 	public void checkSlavesHealth() {
-		if(this.nodeType.equals(NodeType.MASTER)) {
-			System.out.println("*************** CHECKING SLAVE HEALTH STATUS ****************");
-			this.slaveNodes.stream().forEach(slave -> {
-				System.out.println("-* ACTION: Checking health status for: " + slave.getAlias());
-				
-				boolean isAlive = requestSender.isAlive(slave.getHostAddress());
-				
-				if(!isAlive) {
-					System.out.println("-* RESULT: Slave dead, deleting.");
-					disconnectNode(slave);
-				} else {
-					System.out.println("-* RESULT: ALIVE!");
-				}
-			});
-			System.out.println("*************** ENDING SLAVE HEALTH STATUS ****************");	
+		System.out.println("*************** CHECKING SLAVE HEALTH STATUS ****************");
+		
+		List<Host> toDelete = new ArrayList<Host>();
+		
+		if(this.nodeType.equals(NodeType.SLAVE)) {
+			boolean masterAlive = requestSender.isAlive(mainNode.getHostAddress());
+			
+			if(!masterAlive) {
+				System.out.println("Master is dead, disconnecting.");
+				disconnectNode(mainNode);
+			}
 		}
+		
+		this.slaveNodes.stream().forEach(slave -> {
+			System.out.println("-* ACTION: Checking health status for: " + slave.getAlias());
+
+			boolean isAlive = requestSender.isAlive(slave.getHostAddress());
+
+			if (!isAlive) {
+				System.out.println("-* RESULT: Slave dead, deleting.");
+				toDelete.add(slave);
+			} else {
+				System.out.println("-* RESULT: ALIVE!");
+			}
+		});
+		
+		for(int i=0; i<toDelete.size(); i++) {
+			disconnectNode(toDelete.get(i));
+		}
+		
+		System.out.println("*************** ENDING SLAVE HEALTH STATUS ****************");
 	}
 	
 	private void disconnectNode(Host slave) {
@@ -131,6 +163,23 @@ public class AgentsService {
 		});
 		
 		deleteNode(slave.getHostAddress());
+	}
+	
+	private boolean deleteBadNode(String url, String nodeAlias) {
+		boolean success = true;
+		
+		webTarget = restClient.target(HTTP_URL + url + NODE_URL + "/node/" + nodeAlias);
+		Response resp = webTarget.request(MediaType.APPLICATION_JSON).delete();
+		
+		try {
+			success = resp.readEntity(boolean.class);
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Error deleting node.");
+			success = false;
+		}
+		
+		return success;
 	}
 	
 	public boolean deleteNode(String alias) {

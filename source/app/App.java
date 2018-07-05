@@ -67,39 +67,4 @@ public class App extends Application {
 			e.printStackTrace();
 		}
 	}
-	
-	@PreDestroy
-	public void destroy() {
-		try {
-			
-			//delete node data from other slaves (all slaves if i am the main node)
-			for (Iterator<Host> h = agentsService.getSlaveNodes().iterator(); h.hasNext();) {
-				Host item = h.next();
-
-				Response resp = requestSender.deleteAgents(item, agentsService.getMySupportedAgentTypes());
-				boolean respInfo = resp.readEntity(Boolean.class);
-				
-				if(respInfo)
-					System.out.println("Deleting data from " + item.getAlias() + " SUCCEDED!");
-				else
-					System.out.println("Deleting data from " + item.getAlias() + " FAILED!");
-			}
-			
-			//slave shutdown (i am not the main node)
-			if(!agentsService.getMainNode().getHostAddress().equals("ME")) {
-				//delete node data from main node
-				Host main = agentsService.getMainNode();
-				Response resp = requestSender.deleteAgents(main, agentsService.getMySupportedAgentTypes());
-				boolean respInfo = resp.readEntity(Boolean.class);
-				
-				if(respInfo)
-					System.out.println("Deleting data from " + main.getAlias() + " SUCCEDED!");
-				else
-					System.out.println("Deleting data from " + main.getAlias() + " FAILED!");
-			}	
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

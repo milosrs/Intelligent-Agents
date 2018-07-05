@@ -97,11 +97,9 @@ public class GetHostDataService implements Runnable {
 			}
 			else { //i am the master, save my data
 				setMasterData();
-				
-				//initialize heartbeat
-				ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-				executor.scheduleAtFixedRate(heartbeat, 180, 180, TimeUnit.SECONDS);
-			}	
+			}
+			ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+			executor.scheduleAtFixedRate(heartbeat, 180, 180, TimeUnit.SECONDS);
 		}
 		else {//kill the app
 			System.exit(1);

@@ -3,6 +3,7 @@ package requestSenders;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
 import javax.ejb.Stateless;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -17,7 +18,7 @@ import beans.AgentType;
 import beans.AgentTypeDTO;
 import beans.Host;
 
-@Stateless
+@Singleton
 public class HandshakeRequestSender {
 	private Client restClient;
 	private WebTarget webTarget;
