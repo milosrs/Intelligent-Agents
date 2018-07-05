@@ -108,27 +108,9 @@ public class HandshakeController {
 	@Path("/node/{alias}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean deleteNode(@PathParam(value = "alias") String alias){
-		boolean retVal = true;
-		List<AgentTypeDTO> toDelete = new ArrayList<AgentTypeDTO>();
-		List<AID> runningAgentsToDelete = new ArrayList<AID>();
-		agentsService.getAllSupportedAgentTypes().forEach(type -> {
-			if(type.getAlias().equals(alias) || type.getHostAddress().equals(alias)) {
-				toDelete.add(type);
-			}
-		});
-		agentsService.getAllRunningAgents().forEach(agent -> {
-			Host host = agent.getHost();
+	public Response deleteNode(@PathParam(value = "alias") String alias){
+		boolean retVal = handshakeService.deleteNode(alias);
 			
-			if(alias.equals(host.getHostAddress())) {
-				runningAgentsToDelete.add(agent);
-			}
-		});
-		
-		retVal = agentsService.getAllRunningAgents().removeAll(runningAgentsToDelete);
-		retVal = agentsService.getAllSupportedAgentTypes().removeAll(toDelete);	//Delete supported agents
-		retVal = agentsService.getSlaveNodes().removeIf(x -> x.getHostAddress().equals(alias));	//Delete node
-			
-		return retVal;
+		return Response.ok(retVal).build();
 	}
 }

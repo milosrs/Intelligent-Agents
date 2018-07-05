@@ -64,7 +64,6 @@ public class HandshakeService {
 				try {
 					switch(option) {
 					case 0: {
-						List<AgentTypeDTO> dtos = new ArrayList<AgentTypeDTO>();
 						supported = requestSender.fetchAgentTypeList(newSlave.getHostAddress());
 						agentsService.addNewAgentTypes(supported);
 						
@@ -214,20 +213,8 @@ public class HandshakeService {
 		return retList;							
 	}
 	
-	@SuppressWarnings("unlikely-arg-type")
-	public boolean deleteNode(String alias, ArrayList<AgentType> agentsToDelete){
-		
-		boolean retVal = true;
-				
-		boolean hasDeleted = agentsService.getSlaveNodes().removeIf(x -> x.getAlias().equals(alias));
-		boolean hasRemoved = true;
-		if(!agentsToDelete.isEmpty())
-			hasRemoved = agentsService.getMySupportedAgentTypes().remove(agentsToDelete);
-			
-		if(!hasDeleted || !hasRemoved)
-			retVal = false;
-			
-		return retVal;
+	public boolean deleteNode(String alias){
+		return agentsService.deleteNode(alias);
 	}
 	
 }
