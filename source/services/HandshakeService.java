@@ -1,5 +1,6 @@
 package services;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,6 +9,8 @@ import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import beans.AID;
 import beans.AgentType;
@@ -19,7 +22,6 @@ import requestSenders.HandshakeRequestSender;
 
 @Stateful
 public class HandshakeService {
-	private final int handshakeAttempts = 3;
 	@Inject
 	private HandshakeRequestSender requestSender;
 	@Inject
@@ -176,7 +178,7 @@ public class HandshakeService {
 		return success;
 	}
 	
-	public boolean addNewAgentTypes(List<AgentTypeDTO> agentTypes) {
+	public boolean addNewAgentTypes(List<AgentTypeDTO> agentTypes) throws JsonProcessingException, IOException {
 		List<AgentTypeDTO> ret = agentsService.addNewAgentTypes(agentTypes);
 		
 		return ret != null;
@@ -214,7 +216,17 @@ public class HandshakeService {
 	}
 	
 	public boolean deleteNode(String alias){
-		return agentsService.deleteNode(alias);
+		boolean success = true;
+		
+		try {
+			success = agentsService.deleteNode(alias);
+		} catch(Exception e) {
+			success = false;
+			e.printStackTrace();
+			System.out.println("Error deleting node. :(");
+		}
+		
+		return success;
 	}
 	
 }

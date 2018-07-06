@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +18,8 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import beans.AID;
 import beans.AgentType;
@@ -36,9 +39,17 @@ public class HandshakeController {
 	private AgentsService agentsService;
 	
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/node")
 	public boolean isAlive() {
 		return true;
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/status")
+	public Response nodeStatusForPostman() {
+		return Response.ok(agentsService.returnNodeStatus()).build();
 	}
 	
 	@POST
@@ -98,7 +109,7 @@ public class HandshakeController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/agents/classes")
-	public Response registerNewAgentClasses(List<AgentTypeDTO> agentTypes) {
+	public Response registerNewAgentClasses(List<AgentTypeDTO> agentTypes) throws JsonProcessingException, IOException {
 		boolean success = handshakeService.addNewAgentTypes(agentTypes);
 		
 		return Response.ok(success).build();

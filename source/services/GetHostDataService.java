@@ -57,7 +57,6 @@ public class GetHostDataService implements Runnable {
 		this.heartbeat = hbi;
 		this.heartbeat.init(this.agentsService);
 		this.requestSender = rhs;
-//		this.resultPredictionService = rps;
 	}
 	
 	@Override
@@ -77,9 +76,6 @@ public class GetHostDataService implements Runnable {
 				| ReflectionException | MBeanException | CommandLineException e) {
 			e.printStackTrace();
 		}
-		
-		//test read results
-//		resultPredictionService.readResults();
 		
 		//check if server is up and running
 		boolean isRunning = sendAdminRequest(this.portOffset);

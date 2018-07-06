@@ -44,9 +44,6 @@ public class App extends Application {
 	@Inject
 	private HandshakeRequestSender rhs;
 	
-//	@Inject
-//	private ResultPredictionService rps;
-	
 	@PostConstruct
 	public void init() {
 		try {

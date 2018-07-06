@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit {
   }
 
   stopAgentEvent(agent : Aid){
-    var index = this.containsAid(agent);
+    var index = this.containsAid(agent,this.runningAgents);
     if(index!=-1){
       this.runningAgents.splice(index,1);
     }
@@ -66,6 +66,26 @@ export class HomeComponent implements OnInit {
 
   aclMessageEvent(aclMessage:any){
     this.aclMessages.push(aclMessage);
+  }
+
+  deleteRunningEvent(runningToDelete:any[]){
+    for(let running of runningToDelete){
+      var index = this.containsAid(running,this.runningAgents);
+      this.runningAgents.splice(index,1);
+    }
+  }
+
+  deleteTypesEvent(typesToDelete:any[]){
+    for(let type of typesToDelete){
+      var index = this.containsType(type,this.agentTypes);
+      this.agentTypes.splice(index,1);
+    }
+  }
+
+  addTypesEvent(typesToAdd:any[]) {
+    for(let type of typesToAdd) {
+      this.agentTypes.push(type);
+    }
   }
 
   startSocket(){
@@ -79,13 +99,19 @@ export class HomeComponent implements OnInit {
         this.stopAgentEvent(JSON.parse(resp.content));
       }else if(resp.messageType==="aclMessage"){
         this.aclMessageEvent(JSON.parse(resp.content));
+      }else if(resp.messageType==="deleteRunning"){
+        this.deleteRunningEvent(JSON.parse(resp.content));
+      }else if(resp.messageType==="deleteTypes"){
+        this.deleteTypesEvent(JSON.parse(resp.content));
+      } else if(resp.messageType === 'addTypes') {
+        this.addTypesEvent(JSON.parse(resp.content));
       }
     }
   }
 
-  containsAid(aid:Aid):number{
+  containsAid(aid:Aid,agentsList:any[]):number{
     var index = 0;
-    for(let listAid of this.runningAgents){
+    for(let listAid of agentsList){
       if(listAid.name===aid.name && listAid.type.name===aid.type.name && listAid.type.module===aid.type.module && listAid.host.hostAddress===aid.host.hostAddress && listAid.host.alias===aid.host.alias){
         return index;
       }
@@ -93,5 +119,18 @@ export class HomeComponent implements OnInit {
     }
     return -1;
   }
+
+  containsType(agentType:any,typeList:any[]):number{
+    var index = 0;
+    for(let type of typeList){
+      if(type.name===agentType.name && type.module===agentType.module 
+          && type.hostAddress === agentType.hostAddress && type.alias === agentType.alias){
+        return index;
+      }
+      index++;
+    }
+    return -1;
+  }
+
 
 }

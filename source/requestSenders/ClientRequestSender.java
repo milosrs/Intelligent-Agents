@@ -25,9 +25,10 @@ public class ClientRequestSender {
 	private static String NODE_URL = "/Inteligent_Agents/rest/app";
 	
 	public void postRunningAgents(ArrayList<AID> agents, String hostAddress) {
-		restClient = ClientBuilder.newClient();
-		webTarget = restClient.target(HTTP_URL + hostAddress + NODE_URL + "/agents/running");
-		webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agents, MediaType.APPLICATION_JSON));
+		System.out.println("Ovo je ocigledno neka greska");
+//		restClient = ClientBuilder.newClient();
+//		webTarget = restClient.target(HTTP_URL + hostAddress + NODE_URL + "/agents/running");
+//		webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(agents, MediaType.APPLICATION_JSON));
 	}
 	
 	public String deleteRunningAgents(Host host, AID aid) throws JsonProcessingException {

@@ -1,6 +1,8 @@
 package services;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -10,20 +12,27 @@ import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Singleton;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.websocket.Session;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import beans.AID;
 import beans.AgentType;
 import beans.AgentTypeDTO;
 import beans.Host;
+import beans.Message;
 import beans.enums.NodeType;
+import controllers.WebSocketController;
 import interfaces.AgentInterface;
 import requestSenders.AdminConsoleRequestSender;
 import requestSenders.HandshakeRequestSender;
+import services.agentServiceStatus.AgentServiceStatusDTO;
 
 @Singleton
 @ApplicationScoped
@@ -56,9 +65,12 @@ public class AgentsService {
 	
 	private List<AID> allRunningAgents;
 	
+	private ObjectMapper mapper;
+	
 	@PostConstruct
 	public void init() {
 		this.restClient = ClientBuilder.newClient();
+		mapper = new ObjectMapper();
 	}
 	
 	@PreDestroy
@@ -94,25 +106,17 @@ public class AgentsService {
 		return success;
 	}
 	
-	public List<AgentTypeDTO> addNewAgentTypes(List<AgentTypeDTO> agentTypes) {
+	public List<AgentTypeDTO> addNewAgentTypes(List<AgentTypeDTO> agentTypes) throws JsonProcessingException, IOException {
 		List<AgentTypeDTO> nonSupported = new ArrayList<AgentTypeDTO>();
 		
 		if (agentTypes != null) {
-			try {
-				for(AgentTypeDTO type : agentTypes) {
-					this.allSupportedAgentTypes.stream().forEach(alltype -> {
-						if(!type.getModule().equals(alltype.getModule()) 
-							&& !type.getName().equals(alltype.getName())) {
-							allSupportedAgentTypes.add(type);
-							nonSupported.add(type);
-						}
-					});
-				}
-			} catch(Exception e ) {
-				e.printStackTrace();
-				System.out.println("Error adding agentTypes");
-				return null;
-			}	
+			allSupportedAgentTypes.addAll(agentTypes);
+		}
+		
+		Iterator<Session> iterator2 = WebSocketController.sessions.iterator();
+		while(iterator2.hasNext()) {
+			Session s = iterator2.next();
+			s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("addTypes", mapper.writeValueAsString(agentTypes))));
 		}
 		
 		return nonSupported;
@@ -162,7 +166,13 @@ public class AgentsService {
 			}
 		});
 		
-		deleteNode(slave.getHostAddress());
+		try {
+			deleteNode(slave.getHostAddress());	
+		} catch(Exception e ) {
+			e.printStackTrace();
+			System.out.println("!!!!!!!!!!!!!!!!!!!! Error disconnecting node. !!!!!!!!!!!!!!!!!!!");
+		}
+		
 	}
 	
 	private boolean deleteBadNode(String url, String nodeAlias) {
@@ -182,13 +192,14 @@ public class AgentsService {
 		return success;
 	}
 	
-	public boolean deleteNode(String alias) {
+	public boolean deleteNode(String alias) throws JsonProcessingException, IOException {
 		boolean retVal = true;
-		
 		List<AgentTypeDTO> toDelete = new ArrayList<AgentTypeDTO>();
 		List<AID> runningAgentsToDelete = new ArrayList<AID>();
+		mapper = new ObjectMapper();
+		
 		this.getAllSupportedAgentTypes().forEach(type -> {
-			if(type.getAlias().equals(alias) || type.getHostAddress().equals(alias)) {
+			if(type.getHostAddress().equals(alias)) {
 				toDelete.add(type);
 			}
 		});
@@ -199,6 +210,17 @@ public class AgentsService {
 				runningAgentsToDelete.add(agent);
 			}
 		});
+		
+		Iterator<Session> iterator = WebSocketController.sessions.iterator();
+		while(iterator.hasNext()) {
+			Session s = iterator.next();
+			s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("deleteRunning", mapper.writeValueAsString(runningAgentsToDelete))));
+		}
+		Iterator<Session> iterator2 = WebSocketController.sessions.iterator();
+		while(iterator2.hasNext()) {
+			Session s = iterator2.next();
+			s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("deleteTypes", mapper.writeValueAsString(toDelete))));
+		}
 		
 		retVal = this.getAllRunningAgents().removeAll(runningAgentsToDelete);
 		retVal = this.getAllSupportedAgentTypes().removeAll(toDelete);	//Delete supported agents
@@ -287,4 +309,11 @@ public class AgentsService {
 	public void setAllRunningAgents(List<AID> allRunningAgents) {
 		this.allRunningAgents = allRunningAgents;
 	}	
+	
+	public AgentServiceStatusDTO returnNodeStatus() {
+		return new AgentServiceStatusDTO(portOffset, 
+				nodeType, mainNode, myHostInfo, slaveNodes, 
+				mySupportedAgentTypes, allSupportedAgentTypes, 
+				myRunningAgents, allRunningAgents);
+	}
 }
