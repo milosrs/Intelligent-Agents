@@ -71,7 +71,8 @@ public class JMSTopic implements MessageListener {
 		try {
 			consumer.close();
 			producer.close();
-			connection.close();	
+			connection.close();
+			session.close();
 		} catch (JMSException ex) {
 			throw new IllegalStateException(ex);
 		}

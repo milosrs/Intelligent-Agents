@@ -41,8 +41,8 @@ public class HandshakeController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/node")
-	public boolean isAlive() {
-		return true;
+	public Response isAlive() {
+		return Response.ok(Boolean.TRUE).build();
 	}
 	
 	@GET

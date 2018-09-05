@@ -45,7 +45,7 @@ public class HandshakeService {
 				isSuccess = tryHandshake(newSlave);	
 			}
 			if(isSuccess) {
-				agentsService.getSlaveNodes().add(newSlave);	
+				agentsService.getSlaveNodes().add(newSlave);
 			} else {
 				System.out.println("ERROR: Handshake failed. Initializing rollback.");
 				rollback(newSlave);

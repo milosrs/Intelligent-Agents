@@ -71,6 +71,11 @@ public class AgentsService {
 	public void init() {
 		this.restClient = ClientBuilder.newClient();
 		mapper = new ObjectMapper();
+		setSlaveNodes(new ArrayList<Host>());
+		setMySupportedAgentTypes(new ArrayList<AgentType>());
+		setAllSupportedAgentTypes(new ArrayList<AgentTypeDTO>());
+		setMyRunningAgents(new ArrayList<AgentInterface>());
+		setAllRunningAgents(new ArrayList<AID>());
 	}
 	
 	@PreDestroy
@@ -161,7 +166,7 @@ public class AgentsService {
 	
 	private void disconnectNode(Host slave) {
 		this.slaveNodes.stream().forEach(slv -> {
-			if(!slave.equals(slv)) {
+			if(!slave.getHostAddress().equals(slv.getHostAddress())) {
 				requestSender.deleteBadNode(slv.getHostAddress(), slave.getHostAddress());
 			}
 		});
@@ -184,9 +189,8 @@ public class AgentsService {
 		try {
 			success = resp.readEntity(boolean.class);
 		} catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("Error deleting node.");
-			success = false;
+			System.out.println("RestEasy had problems reading request body. Is response code 200?");
+			success = resp.getStatus() == 200;
 		}
 		
 		return success;
@@ -198,12 +202,12 @@ public class AgentsService {
 		List<AID> runningAgentsToDelete = new ArrayList<AID>();
 		mapper = new ObjectMapper();
 		
-		this.getAllSupportedAgentTypes().forEach(type -> {
+		this.allSupportedAgentTypes.forEach(type -> {
 			if(type.getHostAddress().equals(alias)) {
 				toDelete.add(type);
 			}
 		});
-		this.getAllRunningAgents().forEach(agent -> {
+		this.allRunningAgents.forEach(agent -> {
 			Host host = agent.getHost();
 			
 			if(alias.equals(host.getHostAddress())) {

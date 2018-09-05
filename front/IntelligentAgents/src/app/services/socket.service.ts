@@ -12,7 +12,7 @@ export class SocketService {
   }
 
   public initSocket(): void {
-    this.socket = new WebSocket('ws://localhost:8082/Inteligent_Agents/websocket');
+    this.socket = new WebSocket('ws://localhost:8080/Inteligent_Agents/websocket');
   }
 
   public closeSocket(): void {

@@ -179,11 +179,11 @@ public class HandshakeRequestSender {
 			Response resp = webTarget.request(MediaType.APPLICATION_JSON).get();
 			
 			try {
-				success = resp.readEntity(boolean.class);
+				success = resp.readEntity(Boolean.class);
 			} catch(Exception e) {
-				e.printStackTrace();
-				success = false;
-			}	
+				System.out.println("RestEasy client unable to parse GET response body. Checking response code!");
+				success = resp.getStatus() == 200;
+			}
 		} catch(Exception e) {
 			success = false;
 		}

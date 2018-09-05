@@ -1,6 +1,6 @@
 {
     "/rest/*" : {
-        "target" : "http://localhost:8082/Inteligent_Agents",
+        "target" : "http://localhost:8080/Inteligent_Agents",
         "secure" : false
     }
 
