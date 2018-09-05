@@ -203,8 +203,13 @@ public class AgentsService {
 		mapper = new ObjectMapper();
 		
 		this.allSupportedAgentTypes.forEach(type -> {
-			if(type.getHostAddress().equals(alias)) {
-				toDelete.add(type);
+			try {
+				if(type.getHostAddress().equals(alias)) {
+					toDelete.add(type);
+				}	
+			} catch(Exception e) {
+				System.out.println("Error accessing supported agent type." + type);
+				System.out.println("Alias was: " + alias);
 			}
 		});
 		this.allRunningAgents.forEach(agent -> {

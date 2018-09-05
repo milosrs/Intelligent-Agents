@@ -158,9 +158,8 @@ public class HandshakeRequestSender {
 		try {
 			success = resp.readEntity(boolean.class);
 		} catch(Exception e) {
-			e.printStackTrace();
-			System.out.println("Error deleting node.");
-			success = false;
+			System.out.println("RestEasy client unable to parse GET response body. Checking response code!");
+			success = resp.getStatus() == 200;
 		}
 		
 		return success;
