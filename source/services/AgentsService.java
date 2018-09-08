@@ -47,6 +47,7 @@ public class AgentsService {
 	private WebTarget webTarget;
 	private static String HTTP_URL = "http://";
 	private static String NODE_URL = "/Inteligent_Agents/rest/handshake";
+	private boolean hasMasterNodeDisconnected;
 	
 	@Inject
 	private HandshakeRequestSender requestSender;
@@ -112,10 +113,25 @@ public class AgentsService {
 	}
 	
 	public List<AgentTypeDTO> addNewAgentTypes(List<AgentTypeDTO> agentTypes) throws JsonProcessingException, IOException {
-		List<AgentTypeDTO> nonSupported = new ArrayList<AgentTypeDTO>();
-		
-		if (agentTypes != null) {
-			allSupportedAgentTypes.addAll(agentTypes);
+		if (agentTypes != null && agentTypes != null) {
+			agentTypes.forEach(type -> {
+				boolean shouldAdd = type.getHostAddress() != null;
+				
+				if(shouldAdd) {
+					for(AgentTypeDTO t : this.allSupportedAgentTypes) {
+						if(t.getHostAddress().equals(type.getHostAddress()) && t.getName().equals(type.getName())) {
+							shouldAdd = false;
+							break;
+						}
+					}
+					
+					if(shouldAdd) {
+						this.allSupportedAgentTypes.add(type);
+					}
+				}
+			});
+			System.out.println("Node: " + this.myHostInfo.getHostAddress());
+			printAllSupportedAgents();
 		}
 		
 		Iterator<Session> iterator2 = WebSocketController.sessions.iterator();
@@ -124,14 +140,14 @@ public class AgentsService {
 			s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("addTypes", mapper.writeValueAsString(agentTypes))));
 		}
 		
-		return nonSupported;
+		return this.allSupportedAgentTypes;
 	}
 	
 	/***
 	 * Metoda koja treba da se poziva za heartbeat protokol
 	 */
 	public void checkSlavesHealth() {
-		System.out.println("*************** CHECKING SLAVE HEALTH STATUS ****************");
+		System.out.println("*************** CHECKING NODES HEALTH STATUS ****************");
 		
 		List<Host> toDelete = new ArrayList<Host>();
 		
@@ -139,8 +155,15 @@ public class AgentsService {
 			boolean masterAlive = requestSender.isAlive(mainNode.getHostAddress());
 			
 			if(!masterAlive) {
-				System.out.println("Master is dead, disconnecting.");
+				System.out.println("-* RESULT: Master is dead, disconnecting.");
 				disconnectNode(mainNode);
+				hasMasterNodeDisconnected = true;
+			} else {
+				System.out.println("-* RESULT: Master alive!");
+				if(hasMasterNodeDisconnected) {
+					System.out.println("-*ACTION: Master was offline. Reconnecting " + this.myHostInfo.getHostAddress() + " to master!");
+					requestSender.registerSlaveNode(this.mainNode.getHostAddress(), this.myHostInfo);
+				}
 			}
 		}
 		
@@ -159,6 +182,7 @@ public class AgentsService {
 		
 		for(int i=0; i<toDelete.size(); i++) {
 			disconnectNode(toDelete.get(i));
+			this.slaveNodes.remove(i);
 		}
 		
 		System.out.println("*************** ENDING SLAVE HEALTH STATUS ****************");
@@ -324,5 +348,11 @@ public class AgentsService {
 				nodeType, mainNode, myHostInfo, slaveNodes, 
 				mySupportedAgentTypes, allSupportedAgentTypes, 
 				myRunningAgents, allRunningAgents);
+	}
+	
+	private void printAllSupportedAgents() {
+		this.allSupportedAgentTypes.forEach(type -> {
+			System.out.println(type.getName() + " -> " + type.getHostAddress());
+		});
 	}
 }

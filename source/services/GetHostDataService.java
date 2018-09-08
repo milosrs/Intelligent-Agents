@@ -71,7 +71,7 @@ public class GetHostDataService implements Runnable {
 		
 		//try reading host data from socket-bindings
 		try {
-			host = getHostData();
+			this.host = getHostData();
 		} catch (InstanceNotFoundException | AttributeNotFoundException | MalformedObjectNameException
 				| ReflectionException | MBeanException | CommandLineException e) {
 			e.printStackTrace();
