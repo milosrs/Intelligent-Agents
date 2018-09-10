@@ -32,7 +32,6 @@ import controllers.WebSocketController;
 import interfaces.AgentInterface;
 import requestSenders.AdminConsoleRequestSender;
 import requestSenders.HandshakeRequestSender;
-import services.agentServiceStatus.AgentServiceStatusDTO;
 
 @Singleton
 @ApplicationScoped
@@ -64,6 +63,8 @@ public class AgentsService {
 	
 	private List<AgentInterface> myRunningAgents;
 	
+	private List<AID> myRunningAgentsAID;
+	
 	private List<AID> allRunningAgents;
 	
 	private ObjectMapper mapper;
@@ -77,8 +78,9 @@ public class AgentsService {
 		setAllSupportedAgentTypes(new ArrayList<AgentTypeDTO>());
 		setMyRunningAgents(new ArrayList<AgentInterface>());
 		setAllRunningAgents(new ArrayList<AID>());
+		setMyRunningAgentsAID(new ArrayList<AID>());
 	}
-	
+
 	@PreDestroy
 	public void disconnectFromNetwork() {
 		System.out.println("***** Disconnecting from network *****");
@@ -263,11 +265,7 @@ public class AgentsService {
 	}
 
 	public void firstTouch() {
-		setSlaveNodes(new ArrayList<Host>());
-		setMySupportedAgentTypes(new ArrayList<AgentType>());
-		setAllSupportedAgentTypes(new ArrayList<AgentTypeDTO>());
-		setMyRunningAgents(new ArrayList<AgentInterface>());
-		setAllRunningAgents(new ArrayList<AID>());
+		init();
 		System.out.println("---------SINGLETON TOUCHED----------");
 	}
 	
@@ -341,13 +339,14 @@ public class AgentsService {
 
 	public void setAllRunningAgents(List<AID> allRunningAgents) {
 		this.allRunningAgents = allRunningAgents;
-	}	
-	
-	public AgentServiceStatusDTO returnNodeStatus() {
-		return new AgentServiceStatusDTO(portOffset, 
-				nodeType, mainNode, myHostInfo, slaveNodes, 
-				mySupportedAgentTypes, allSupportedAgentTypes, 
-				myRunningAgents, allRunningAgents);
+	}
+
+	public List<AID> getMyRunningAgentsAID() {
+		return myRunningAgentsAID;
+	}
+
+	public void setMyRunningAgentsAID(List<AID> myRunningAgentsAID) {
+		this.myRunningAgentsAID = myRunningAgentsAID;
 	}
 	
 	private void printAllSupportedAgents() {

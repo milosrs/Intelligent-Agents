@@ -45,12 +45,6 @@ public class HandshakeController {
 		return Response.ok(Boolean.TRUE).build();
 	}
 	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/status")
-	public Response nodeStatusForPostman() {
-		return Response.ok(agentsService.returnNodeStatus()).build();
-	}
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -93,10 +87,17 @@ public class HandshakeController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response postRunningAgents(ArrayList<AID> agentsList){
 		Response resp = null;
-		
+		ArrayList<AID> toAdd = new ArrayList<AID>();
 		try {
-			for (Iterator<AID> i = agentsList.iterator(); i.hasNext();)
-				agentsService.getAllRunningAgents().add(i.next());	
+			for (AID i : agentsList) {
+				agentsService.getAllRunningAgents().forEach(a -> {
+					if(!(i.getHost().getHostAddress().equals(a.getHost().getHostAddress()) && i.getName().equals(a.getName()))) {
+						toAdd.add(i);
+					}
+				});
+			}
+
+			agentsService.getAllRunningAgents().addAll(toAdd);
 			resp = Response.ok(true).build();
 		} catch(Exception e) {
 			resp = Response.serverError().entity(false).build();

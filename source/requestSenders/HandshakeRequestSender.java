@@ -17,6 +17,7 @@ import beans.AID;
 import beans.AgentType;
 import beans.AgentTypeDTO;
 import beans.Host;
+import interfaces.AgentInterface;
 
 @Singleton
 public class HandshakeRequestSender {
@@ -30,9 +31,19 @@ public class HandshakeRequestSender {
 		restClient = ClientBuilder.newClient();
 	}
 	
-	public Response getRunningAgents(String hostAddress) {
+	public List<AgentInterface> getRunningAgents(String hostAddress) {
 		webTarget = restClient.target(HTTP_URL + hostAddress + NODE_URL + "/app/agents/running");
-		return webTarget.request(MediaType.APPLICATION_JSON).get();
+		Response resp = webTarget.request(MediaType.APPLICATION_JSON).get();
+		List<AgentInterface> ret = null;
+		
+		try {
+			ret = resp.readEntity(new GenericType<List<AgentInterface>>() {});
+		} catch(Exception e) {
+			System.out.println("Error fetching response body for list of slave nodes.");
+			e.printStackTrace();
+		}
+		
+		return ret;
 	}
 	
 	public Response deleteAgents(Host host, List<AgentType> agentsToDelete) {

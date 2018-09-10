@@ -14,4 +14,8 @@ export class ConsoleComponent implements OnInit {
   ngOnInit() {
   }
 
+  clearConsole(){
+    this.aclMessages = [];
+  }
+
 }

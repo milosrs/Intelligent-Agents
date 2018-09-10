@@ -3,6 +3,7 @@ package beans;
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
 
+import beans.enums.Performative;
 import interfaces.AgentInterface;
 import jms.JMSTopic;
 import services.AgentsService;
@@ -10,18 +11,17 @@ import services.AgentsService;
 @Stateful
 @Remote(AgentInterface.class)
 public class ReduceAgent extends AgentClass{
-
 	private static final long serialVersionUID = 1L;
-	
 	private AID aid;
-	
 	private JMSTopic jmsTopic;
-	
 	private AgentsService agentsService;
+	
 	@Override
 	public void handleMessage(ACLMessage message) {
-		// TODO Auto-generated method stub
-		
+		if(message.getPerformative().equals(Performative.PROPAGATE)
+			&& message.getSender().getType().getName().equals("MapAgent")) {
+			System.out.println("Reduce invoked on: " + agentsService.getMyHostInfo().getHostAddress());
+		}
 	}
 
 	@Override

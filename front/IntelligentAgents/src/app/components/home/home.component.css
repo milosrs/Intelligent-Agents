@@ -10,10 +10,3 @@
     background-color:rgba(238,238,238, 0.4);
 }
 
-.Console {
-    background-color: #00796B;
-    color: #ffffff;
-    height: 400px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}

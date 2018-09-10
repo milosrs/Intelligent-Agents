@@ -69,8 +69,7 @@ public class MDBConsumer implements MessageListener{
 	IllegalAccessException, ClassNotFoundException {
 		
 		boolean agentExists = false;
-		for (Iterator<AgentInterface> i = agentsService.getMyRunningAgents().iterator(); i.hasNext();) {
-			AgentInterface agent = i.next();
+		for (AgentInterface agent : agentsService.getMyRunningAgents()) {
 			if(agent.getClass().isInstance(Class.forName("beans." + aid.getType().getName()).newInstance())) {
 				AgentClass agentObj = (AgentClass) Class.forName("beans." + aid.getType().getName()).cast(agent);
 				AID myAid = agentObj.getAid();
@@ -86,8 +85,6 @@ public class MDBConsumer implements MessageListener{
 		
 		if(!agentExists) {
 			System.out.println("No such agent: " + aid.getName());
-			//WEBSOCKET MESSAGE?
-			
 		}		
 	}
 }

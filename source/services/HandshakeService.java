@@ -196,8 +196,7 @@ public class HandshakeService {
 		for (Iterator<Host> h = agentsService.getSlaveNodes().iterator(); h.hasNext();) {
 			Host item = h.next();
 				if(!item.getHostAddress().equals(myHostAddress)) {
-					Response resp = requestSender.getRunningAgents(item.getHostAddress());
-					ArrayList<AgentInterface> respAgents = resp.readEntity(new GenericType<ArrayList<AgentInterface>>() {});
+					List<AgentInterface> respAgents = requestSender.getRunningAgents(item.getHostAddress());
 					for(Iterator<AgentInterface> ra = respAgents.iterator(); ra.hasNext();)
 							retList.add(ra.next());
 				}
@@ -206,8 +205,7 @@ public class HandshakeService {
 		//i am a slave node, send also to the main node
 		if(agentsService.getNodeType().equals(NodeType.SLAVE)) {
 			Host main = agentsService.getMainNode();
-			Response resp = requestSender.getRunningAgents(main.getHostAddress());
-			ArrayList<AgentInterface> respAgents = resp.readEntity(new GenericType<ArrayList<AgentInterface>>() {});
+			List<AgentInterface> respAgents = requestSender.getRunningAgents(main.getHostAddress());
 			for(Iterator<AgentInterface> ra = respAgents.iterator(); ra.hasNext();)
 				retList.add(ra.next());
 			}

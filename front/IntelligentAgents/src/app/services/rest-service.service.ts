@@ -30,8 +30,9 @@ export class RestServiceService {
     return this.http.get<Aid[]>(this.SERVER_URL + 'app/agents/running');
   }
 
-  startAgent(aid: Aid, agentName: string) {
-    return this.http.put(this.SERVER_URL + 'app/agents/running/' + aid.name + '/' + agentName, null);
+  startAgent(agent: AgentTypeDTO, agentName: string) {
+    const url = "http://" + agent.hostAddress + "/Inteligent_Agents/"+ this.SERVER_URL + 'app/agents/running/' + agent.name + '/' + agentName;
+    return this.http.put(url , null);
   }
 
   sendAclMessage(aclMessage : AclMessage){

@@ -3,6 +3,7 @@ package controllers;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.websocket.Session;
@@ -14,7 +15,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.json.simple.parser.ParseException;
 
@@ -34,6 +37,7 @@ import factories.AgentsFactory;
 import interfaces.AgentInterface;
 import jms.JMSTopic;
 import requestSenders.ClientRequestSender;
+import requestSenders.HandshakeRequestSender;
 import services.AgentsService;
 
 @Path("/app")
@@ -44,6 +48,9 @@ public class RestController {
 	
 	@Inject
 	private ClientRequestSender clientRequestSender;
+	
+	@Inject
+	private HandshakeRequestSender requestSender;
 	
 	@Inject
 	private JMSTopic jmsTopic;
@@ -61,14 +68,9 @@ public class RestController {
 	@GET
 	@Path("/agents/running")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<AID> getRunningAgents(){
+	public List<AID> getRunningAgents(){
 		
-		ArrayList<AID> retList = new ArrayList<AID>();
-		
-		for (Iterator<AID> i = agentsService.getAllRunningAgents().iterator(); i.hasNext();)
-		    retList.add(i.next());
-		
-		return retList;
+		return agentsService.getAllRunningAgents();
 	}
 	
 	@PUT
@@ -76,29 +78,22 @@ public class RestController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public String putNewAgent(@PathParam(value = "type") String type, @PathParam(value = "name") String name) throws JsonProcessingException, IOException{
-		
-		String retStr = "";
-		
-		boolean flag = true;		
+		String retStr = "";		
 		Host myHostData = agentsService.getMyHostInfo();
-		if(agentsService.getAllRunningAgents().stream()
-				.filter(o -> o.getName().equals(name) 
-					&& o.getHost().getHostAddress().equals(myHostData.getHostAddress())
-						&& o.getHost().getAlias().equals(myHostData.getAlias()))
-							.findFirst().isPresent()) {
-			retStr = "Agent with the given name already exists on this node!";
-			flag = false;
-		}
+		boolean shouldAddAgent = agentsService.getAllRunningAgents()
+											  .stream().filter( aid -> 
+											  					aid.getName().equals(name) && 
+											  					aid.getHost().getHostAddress().equals(myHostData.getHostAddress()) && 
+											  					aid.getHost().getAlias().equals(myHostData.getAlias())
+											   ).findFirst() != null;
 		
-		if(flag) {
+		if(!shouldAddAgent) {
+			retStr = "Agent with the given name already exists on this node!";
+		} else {
+			boolean isMainNode = agentsService.getMainNode().getHostAddress().equals(myHostData.getHostAddress())
+								 && agentsService.getMainNode().getAlias().equals(myHostData.getAlias());
 			
-			boolean isMainNode = false;
-			if(agentsService.getMainNode().getHostAddress().equals(myHostData.getHostAddress())
-					&& agentsService.getMainNode().getAlias().equals(myHostData.getAlias()))
-				isMainNode = true;
-			
-			for (Iterator<AgentTypeDTO> i = agentsService.getAllSupportedAgentTypes().iterator(); i.hasNext();) {
-				AgentTypeDTO item = i.next();
+			for (AgentTypeDTO item : agentsService.getAllSupportedAgentTypes()) {
 				if(item.getName().equals(type)) {
 					//add agent to my list
 					AID aid = new AID(name, myHostData, new AgentType(item.getName(), item.getModule()));
@@ -112,16 +107,12 @@ public class RestController {
 						Session s = iterator.next();
 						s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("startAgent", mapper.writeValueAsString(aid))));
 					}
-
-					ArrayList<AID> postList = new ArrayList<AID>();
-					postList.add(aid);
-					//send AID to all other nodes
-					for(Iterator<Host> h = agentsService.getSlaveNodes().iterator(); h.hasNext();)
-						clientRequestSender.postRunningAgents(postList, h.next().getHostAddress());
 					
-					//if I am a slave node, send AID to the main node also
+					for(Host h : agentsService.getSlaveNodes())
+						clientRequestSender.postNewRunningAgent(aid, h.getHostAddress());
+					
 					if(!isMainNode)
-						clientRequestSender.postRunningAgents(postList, agentsService.getMainNode().getHostAddress());
+						clientRequestSender.postNewRunningAgent(aid, agentsService.getMainNode().getHostAddress());
 					
 					retStr = "SUCCESS";
 					break;
@@ -236,44 +227,29 @@ public class RestController {
 	
 	
 	
-	/*@POST
+	@POST
 	@Path("/agents/running")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<AgentInterface> postRunningAgents(Host senderHostData){
+	public boolean postRunningAgents(AID aid){
+		boolean success = true;
 		
-		ArrayList<AID> retList = new ArrayList<AID>();
-		Host myHostData = agentsService.getMyHostInfo();
-		
-		//add my running agents
-		for (Iterator<AID> i = agentsService.getAllRunningAgents().iterator(); i.hasNext();) {
-			AID item = i.next();
-			if(item.getHost().getAlias().equals(myHostData.getAlias())
-					&& item.getHost().getHostAddress().equals(myHostData.getHostAddress())) {
-			    retList.add(item);
+		try {
+			
+			if (!agentsService.getAllRunningAgents().contains(aid)) {
+				agentsService.getAllRunningAgents().add(aid);
 			}
-		}
-
-		//only sending to other slaves (if I am the main node I will skip the slave who initiated the call)
-		for (Iterator<Host> h = agentsService.getSlaveNodes().iterator(); h.hasNext();) {
-			Host item = h.next();
-			if(!item.getHostAddress().equals(myHostAddress)) {
-				Response resp = requestSender.getRunningAgents(item.getHostAddress());
-				ArrayList<AgentInterface> respAgents = resp.readEntity(new GenericType<ArrayList<AgentInterface>>() {});
-				for(Iterator<AgentInterface> ra = respAgents.iterator(); ra.hasNext();)
-					retList.add(ra.next());
+			
+			Iterator<Session> iterator = WebSocketController.sessions.iterator();
+			while(iterator.hasNext()) {
+				Session s = iterator.next();
+				s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("startAgent", mapper.writeValueAsString(aid))));
 			}
+		} catch(Exception e) {
+			success = false;
+			e.printStackTrace();
 		}
 		
-		//i am a slave node, send also to the main node, FIX THE MEEEE
-		if(!agentsService.getMainNode().getHostAddress().equals("ME")) {
-			Host main = agentsService.getMainNode();
-			Response resp = requestSender.getRunningAgents(main.getHostAddress());
-			ArrayList<AgentInterface> respAgents = resp.readEntity(new GenericType<ArrayList<AgentInterface>>() {});
-			for(Iterator<AgentInterface> ra = respAgents.iterator(); ra.hasNext();)
-				retList.add(ra.next());
-		}
-		
-		return retList;
-	}*/
+		return success;
+	}
 }
