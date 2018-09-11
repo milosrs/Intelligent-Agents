@@ -8,10 +8,13 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.ejb.Stateful;
 
+import beans.AID;
 import mapreduceBean.MapReduceDetails;
 
 @Stateful
@@ -21,6 +24,11 @@ public class ReduceService {
 	private String reducerPath;
 	private MapReduceDetails details;
 	private HashMap<String, Integer> counts;
+	private List<AID> processedMappers;
+	
+	public ReduceService() {
+		
+	}
 	
 	public ReduceService(String fileName, MapReduceDetails details) {
 		String absolutePath = ResultPredictionService.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -64,5 +72,16 @@ public class ReduceService {
 			count += 1;
 			counts.put(line, count);
 		}
+	}
+	
+	public boolean areAllMappersProcessed(List<AID> mappers) {
+		boolean shouldReset =processedMappers.containsAll(mappers);
+		
+		if(shouldReset) {
+			this.processedMappers = new ArrayList<AID>();
+			this.counts = new HashMap<String, Integer>();
+		}
+		
+		return shouldReset;
 	}
 }

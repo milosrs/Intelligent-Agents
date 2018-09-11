@@ -24,64 +24,76 @@ public class MapAgent extends AgentClass{
 	private JMSTopic jmsTopic;
 	private AgentsService agentsService;
 	private MapService mapService;
-	private int reducerNumber;
+	private int mapNumber;
+	private HashMap<String, Integer> counts;
 	
 	@Override
 	public void handleMessage(ACLMessage message) {
 		if(message.getPerformative().equals(Performative.CALL_FOR_PROPOSAL)
-			&& areAllReceiversReducers(message.getReceivers())) {
+			&& countMappers(message.getReceivers())) {
 			try {
-				mapService = new MapService();
-				mapService.init();
-				mapService.createKeyValuePairs(message.getContent());
-				System.out.println("Turning on Reducers!");
-				ACLMessage reducerMsg = new ACLMessage();
-				reducerMsg.setConversationId(message.getConversationId());
-				reducerMsg.setPerformative(Performative.PROPAGATE);
-				reducerMsg.setReceivers(message.getReceivers());
-				reducerMsg.setSender(message.getSender());
-				reducerMsg.setReplyTo(message.getSender());
 				
-				int lineNumberPerReducer = Math.floorDiv(mapService.getNumberOfLines(), reducerNumber);
-				HashMap<String, Object> userArgs = createMapReduceDetails(lineNumberPerReducer, message);
-				
-				jmsTopic.send(reducerMsg);
+				int positionInArray = positionInList(message.getReceivers());
+				if(positionInArray > -1) {
+					System.out.println("Turning on Mapper: " + this.aid.getName());
+					mapService = new MapService();
+					mapService.init();
+					mapService.createKeyValuePairs(message.getContent(), positionInArray, mapNumber);
+					
+					ACLMessage reducerMsg = new ACLMessage();
+					reducerMsg.setConversationId(message.getConversationId());
+					reducerMsg.setPerformative(Performative.PROPAGATE);
+					reducerMsg.setReceivers(message.getReceivers());
+					reducerMsg.setSender(message.getSender());
+					reducerMsg.setReplyTo(message.getSender());
+	
+					HashMap<String, Object> userArgs = createMapReduceDetails(mapService.getCounts(), message);
+					
+					reducerMsg.setUserArgs(userArgs);
+					
+					jmsTopic.send(reducerMsg);
+					mapNumber = 0;
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	private HashMap<String, Object> createMapReduceDetails(int lineNumberPerReducer, ACLMessage message) {
-		HashMap<String, Object> ret = new HashMap<String, Object>();
-		int startAt = 0;
+	private int positionInList(ArrayList<AID> receivers) {
+		int ret = 0;
 		
-		for(int i = 0; i < reducerNumber; i++) {
-			MapReduceDetails details = new MapReduceDetails(message.getContent(), startAt, startAt + lineNumberPerReducer);
-			startAt += lineNumberPerReducer;
-			ret.put(message.getReceivers().get(i).getName(), details);
+		for(int i = 0; i < receivers.size(); i++) {
+			if(receivers.get(i).getName().equals(this.aid.getName())) {
+				break;
+			}
+			
+			ret++;
 		}
 		
 		return ret;
 	}
 
-	private boolean areAllReceiversReducers(ArrayList<AID> receivers) {
-		boolean success = true;
-		reducerNumber = 0;
-		
-		for(AID aid : receivers) {
-			success = aid.getType().getName().equals("ReduceAgent")
-					  || aid.getType().getName().equals("MapAgent");
+	private HashMap<String, Object> createMapReduceDetails(HashMap<String, Integer> details,  ACLMessage message) {
+		HashMap<String, Object> ret = new HashMap<String, Object>();
 
-			if(!success) {
-				break;
-			} else {
-				if(aid.getType().getName().equals("ReduceAgent")) {
-					reducerNumber++;
-				}
+		for(int i = 0; i < message.getReceivers().size(); i++) {
+			if(message.getReceivers().get(i).getType().getName().equals("ReduceAgent")) {
+				ret.put(message.getReceivers().get(i).getName(), details);
+			}		
+		}
+		
+		return ret;
+	}
+
+	private boolean countMappers(ArrayList<AID> receivers) {
+		for(AID aid : receivers) {
+			if(aid.getType().getName().equals("MapAgent")) {
+				mapNumber++;
 			}
 		}
-		return success;
+		
+		return mapNumber > 1;
 	}
 
 	@Override
