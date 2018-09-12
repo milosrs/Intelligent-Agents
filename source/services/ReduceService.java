@@ -27,11 +27,12 @@ public class ReduceService {
 	private List<AID> processedMappers;
 	
 	public ReduceService() {
+		processedMappers = new ArrayList<AID>();
 	    counts = new HashMap<String, Integer>();
 	}
 	
 	public void countOccurences(HashMap<String, Integer> words, AID mapper) throws IOException {
-		if(mapper.getType().getClass().equals(MapAgent.class)) {
+		if(mapper.getType().getName().equals("MapAgent")) {
 			for(String key : words.keySet()) {
 				Integer total;
 				Integer mapOccurrences = words.get(key);

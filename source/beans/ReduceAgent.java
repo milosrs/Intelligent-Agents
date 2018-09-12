@@ -27,6 +27,10 @@ public class ReduceAgent extends AgentClass{
 			&& message.getSender().getType().getName().equals("MapAgent")) {
 			boolean shouldReset;
 			
+			if(reduceService == null) {
+				reduceService = new ReduceService();
+			}
+			
 			System.out.println("Reduce invoked on: " + agentsService.getMyHostInfo().getHostAddress());
 			HashMap<String, Object> userArgs = message.getUserArgs();
 			
