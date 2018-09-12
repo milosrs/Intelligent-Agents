@@ -4,11 +4,13 @@ import java.util.HashMap;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
+import javax.ws.rs.core.GenericType;
 
 import beans.enums.Performative;
 import interfaces.AgentInterface;
 import jms.JMSTopic;
 import services.AgentsService;
+import services.ReduceService;
 
 @Stateful
 @Remote(AgentInterface.class)
@@ -17,24 +19,36 @@ public class ReduceAgent extends AgentClass{
 	private AID aid;
 	private JMSTopic jmsTopic;
 	private AgentsService agentsService;
+	private ReduceService reduceService;
 	
 	@Override
 	public void handleMessage(ACLMessage message) {
 		if(message.getPerformative().equals(Performative.PROPAGATE)
 			&& message.getSender().getType().getName().equals("MapAgent")) {
+			boolean shouldReset;
+			
 			System.out.println("Reduce invoked on: " + agentsService.getMyHostInfo().getHostAddress());
 			HashMap<String, Object> userArgs = message.getUserArgs();
 			
-			writeValues(userArgs);
-		}
-	}
+			for(String key : userArgs.keySet()) {
+				Object fromMap = userArgs.get(key);
+				
+				if(fromMap instanceof HashMap) {
+					HashMap<String, Integer> mapperOutput = (HashMap<String, Integer>) fromMap;
+					
+					try {
+						reduceService.countOccurences(mapperOutput, message.getSender());
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
 
-	private void writeValues(HashMap<String, Object> userArgs) {
-		for(String key : userArgs.keySet()) {
-			HashMap<String, Integer> words = (HashMap<String, Integer>) userArgs.get(key);
+			shouldReset = reduceService.areAllMappersProcessed(message.getReceivers());
 			
-			for(String word : words.keySet()) {
-				System.out.println(word + ": " + words.get(word));
+			if(shouldReset) {
+				reduceService.writeValues();
+				reduceService.resetAll();
 			}
 		}
 	}

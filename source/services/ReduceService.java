@@ -9,79 +9,68 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.ejb.Stateful;
 
 import beans.AID;
+import beans.MapAgent;
 import mapreduceBean.MapReduceDetails;
 
 @Stateful
 public class ReduceService {
-
-	private String mapPath;
-	private String reducerPath;
-	private MapReduceDetails details;
 	private HashMap<String, Integer> counts;
 	private List<AID> processedMappers;
 	
 	public ReduceService() {
-		
-	}
-	
-	public ReduceService(String fileName, MapReduceDetails details) {
-		String absolutePath = ResultPredictionService.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-	    String newPath = absolutePath.substring(1);
-	    mapPath = newPath + "/../mapOutput/" + fileName;
-	    reducerPath = newPath + "/../reducerOutput/" + fileName;
-	    this.details = details;
 	    counts = new HashMap<String, Integer>();
 	}
 	
-	public void countOccurences() throws IOException {
-		File inputFile = new File(mapPath + details.getFileName());
-		File outputFile = new File(reducerPath + details.getFileName());
-		
-		if(!outputFile.exists()) {
-			outputFile.mkdirs();
-			outputFile.createNewFile();
-		}
-		
-		if(inputFile.exists() && outputFile.exists()) {
-			String line;
-			
-			BufferedReader br = new BufferedReader(new FileReader(inputFile));
-			FileOutputStream fos = new FileOutputStream(outputFile);
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-			
-			while((line = br.readLine()) != null) {
-				count(line);
+	public void countOccurences(HashMap<String, Integer> words, AID mapper) throws IOException {
+		if(mapper.getType().getClass().equals(MapAgent.class)) {
+			for(String key : words.keySet()) {
+				Integer total;
+				Integer mapOccurrences = words.get(key);
+				Integer occurrences = counts.get(key);
+				
+				if(mapOccurrences != null && occurrences != null) {
+					total = mapOccurrences + occurrences;
+				} else {
+					total = mapOccurrences;
+				}
+				
+				counts.put(key, total);
 			}
 			
-			bw.close();
-			fos.close();
-			br.close();
-		}
-	}
-
-	private void count(String line) {
-		line = line.split(",")[0].trim();
-		if(counts.get(line) != null) {
-			Integer count = counts.get(line);
-			count += 1;
-			counts.put(line, count);
+			processedMappers.add(mapper);
 		}
 	}
 	
 	public boolean areAllMappersProcessed(List<AID> mappers) {
-		boolean shouldReset =processedMappers.containsAll(mappers);
+		List<AID> mappersList = new ArrayList<AID>();
 		
-		if(shouldReset) {
-			this.processedMappers = new ArrayList<AID>();
-			this.counts = new HashMap<String, Integer>();
+		for(int i = 0; i < mappers.size(); i++) {
+			if(mappers.get(i).getType().getName().equals("MapAgent")) {
+				mappersList.add(mappers.get(i));
+			}
 		}
 		
-		return shouldReset;
+		return processedMappers.containsAll(mappers);
+	}
+	
+	public void resetAll() {
+		counts = new HashMap<String, Integer>();
+		processedMappers = new ArrayList<AID>();
+	}
+
+	public void writeValues() {
+		for(String key : counts.keySet()) {
+			Integer count = counts.get(key);
+			System.out.println(key + ": " + count);
+		}
 	}
 }

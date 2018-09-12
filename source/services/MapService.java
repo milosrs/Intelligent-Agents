@@ -51,7 +51,7 @@ public class MapService {
 			try(RandomAccessFile raf = new RandomAccessFile(inputFile, "r")) {
 				
 				String text = readFile(raf, mapperPosition, totalMapperNumber);
-				String[] words = text.trim().split(" ");
+				String[] words = text.trim().split("[\\r\\n\\t\\s]+");
 				
 				for(int i = 0; i < words.length; i++) {
 					addToMap(words[i]);
@@ -64,9 +64,30 @@ public class MapService {
 	}
 	
 	private String readFile(RandomAccessFile raf, int mapperPosition, int totalMapperNumber) throws IOException {
+		boolean isLastMapper = (mapperPosition + 1) == totalMapperNumber;
+		byte[] buffer = createTextBuffer(raf, isLastMapper, mapperPosition, totalMapperNumber);
+		
+		String text = new String(buffer);
+		boolean lastCharIsLetter = !Character.isWhitespace(text.charAt(text.length() - 1));
+		text = lastCharIsLetter ? text : text.trim();
+		
+		try {
+			while(lastCharIsLetter && !isLastMapper) {
+				Character c = (char)raf.read();
+				lastCharIsLetter = !Character.isWhitespace(c);
+				text += c;
+			}
+		} catch(Exception e) {
+			System.out.println("Stopping seek, probably EOF");
+		}
+		
+		return text;
+	}
+
+	private byte[] createTextBuffer(RandomAccessFile raf, boolean isLastMapper, int mapperPosition, int totalMapperNumber) throws IOException {
+		byte[] buffer;
 		Long fileLengthInBytes = raf.length();
-		Long nthOfFile = Math.floorDiv(fileLengthInBytes, totalMapperNumber) + 1;
-		byte[] buffer = new byte[nthOfFile.intValue() + 10];
+		Long nthOfFile = Math.floorDiv(fileLengthInBytes, totalMapperNumber);
 		Long seekToPosition = (long)0;
 		
 		if(mapperPosition > 0) {
@@ -74,41 +95,24 @@ public class MapService {
 			raf.seek(seekToPosition);
 			
 			try {
-				while(raf.readChar() != ' ') {
-					//Move pointer to right
+				char c = (char)raf.read();
+				while(!Character.isWhitespace(c)) {
+					seekToPosition++;
+					c = (char)raf.read();
 				}
 			} catch(Exception e) {
 				//EOF Exception
 			}
 			
-			
-			raf.seek(--seekToPosition);
-		}
-		
-		try {
-			raf.read(buffer, seekToPosition.intValue(), nthOfFile.intValue());
-		} catch(Exception e) {
-			raf.read(buffer, seekToPosition.intValue(), (int)(fileLengthInBytes - seekToPosition - 1));
-		}
-		
-		
-		String text = new String(buffer);
-		
-		try {
-			boolean shouldLoop = text.charAt(text.length() - 1) != ' ' && Character.isLetter(text.charAt(text.length() - 1));
-			
-			while(text.charAt(text.length() - 1) != ' ' && shouldLoop) {
-				Character c = (char)raf.read();
-				shouldLoop = Character.isLetter(c);
-				if(shouldLoop) {
-					text += c;
-				}
+			if(isLastMapper) {
+				nthOfFile = fileLengthInBytes - (nthOfFile * mapperPosition);
 			}
-		} catch(Exception e) {
-			System.out.println("Stopping seek, probably EOF");
 		}
 		
-		return text;
+		buffer = new byte[nthOfFile.intValue()];
+		raf.read(buffer, 0, nthOfFile.intValue());
+		
+		return buffer;
 	}
 
 	private void addToMap(String word) throws IOException {
@@ -125,8 +129,6 @@ public class MapService {
 			
 			counts.put(word, count);
 			numberOfLines++;
-		} else {
-			System.out.println("Skipped space");
 		}
 	}
 

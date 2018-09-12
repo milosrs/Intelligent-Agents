@@ -44,7 +44,7 @@ public class MapAgent extends AgentClass{
 					reducerMsg.setConversationId(message.getConversationId());
 					reducerMsg.setPerformative(Performative.PROPAGATE);
 					reducerMsg.setReceivers(message.getReceivers());
-					reducerMsg.setSender(message.getSender());
+					reducerMsg.setSender(this.aid);
 					reducerMsg.setReplyTo(message.getSender());
 	
 					HashMap<String, Object> userArgs = createMapReduceDetails(mapService.getCounts(), message);
