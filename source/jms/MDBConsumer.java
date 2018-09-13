@@ -84,7 +84,6 @@ public class MDBConsumer implements MessageListener{
 		}
 		
 		if(!agentExists) {
-			System.out.println("No such agent: " + aid.getName());
 		}		
 	}
 }

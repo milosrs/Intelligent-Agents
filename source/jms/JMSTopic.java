@@ -80,7 +80,6 @@ public class JMSTopic implements MessageListener {
 	
 	@Override
 	public void onMessage(Message msg) {
-		System.out.println("Recieved a message! ");
 	}
 
 	public void send(ACLMessage msg) {	    

@@ -149,36 +149,24 @@ public class AgentsService {
 	 * Metoda koja treba da se poziva za heartbeat protokol
 	 */
 	public void checkSlavesHealth() {
-		System.out.println("*************** CHECKING NODES HEALTH STATUS ****************");
-		
 		List<Host> toDelete = new ArrayList<Host>();
 		
 		if(this.nodeType.equals(NodeType.SLAVE)) {
 			boolean masterAlive = requestSender.isAlive(mainNode.getHostAddress());
 			
 			if(!masterAlive) {
-				System.out.println("-* RESULT: Master is dead, disconnecting.");
 				disconnectNode(mainNode);
 				hasMasterNodeDisconnected = true;
-			} else {
-				System.out.println("-* RESULT: Master alive!");
-				if(hasMasterNodeDisconnected) {
-					System.out.println("-*ACTION: Master was offline. Reconnecting " + this.myHostInfo.getHostAddress() + " to master!");
+			} else if(hasMasterNodeDisconnected) {
 					requestSender.registerSlaveNode(this.mainNode.getHostAddress(), this.myHostInfo);
-				}
 			}
 		}
 		
 		this.slaveNodes.stream().forEach(slave -> {
-			System.out.println("-* ACTION: Checking health status for: " + slave.getAlias());
-
 			boolean isAlive = requestSender.isAlive(slave.getHostAddress());
 
 			if (!isAlive) {
-				System.out.println("-* RESULT: Slave dead, deleting.");
 				toDelete.add(slave);
-			} else {
-				System.out.println("-* RESULT: ALIVE!");
 			}
 		});
 		
@@ -186,8 +174,6 @@ public class AgentsService {
 			disconnectNode(toDelete.get(i));
 			this.slaveNodes.remove(i);
 		}
-		
-		System.out.println("*************** ENDING SLAVE HEALTH STATUS ****************");
 	}
 	
 	private void disconnectNode(Host slave) {
@@ -215,7 +201,6 @@ public class AgentsService {
 		try {
 			success = resp.readEntity(boolean.class);
 		} catch(Exception e) {
-			System.out.println("RestEasy had problems reading request body. Is response code 200?");
 			success = resp.getStatus() == 200;
 		}
 		
@@ -234,8 +219,7 @@ public class AgentsService {
 					toDelete.add(type);
 				}	
 			} catch(Exception e) {
-				System.out.println("Error accessing supported agent type." + type);
-				System.out.println("Alias was: " + alias);
+				e.printStackTrace();
 			}
 		});
 		this.allRunningAgents.forEach(agent -> {

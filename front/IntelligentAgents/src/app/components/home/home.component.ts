@@ -98,7 +98,11 @@ export class HomeComponent implements OnInit {
       }else if(resp.messageType==="stopAgent"){
         this.stopAgentEvent(JSON.parse(resp.content));
       }else if(resp.messageType==="aclMessage"){
-        this.aclMessageEvent(JSON.parse(resp.content));
+        try{
+          this.aclMessageEvent(JSON.parse(resp.content));
+        } catch(err) {
+          this.aclMessageEvent(resp.content);
+        } 
       }else if(resp.messageType==="deleteRunning"){
         this.deleteRunningEvent(JSON.parse(resp.content));
       }else if(resp.messageType==="deleteTypes"){

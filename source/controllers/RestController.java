@@ -209,6 +209,7 @@ public class RestController {
 		Iterator<Session> iterator = WebSocketController.sessions.iterator();
 		while(iterator.hasNext()) {
 			Session s = iterator.next();
+			aclMessage.setContent(aclMessage.getContent());
 			s.getBasicRemote().sendText(mapper.writeValueAsString(new Message("aclMessage", mapper.writeValueAsString(aclMessage))));
 		}
 		
@@ -221,11 +222,8 @@ public class RestController {
 	@Path("/messages")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Performative[] getMessages() {
-		
 		return Performative.values();
 	}
-	
-	
 	
 	@POST
 	@Path("/agents/running")

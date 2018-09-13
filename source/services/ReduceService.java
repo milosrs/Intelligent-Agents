@@ -1,25 +1,12 @@
 package services;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-
 import javax.ejb.Stateful;
 
 import beans.AID;
-import beans.MapAgent;
-import mapreduceBean.MapReduceDetails;
 
 @Stateful
 public class ReduceService {
@@ -29,6 +16,12 @@ public class ReduceService {
 	public ReduceService() {
 		processedMappers = new ArrayList<AID>();
 	    counts = new HashMap<String, Integer>();
+	}
+	
+	public void test(AID mapper) {
+		if(!processedMappers.contains(mapper)) {
+			processedMappers.add(mapper);
+		}
 	}
 	
 	public void countOccurences(HashMap<String, Integer> words, AID mapper) throws IOException {
@@ -47,20 +40,25 @@ public class ReduceService {
 				counts.put(key, total);
 			}
 			
-			processedMappers.add(mapper);
+			if(!processedMappers.contains(mapper)) {
+				processedMappers.add(mapper);
+			}
 		}
 	}
 	
 	public boolean areAllMappersProcessed(List<AID> mappers) {
-		List<AID> mappersList = new ArrayList<AID>();
+		boolean containsAll = false;
+		int count = 0;
 		
 		for(int i = 0; i < mappers.size(); i++) {
-			if(mappers.get(i).getType().getName().equals("MapAgent")) {
-				mappersList.add(mappers.get(i));
+			for(AID pm : processedMappers) {
+				if(mappers.get(i).getType().getName().equals("MapAgent") && pm.getName().equals(mappers.get(i).getName())) {
+					count++;
+				}
 			}
 		}
 		
-		return processedMappers.containsAll(mappers);
+		return processedMappers.size() == count;
 	}
 	
 	public void resetAll() {
@@ -73,5 +71,15 @@ public class ReduceService {
 			Integer count = counts.get(key);
 			System.out.println(key + ": " + count);
 		}
+	}
+
+	public String createHugeString() {
+		String ret = "";
+		
+		for(String key : counts.keySet()) {
+			ret += key + " : " + Integer.toString(counts.get(key)) + " ";
+		}
+		
+		return ret;
 	}
 }

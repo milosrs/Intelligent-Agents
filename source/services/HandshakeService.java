@@ -76,7 +76,6 @@ public class HandshakeService {
 					case 3: isSuccess = sendSlaveListToNewSlave(newSlave.getHostAddress()); break;
 					case 4: isSuccess = sendAgentTypesToNewSlave(newSlave.getHostAddress(), agentsService.getAllSupportedAgentTypes()); break;
 					case 5: isSuccess = sendRunningAgentsToNewSlave(newSlave.getHostAddress(), agentsService.getAllRunningAgents()); break;
-					default: System.out.println("Handshake successfull!"); break;
 					}
 				} catch(Exception e) {
 					e.printStackTrace();

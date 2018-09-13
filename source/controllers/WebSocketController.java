@@ -43,7 +43,6 @@ public class WebSocketController {
         System.out.println("Closing a WebSocket due to " + reason.getReasonPhrase());
     }
     
-    
     /*@OnMessage
     public String sayHello(String message, Session session) throws JsonParseException, JsonMappingException, IOException, ParseException, InstanceNotFoundException, AttributeNotFoundException, MalformedObjectNameException, ReflectionException, MBeanException, CommandLineException {
     	

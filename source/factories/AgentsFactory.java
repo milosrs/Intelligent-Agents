@@ -17,7 +17,6 @@ public class AgentsFactory {
 			retObj.setAid(aid);
 			retObj.init(topic,agentService);
 		} catch (Exception e) {
-			System.out.println("Invalid Agent Type!");
 			retObj = null;
 		}
 		

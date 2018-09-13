@@ -1,12 +1,17 @@
 package beans;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
-import javax.ws.rs.core.GenericType;
+import javax.websocket.Session;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.enums.Performative;
+import controllers.WebSocketController;
 import interfaces.AgentInterface;
 import jms.JMSTopic;
 import services.AgentsService;
@@ -20,6 +25,7 @@ public class ReduceAgent extends AgentClass{
 	private JMSTopic jmsTopic;
 	private AgentsService agentsService;
 	private ReduceService reduceService;
+	private ObjectMapper mapper = new ObjectMapper();
 	
 	@Override
 	public void handleMessage(ACLMessage message) {
@@ -31,8 +37,8 @@ public class ReduceAgent extends AgentClass{
 				reduceService = new ReduceService();
 			}
 			
-			System.out.println("Reduce invoked on: " + agentsService.getMyHostInfo().getHostAddress());
-			HashMap<String, Object> userArgs = message.getUserArgs();
+			System.out.println("Reduce invoked on: " + agentsService.getMyHostInfo().getHostAddress() + " by: " + message.getSender().getName());
+			/*HashMap<String, Object> userArgs = message.getUserArgs();
 			
 			for(String key : userArgs.keySet()) {
 				Object fromMap = userArgs.get(key);
@@ -46,15 +52,46 @@ public class ReduceAgent extends AgentClass{
 						e.printStackTrace();
 					}
 				}
-			}
-
-			shouldReset = reduceService.areAllMappersProcessed(message.getReceivers());
+			}*/
+			reduceService.test(message.getSender());
+			shouldReset = reduceService.areAllMappersProcessed(getMappers(message));
 			
 			if(shouldReset) {
-				reduceService.writeValues();
-				reduceService.resetAll();
+				String content = reduceService.createHugeString().trim();
+				
+				if(content != "" && content != null) {
+					Message msg = new Message("aclMessage", "RESPONSE: " + content);
+					
+					Iterator<Session> iterator = WebSocketController.sessions.iterator();
+					System.out.println(agentsService.getMyHostInfo().getHostAddress() + " is sending a response!");
+					int i = 0;
+					while(iterator.hasNext()) {
+						System.out.println(agentsService.getMyHostInfo().getHostAddress() + " iterator: " + i++);
+						Session s = iterator.next();
+						try {
+							s.getBasicRemote().sendText(mapper.writeValueAsString(msg));
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+					reduceService.resetAll();
+				}
 			}
 		}
+	}
+	
+	private List<AID> getMappers(ACLMessage message) {
+		List<AID> mappers = new ArrayList<AID>();
+		
+		for(AID mapper : message.getReceivers()) {
+			if(mapper.getType().getName().equals("MapAgent")) {
+				mappers.add(mapper);
+			}
+		}
+		
+		return mappers;
 	}
 
 	@Override

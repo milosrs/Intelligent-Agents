@@ -9,9 +9,9 @@ public class Message implements Serializable {
 	
 	public Message() {}
 	
-	public Message(String mt, String ct) {
-		this.messageType = mt;
-		this.content = ct;
+	public Message(String messageType, String content) {
+		this.messageType = messageType;
+		this.content = content;
 	}
 
 	public String getMessageType() {

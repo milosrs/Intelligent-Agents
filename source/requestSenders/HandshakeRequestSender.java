@@ -39,7 +39,6 @@ public class HandshakeRequestSender {
 		try {
 			ret = resp.readEntity(new GenericType<List<AgentInterface>>() {});
 		} catch(Exception e) {
-			System.out.println("Error fetching response body for list of slave nodes.");
 			e.printStackTrace();
 		}
 		
@@ -62,7 +61,6 @@ public class HandshakeRequestSender {
 			slaves = regResp.readEntity(new GenericType<List<Host>>(){});	
 		} catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Error fetching response body for list of slave nodes.");
 			slaves = null;
 		}
 		
@@ -79,7 +77,6 @@ public class HandshakeRequestSender {
 			retList = resp.readEntity(new GenericType<List<AgentTypeDTO>>() {});
 		} catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Error fetching response body for agent type list");
 			retList = null;
 		}
 		
@@ -96,7 +93,6 @@ public class HandshakeRequestSender {
 			success = resp.readEntity(boolean.class);
 		} catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Error posting agent types list to slave: " + url);
 			success = false;
 		}
 		
@@ -113,7 +109,6 @@ public class HandshakeRequestSender {
 			success = resp.readEntity(boolean.class);
 		} catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Error posting slave list to slave: " + url);
 			success = false;
 		}
 		
@@ -130,7 +125,6 @@ public class HandshakeRequestSender {
 			success = resp.readEntity(boolean.class);
 		} catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Error posting running agents list to slave: " + url);
 			success = false;
 		}
 		
@@ -169,7 +163,6 @@ public class HandshakeRequestSender {
 		try {
 			success = resp.readEntity(boolean.class);
 		} catch(Exception e) {
-			System.out.println("RestEasy client unable to parse GET response body. Checking response code!");
 			success = resp.getStatus() == 200;
 		}
 		
@@ -191,7 +184,6 @@ public class HandshakeRequestSender {
 			try {
 				success = resp.readEntity(Boolean.class);
 			} catch(Exception e) {
-				System.out.println("RestEasy client unable to parse GET response body. Checking response code!");
 				success = resp.getStatus() == 200;
 			}
 		} catch(Exception e) {
