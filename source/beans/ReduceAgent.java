@@ -38,7 +38,7 @@ public class ReduceAgent extends AgentClass{
 			}
 			
 			System.out.println("Reduce invoked on: " + agentsService.getMyHostInfo().getHostAddress() + " by: " + message.getSender().getName());
-			/*HashMap<String, Object> userArgs = message.getUserArgs();
+			HashMap<String, Object> userArgs = message.getUserArgs();
 			
 			for(String key : userArgs.keySet()) {
 				Object fromMap = userArgs.get(key);
@@ -52,15 +52,15 @@ public class ReduceAgent extends AgentClass{
 						e.printStackTrace();
 					}
 				}
-			}*/
-			reduceService.test(message.getSender());
+			}
+			
 			shouldReset = reduceService.areAllMappersProcessed(getMappers(message));
 			
 			if(shouldReset) {
 				String content = reduceService.createHugeString().trim();
 				
 				if(content != "" && content != null) {
-					Message msg = new Message("aclMessage", "RESPONSE: " + content);
+					Message msg = new Message("aclMessage", "************RESPONSE********** " + content);
 					
 					Iterator<Session> iterator = WebSocketController.sessions.iterator();
 					System.out.println(agentsService.getMyHostInfo().getHostAddress() + " is sending a response!");

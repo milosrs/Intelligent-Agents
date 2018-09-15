@@ -65,7 +65,13 @@ export class HomeComponent implements OnInit {
   }
 
   aclMessageEvent(aclMessage:any){
-    this.aclMessages.push(aclMessage);
+    if(typeof aclMessage === 'string' && aclMessage.includes('RESPONSE')) {
+      const keyValues = aclMessage.split(' ');
+      debugger;
+      keyValues.map(keyValue => this.aclMessages.push(keyValue));
+    } else {
+      this.aclMessages.push(aclMessage);
+    }
   }
 
   deleteRunningEvent(runningToDelete:any[]){

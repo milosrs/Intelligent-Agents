@@ -47,18 +47,7 @@ public class ReduceService {
 	}
 	
 	public boolean areAllMappersProcessed(List<AID> mappers) {
-		boolean containsAll = false;
-		int count = 0;
-		
-		for(int i = 0; i < mappers.size(); i++) {
-			for(AID pm : processedMappers) {
-				if(mappers.get(i).getType().getName().equals("MapAgent") && pm.getName().equals(mappers.get(i).getName())) {
-					count++;
-				}
-			}
-		}
-		
-		return processedMappers.size() == count;
+		return processedMappers.size() == mappers.size();
 	}
 	
 	public void resetAll() {
@@ -77,7 +66,7 @@ public class ReduceService {
 		String ret = "";
 		
 		for(String key : counts.keySet()) {
-			ret += key + " : " + Integer.toString(counts.get(key)) + " ";
+			ret += key + ":" + Integer.toString(counts.get(key)) + " ";
 		}
 		
 		return ret;
