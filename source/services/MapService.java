@@ -107,6 +107,8 @@ public class MapService {
 			if(isLastMapper) {
 				nthOfFile = fileLengthInBytes - (nthOfFile * mapperPosition);
 			}
+		} else if(mapperPosition == 0 && isLastMapper) {
+			nthOfFile = fileLengthInBytes;
 		}
 		
 		buffer = new byte[nthOfFile.intValue()];

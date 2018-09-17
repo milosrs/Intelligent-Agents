@@ -1,0 +1,2112 @@
+---
+  0 info pnpm:store: "Nothing to stop. No server is running for the store at C:\\Users\\milos\\.pnpm-store\\2"
+  1 debug pnpm:package-json: 
+    initial: {}
+    prefix: "C:\\Users\\milos\\AppData\\Roaming\\npm\\pnpm-global\\1"
+  2 debug pnpm:stage: "resolution_started"
+  3 debug pnpm:progress: 
+    pkg: 
+      name: "pnpm"
+      rawSpec: "pnpm"
+    status: "installing"
+  4 debug pnpm:progress: 
+    status: "resolved"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    pkg: 
+      name: "pnpm"
+      rawSpec: "pnpm"
+  5 debug pnpm:progress: 
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    pkgVersion: "2.15.3"
+    status: "downloaded_manifest"
+  6 debug pnpm:progress: 
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    status: "resolving_content"
+  7 debug pnpm:stage: "resolution_done"
+  8 debug pnpm:package-json: 
+    prefix: "C:\\Users\\milos\\AppData\\Roaming\\npm\\pnpm-global\\1"
+    updated: 
+      dependencies: 
+        pnpm: "^2.15.3"
+  9 debug pnpm:stats: 
+    prefix: "C:\\Users\\milos\\AppData\\Roaming\\npm\\pnpm-global\\1"
+    removed: 0
+  10 debug pnpm:progress: 
+    status: "fetching_started"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    size: 6119469
+    attempt: 1
+  11 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 15754
+  12 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 32138
+  13 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 48522
+  14 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 64906
+  15 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 81290
+  16 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 97674
+  17 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 114058
+  18 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 130442
+  19 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 146826
+  20 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 162553
+  21 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 170745
+  22 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 183033
+  23 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 191225
+  24 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 195321
+  25 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 211705
+  26 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 228089
+  27 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 244473
+  28 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 260857
+  29 debug pnpm:stage: "importing_started"
+  30 debug pnpm:stats: 
+    added: 1
+    prefix: "C:\\Users\\milos\\AppData\\Roaming\\npm\\pnpm-global\\1"
+  31 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 277241
+  32 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 293625
+  33 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 310009
+  34 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 326393
+  35 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 342777
+  36 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 359161
+  37 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 375545
+  38 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 391929
+  39 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 408313
+  40 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 424697
+  41 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 436985
+  42 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 441081
+  43 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 453369
+  44 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 457465
+  45 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 473849
+  46 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 490233
+  47 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 498425
+  48 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 510713
+  49 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 518905
+  50 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 523001
+  51 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 531193
+  52 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 539385
+  53 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 547577
+  54 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 551673
+  55 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 568057
+  56 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 580345
+  57 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 584441
+  58 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 588537
+  59 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 596729
+  60 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 600825
+  61 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 613113
+  62 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 625401
+  63 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 641785
+  64 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 654073
+  65 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 662265
+  66 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 678649
+  67 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 686841
+  68 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 703225
+  69 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 711417
+  70 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 727801
+  71 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 735993
+  72 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 748281
+  73 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 752377
+  74 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 768761
+  75 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 776953
+  76 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 781049
+  77 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 797433
+  78 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 805625
+  79 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 809721
+  80 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 813817
+  81 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 822009
+  82 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 838393
+  83 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 850681
+  84 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 858873
+  85 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 871161
+  86 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 875257
+  87 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 879353
+  88 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 883449
+  89 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 887545
+  90 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 903929
+  91 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 920313
+  92 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 936697
+  93 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 953081
+  94 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 969465
+  95 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 985849
+  96 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1002233
+  97 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1018617
+  98 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1035001
+  99 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1051385
+  100 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1067769
+  101 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1084153
+  102 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1100537
+  103 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1116921
+  104 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1133305
+  105 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1149689
+  106 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1166073
+  107 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1182457
+  108 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1198841
+  109 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1215225
+  110 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1231609
+  111 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1247993
+  112 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1264377
+  113 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1280761
+  114 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1297145
+  115 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1313529
+  116 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1329913
+  117 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1346297
+  118 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1362681
+  119 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1379065
+  120 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1395449
+  121 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1407737
+  122 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1424121
+  123 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1440505
+  124 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1452793
+  125 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1469177
+  126 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1477369
+  127 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1485561
+  128 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1501945
+  129 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1506041
+  130 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1518329
+  131 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1534713
+  132 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1551097
+  133 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1555193
+  134 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1563385
+  135 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1579769
+  136 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1583865
+  137 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1600249
+  138 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1608441
+  139 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1612537
+  140 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1620729
+  141 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1628921
+  142 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1641209
+  143 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1653497
+  144 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1669881
+  145 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1686265
+  146 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1702649
+  147 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1719033
+  148 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1735417
+  149 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1751801
+  150 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1768185
+  151 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1784569
+  152 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1800953
+  153 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1817337
+  154 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1833721
+  155 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1850105
+  156 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1866489
+  157 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1874681
+  158 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1891065
+  159 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1907449
+  160 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1923833
+  161 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1940217
+  162 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1956601
+  163 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1972985
+  164 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 1989369
+  165 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2005753
+  166 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2022137
+  167 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2038521
+  168 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2054905
+  169 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2071289
+  170 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2087673
+  171 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2095865
+  172 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2112249
+  173 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2128633
+  174 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2145017
+  175 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2161401
+  176 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2177785
+  177 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2194169
+  178 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2210553
+  179 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2226937
+  180 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2243321
+  181 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2247417
+  182 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2259705
+  183 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2267897
+  184 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2284281
+  185 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2296569
+  186 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2300665
+  187 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2312953
+  188 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2321145
+  189 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2337529
+  190 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2341625
+  191 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2353913
+  192 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2362105
+  193 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2378489
+  194 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2394873
+  195 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2403065
+  196 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2411257
+  197 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2419449
+  198 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2423545
+  199 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2439929
+  200 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2456313
+  201 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2472697
+  202 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2489081
+  203 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2505465
+  204 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2521849
+  205 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2538233
+  206 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2546425
+  207 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2562809
+  208 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2579193
+  209 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2587385
+  210 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2595577
+  211 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2611961
+  212 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2616057
+  213 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2632441
+  214 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2648825
+  215 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2661113
+  216 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2677497
+  217 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2681593
+  218 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2693881
+  219 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2710265
+  220 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2714361
+  221 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2730745
+  222 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2743033
+  223 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2751225
+  224 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2759417
+  225 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2767609
+  226 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2783993
+  227 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2800377
+  228 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2816761
+  229 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2829049
+  230 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2845433
+  231 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2849529
+  232 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2865913
+  233 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2874105
+  234 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2890489
+  235 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2894585
+  236 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2910969
+  237 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2915065
+  238 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2931449
+  239 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2943737
+  240 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2960121
+  241 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2972409
+  242 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 2988793
+  243 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3005177
+  244 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3021561
+  245 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3033849
+  246 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3050233
+  247 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3058425
+  248 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3070713
+  249 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3078905
+  250 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3091193
+  251 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3107577
+  252 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3123961
+  253 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3140345
+  254 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3156729
+  255 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3173113
+  256 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3189497
+  257 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3205881
+  258 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3222265
+  259 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3238649
+  260 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3242745
+  261 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3250937
+  262 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3259129
+  263 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3271417
+  264 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3287801
+  265 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3295993
+  266 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3304185
+  267 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3312377
+  268 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3324665
+  269 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3336953
+  270 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3345145
+  271 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3353337
+  272 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3361529
+  273 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3369721
+  274 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3382009
+  275 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3390201
+  276 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3398393
+  277 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3406585
+  278 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3414777
+  279 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3427065
+  280 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3435257
+  281 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3443449
+  282 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3459833
+  283 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3468025
+  284 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3484409
+  285 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3492601
+  286 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3500793
+  287 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3508985
+  288 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3525369
+  289 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3537657
+  290 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3554041
+  291 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3566329
+  292 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3570425
+  293 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3586809
+  294 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3603193
+  295 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3619577
+  296 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3631865
+  297 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3648249
+  298 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3656441
+  299 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3672825
+  300 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3689209
+  301 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3705593
+  302 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3721977
+  303 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3734265
+  304 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3750649
+  305 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3767033
+  306 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3783417
+  307 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3799801
+  308 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3807993
+  309 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3824377
+  310 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3832569
+  311 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3848953
+  312 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3857145
+  313 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3865337
+  314 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3877625
+  315 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3889913
+  316 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3898105
+  317 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3914489
+  318 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3930873
+  319 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3947257
+  320 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3963641
+  321 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3980025
+  322 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 3996409
+  323 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4012793
+  324 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4029177
+  325 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4045561
+  326 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4061945
+  327 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4078329
+  328 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4094713
+  329 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4111097
+  330 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4127481
+  331 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4143865
+  332 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4160249
+  333 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4176633
+  334 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4193017
+  335 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4209401
+  336 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4225785
+  337 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4242169
+  338 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4258553
+  339 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4274937
+  340 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4291321
+  341 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4307705
+  342 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4324089
+  343 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4340473
+  344 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4356857
+  345 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4373241
+  346 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4389625
+  347 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4406009
+  348 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4418297
+  349 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4434681
+  350 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4451065
+  351 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4467449
+  352 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4483833
+  353 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4500217
+  354 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4512505
+  355 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4528889
+  356 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4545273
+  357 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4553465
+  358 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4561657
+  359 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4578041
+  360 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4582137
+  361 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4598521
+  362 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4614905
+  363 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4631289
+  364 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4643577
+  365 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4659961
+  366 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4668153
+  367 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4684537
+  368 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4700921
+  369 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4717305
+  370 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4733689
+  371 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4750073
+  372 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4766457
+  373 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4782841
+  374 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4799225
+  375 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4815609
+  376 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4831993
+  377 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4848377
+  378 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4864761
+  379 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4881145
+  380 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4897529
+  381 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4913913
+  382 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4930297
+  383 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4946681
+  384 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4963065
+  385 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4979449
+  386 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 4995833
+  387 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5012217
+  388 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5028601
+  389 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5044985
+  390 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5061369
+  391 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5077753
+  392 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5094137
+  393 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5110521
+  394 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5126905
+  395 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5143289
+  396 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5159673
+  397 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5176057
+  398 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5192441
+  399 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5208825
+  400 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5225209
+  401 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5241593
+  402 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5257977
+  403 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5259346
+  404 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5260715
+  405 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5262084
+  406 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5263453
+  407 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5264822
+  408 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5266191
+  409 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5267560
+  410 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5268929
+  411 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5270298
+  412 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5271667
+  413 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5273036
+  414 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5274405
+  415 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5275774
+  416 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5277143
+  417 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5278512
+  418 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5279881
+  419 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5281250
+  420 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5282619
+  421 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5283988
+  422 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5285357
+  423 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5286726
+  424 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5288095
+  425 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5289464
+  426 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5290745
+  427 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5292114
+  428 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5293483
+  429 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5294852
+  430 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5296221
+  431 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5297590
+  432 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5298959
+  433 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5300328
+  434 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5301697
+  435 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5303066
+  436 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5304435
+  437 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5305804
+  438 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5307173
+  439 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5308542
+  440 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5309911
+  441 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5311280
+  442 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5312649
+  443 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5316878
+  444 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5321107
+  445 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5323513
+  446 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5327742
+  447 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5331971
+  448 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5336200
+  449 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5340429
+  450 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5344658
+  451 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5348887
+  452 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5353116
+  453 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5356281
+  454 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5360510
+  455 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5364739
+  456 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5368968
+  457 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5373197
+  458 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5377426
+  459 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5381655
+  460 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5385884
+  461 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5389049
+  462 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5393278
+  463 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5397507
+  464 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5401736
+  465 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5405965
+  466 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5410194
+  467 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5414423
+  468 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5418652
+  469 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5421817
+  470 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5426046
+  471 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5430275
+  472 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5434504
+  473 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5438733
+  474 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5442962
+  475 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5447191
+  476 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5451420
+  477 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5454585
+  478 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5458814
+  479 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5463043
+  480 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5467272
+  481 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5471501
+  482 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5475730
+  483 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5487353
+  484 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5503737
+  485 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5520121
+  486 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5536505
+  487 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5552889
+  488 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5569273
+  489 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5585657
+  490 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5602041
+  491 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5618425
+  492 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5634809
+  493 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5651193
+  494 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5667577
+  495 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5683961
+  496 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5700345
+  497 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5716729
+  498 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5733113
+  499 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5749497
+  500 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5765881
+  501 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5782265
+  502 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5798649
+  503 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5815033
+  504 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5831417
+  505 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5847801
+  506 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5864185
+  507 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5880569
+  508 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5896953
+  509 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5913337
+  510 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5929721
+  511 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5946105
+  512 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5962489
+  513 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5978873
+  514 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 5995257
+  515 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 6011641
+  516 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 6028025
+  517 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 6044409
+  518 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 6060793
+  519 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 6077177
+  520 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 6093561
+  521 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 6109945
+  522 debug pnpm:progress: 
+    status: "fetching_progress"
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    downloaded: 6119469
+  523 debug pnpm:progress: 
+    pkgId: "registry.npmjs.org/pnpm/2.15.3"
+    status: "fetched"
+  524 debug pnpm:importing: 
+    from: "C:\\Users\\milos\\.pnpm-store\\2\\registry.npmjs.org\\pnpm\\2.15.3\\node_modules\\pnpm"
+    to: "C:\\Users\\milos\\AppData\\Roaming\\npm\\pnpm-global\\1\\node_modules\\.registry.npmjs.org\\pnpm\\2.15.3\\node_modules\\pnpm"
+    method: "hardlink"
+  525 debug pnpm:stage: "importing_done"
+  526 debug pnpm:link: 
+    target: "C:\\Users\\milos\\AppData\\Roaming\\npm\\pnpm-global\\1\\node_modules\\.registry.npmjs.org\\pnpm\\2.15.3\\node_modules\\pnpm"
+    link: "C:\\Users\\milos\\AppData\\Roaming\\npm\\pnpm-global\\1\\node_modules\\pnpm"
+  527 debug pnpm:root: 
+    added: 
+      dependencyType: "prod"
+      id: "registry.npmjs.org/pnpm/2.15.3"
+      name: "pnpm"
+      realName: "pnpm"
+      version: "2.15.3"
+    prefix: "C:\\Users\\milos\\AppData\\Roaming\\npm\\pnpm-global\\1"
+  528 error pnpm: 
+    message: 
+      errno: -4048
+      code: "EPERM"
+      syscall: "open"
+      path: "C:\\Users\\milos\\AppData\\Roaming\\npm\\pnpm"
+    err: 
+      name: "Error"
+      message: "EPERM: operation not permitted, open 'C:\\Users\\milos\\AppData\\Roaming\\npm\\pnpm'"
+      code: "EPERM"
+      stack: "Error: EPERM: operation not permitted, open 'C:\\Users\\milos\\AppData\\Roaming\\npm\\pnpm'"
