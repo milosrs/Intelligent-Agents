@@ -66,9 +66,9 @@ public class MapAgent extends AgentClass{
 		for(int i = 0; i < receivers.size(); i++) {
 			if(receivers.get(i).getName().equals(this.aid.getName())) {
 				break;
+			} else if(receivers.get(i).getType().getName().equals("MapAgent")) {
+				ret++;
 			}
-			
-			ret++;
 		}
 		
 		return ret;
@@ -93,7 +93,7 @@ public class MapAgent extends AgentClass{
 			}
 		}
 		
-		return mapNumber > 1;
+		return mapNumber > 0;
 	}
 
 	@Override

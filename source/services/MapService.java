@@ -96,7 +96,7 @@ public class MapService {
 			
 			try {
 				char c = (char)raf.read();
-				while(!Character.isWhitespace(c)) {
+				while(!Character.isWhitespace(c) && seekToPosition <= fileLengthInBytes) {
 					seekToPosition++;
 					c = (char)raf.read();
 				}
