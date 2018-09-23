@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 
 import beans.ACLMessage;
 import beans.AgentType;
-import services.JndiTreeParser;
+import services.appConfigServices.JndiTreeParser;
 
 @Singleton
 @Path("/agents")
@@ -33,35 +33,5 @@ public class ClientCommunicationController {
 		  } catch (NamingException ex) {
 		    throw new IllegalStateException(ex);
 		  }
-	}
-	
-	@GET
-	@Path("/running")
-	public void getAllRunningAgents() {
-		
-	}
-	
-	@PUT
-	@Path("/running/{type}/{name}")
-	public void runAgent(@PathParam("type") String type, @PathParam("name") String name) {
-		
-	}
-	
-	@DELETE
-	@Path("/running/{aid}")
-	public void stopAgent(@PathParam("aid")String AID) {
-		
-	}
-	
-	@POST
-	@Path("/messages")
-	public void sendACLMessage(ACLMessage msg) {
-		
-	}
-	
-	@GET
-	@Path("/messages")
-	public void getPerfomativeList() {
-		
 	}
 }

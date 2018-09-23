@@ -5,8 +5,8 @@ import javax.ejb.Remote;
 import javax.ejb.Stateful;
 import beans.enums.Performative;
 import interfaces.AgentInterface;
-import jms.JMSTopic;
 import services.AgentsService;
+import services.appConfigServices.JMSTopic;
 
 @Stateful
 @Remote(AgentInterface.class)

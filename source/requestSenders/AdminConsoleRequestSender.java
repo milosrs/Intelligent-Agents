@@ -24,7 +24,13 @@ public class AdminConsoleRequestSender {
 	public boolean isWildflyRunning(String ipAddress, int portOffset) {
 		if (ipAddress == null) {
 			STATUS_URL = STATUS_URL.replace("{0}", "localhost");
+		} else {
+			if(ipAddress.contains(":")) {
+				ipAddress = ipAddress.split(":")[0];
+			}
+			STATUS_URL = STATUS_URL.replace("{0}", ipAddress);
 		}
+
 		STATUS_URL = STATUS_URL.replace("{1}", Integer.toString(9990 + portOffset));
 		
 		boolean success = isUpAndRunning(STATUS_URL);

@@ -1,20 +1,15 @@
 package beans;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
-import javax.inject.Inject;
-
 import beans.enums.Performative;
 import interfaces.AgentInterface;
-import jms.JMSTopic;
-import mapreduceBean.MapReduceDetails;
 import services.AgentsService;
 import services.MapService;
+import services.appConfigServices.JMSTopic;
 
 @Stateful
 @Remote(AgentInterface.class)
@@ -22,6 +17,7 @@ public class MapAgent extends AgentClass{
 	private static final long serialVersionUID = 1L;
 	private AID aid;
 	private JMSTopic jmsTopic;
+	@SuppressWarnings("unused")
 	private AgentsService agentsService;
 	private MapService mapService;
 	private int mapNumber;
@@ -110,6 +106,14 @@ public class MapAgent extends AgentClass{
 	public void init(JMSTopic topic, AgentsService agentService) {
 		this.jmsTopic = topic;
 		this.agentsService = agentService;
+	}
+
+	public HashMap<String, Integer> getCounts() {
+		return counts;
+	}
+
+	public void setCounts(HashMap<String, Integer> counts) {
+		this.counts = counts;
 	}
 
 }

@@ -3,7 +3,7 @@ package interfaces;
 import java.io.Serializable;
 
 import beans.ACLMessage;
-import jms.JMSTopic;
+import services.appConfigServices.JMSTopic;
 
 public interface AgentInterface extends Serializable {
 

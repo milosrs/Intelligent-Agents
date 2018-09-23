@@ -13,9 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import beans.enums.Performative;
 import controllers.WebSocketController;
 import interfaces.AgentInterface;
-import jms.JMSTopic;
 import services.AgentsService;
 import services.ReduceService;
+import services.appConfigServices.JMSTopic;
 
 @Stateful
 @Remote(AgentInterface.class)

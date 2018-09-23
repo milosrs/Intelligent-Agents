@@ -4,8 +4,8 @@ import javax.inject.Inject;
 
 import beans.AID;
 import beans.AgentClass;
-import jms.JMSTopic;
 import services.AgentsService;
+import services.appConfigServices.JMSTopic;
 
 public class AgentsFactory {
 	

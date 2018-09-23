@@ -10,8 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import controllers.WebSocketController;
 import interfaces.AgentInterface;
-import jms.JMSTopic;
 import services.AgentsService;
+import services.appConfigServices.JMSTopic;
 
 public abstract class AgentClass implements AgentInterface {
 

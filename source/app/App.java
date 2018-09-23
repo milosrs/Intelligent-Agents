@@ -16,9 +16,9 @@ import beans.Host;
 import config.HeartbeatInvoker;
 import requestSenders.HandshakeRequestSender;
 import services.AgentsService;
-import services.GetHostDataService;
-import services.JndiTreeParser;
 import services.ResultPredictionService;
+import services.appConfigServices.GetHostDataService;
+import services.appConfigServices.JndiTreeParser;
 
 @ApplicationPath("/rest")
 @Singleton
