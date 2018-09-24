@@ -32,6 +32,7 @@ public class ReduceAgent extends AgentClass{
 		if(message.getPerformative().equals(Performative.PROPAGATE)
 			&& message.getSender().getType().getName().equals("MapAgent")) {
 			boolean shouldReset;
+			System.out.println(this.aid.getName() + " Invoked on : " + this.agentsService.getMyHostInfo().getHostAddress());
 			
 			if(reduceService == null) {
 				reduceService = new ReduceService();
@@ -55,9 +56,12 @@ public class ReduceAgent extends AgentClass{
 			}
 			
 			shouldReset = reduceService.areAllMappersProcessed(getMappers(message));
+			System.out.println("Should Reset: " + shouldReset);
 			
 			if(shouldReset) {
+				
 				String content = reduceService.createHugeString().trim();
+				System.out.println(content);
 				
 				if(content != "" && content != null) {
 					Message msg = new Message("aclMessage", "************RESPONSE********** " + content);

@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +22,7 @@ import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.management.ReflectionException;
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 
 import org.jboss.as.cli.CommandLineException;
 
@@ -83,7 +87,6 @@ public class GetHostDataService implements Runnable {
 		if(isRunning) {
 			if(!this.mainNodeDetails.equals(this.host.getHostAddress())) {
 				setSlaveData();
-				
 				requestSender.registerSlaveNode(this.mainNodeDetails, this.host);
 			}
 			else {
@@ -205,22 +208,19 @@ public class GetHostDataService implements Runnable {
 		return ret;
     }
 	
-	@SuppressWarnings("resource")
 	public String getMainNodeDetails() {
-		String absolutePath = GetHostDataService.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-	    String newPath = absolutePath.substring(1);
-	    String fullResourcePath = newPath + "/../mainNodeData/mainNodeInfo.txt";
-		File file = new File(fullResourcePath);
-		
+		String resourcePath = "mainNodeData/mainNodeInfo.txt";
+		URL url = this.getClass().getClassLoader().getResource(resourcePath);
+		System.out.println("READING MAIN NODE DATA FROM: " + url.getPath());
+		InputStream resource = this.getClass().getClassLoader().getResourceAsStream(resourcePath);
 		String line = null;
+		
 		try {
-			FileReader nodesData = new FileReader(file);
-			BufferedReader bufferedReader = new BufferedReader(nodesData);
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(resource));
 			line = bufferedReader.readLine();
-
-	    } catch (IOException e) {
-	    	e.printStackTrace();
-	    }
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 		
 		if(line == null) {
 			System.out.println("ERROR WHLE READING THE MAIN NODE DATA!");

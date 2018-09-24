@@ -11,8 +11,12 @@ import java.io.RandomAccessFile;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.nio.file.OpenOption;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.FileAttribute;
 import java.util.HashMap;
 
 import javax.annotation.PostConstruct;
@@ -21,46 +25,34 @@ import javax.ejb.Stateless;
 
 @Stateful
 public class MapService {
-	
-	private String textFilesPath;
-	private String mapOutputPath;
-	private String fileLocation;
+	private final String fileLocation = "largeTextFiles/";
 	private int numberOfLines;
 	private HashMap<String, Integer> counts;
 	
 	@PostConstruct
 	public void init() {
-		String absolutePath = ResultPredictionService.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-	    String newPath = absolutePath.substring(1);
-	    textFilesPath = newPath + "/../largeTextFiles/";
-	    mapOutputPath = newPath + "/../mapOutput/";
 	    numberOfLines = 0;
 	    counts = new HashMap<String, Integer>();
 	}
 	
 	public void createKeyValuePairs(String filename, int mapperPosition, int totalMapperNumber) throws URISyntaxException, IOException {
-		File inputFile = new File(textFilesPath + filename);
-		File outputFile = new File(mapOutputPath + filename);
+		Path temp = Files.createTempFile(filename, ".txt");
+		Files.copy(this.getClass().getClassLoader().getResourceAsStream(fileLocation + filename), temp, StandardCopyOption.REPLACE_EXISTING);
 		
-		if(!outputFile.exists()) {
-			outputFile.mkdirs();
-			outputFile.createNewFile();
-		}
-		
-		if(inputFile.exists() && outputFile.exists()) {
-			try(RandomAccessFile raf = new RandomAccessFile(inputFile, "r")) {
-				
-				String text = readFile(raf, mapperPosition, totalMapperNumber);
-				String[] words = text.trim().split("[\\r\\n\\t\\s]+");
-				
-				for(int i = 0; i < words.length; i++) {
-					addToMap(words[i]);
-				}
-			} catch(Exception e) {
-				e.printStackTrace();
-				return;
+		try(RandomAccessFile raf = new RandomAccessFile(temp.toFile(), "r")) {
+			
+			String text = readFile(raf, mapperPosition, totalMapperNumber);
+			System.out.println(text);
+			String[] words = text.trim().split("[\\r\\n\\t\\s]+");
+			
+			for(int i = 0; i < words.length; i++) {
+				addToMap(words[i]);
 			}
+		} catch(Exception e) {
+			System.err.println("Cant read file: " + temp.toFile().getAbsolutePath());
+			return;
 		}
+		
 	}
 	
 	private String readFile(RandomAccessFile raf, int mapperPosition, int totalMapperNumber) throws IOException {
@@ -101,7 +93,8 @@ public class MapService {
 					c = (char)raf.read();
 				}
 			} catch(Exception e) {
-				//EOF Exception
+				e.printStackTrace();
+				System.out.println("Something went wrong while seeking, method : createTextBuffer");
 			}
 			
 			if(isLastMapper) {
@@ -136,10 +129,6 @@ public class MapService {
 
 	public String getFileLocation() {
 		return fileLocation;
-	}
-
-	public void setFileLocation(String fileLocation) {
-		this.fileLocation = fileLocation;
 	}
 
 	public int getNumberOfLines() {

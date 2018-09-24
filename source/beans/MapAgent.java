@@ -28,7 +28,7 @@ public class MapAgent extends AgentClass{
 		if(message.getPerformative().equals(Performative.CALL_FOR_PROPOSAL)
 			&& countMappers(message.getReceivers())) {
 			try {
-				
+				System.out.println(this.aid.getName() + " Invoked on : " + this.agentsService.getMyHostInfo().getHostAddress());
 				int positionInArray = positionInList(message.getReceivers());
 				if(positionInArray > -1) {
 					System.out.println("Turning on Mapper: " + this.aid.getName());
@@ -53,6 +53,8 @@ public class MapAgent extends AgentClass{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		} else {
+			System.out.println(this.aid.getName() + " NOT INVOKED : " + this.agentsService.getMyHostInfo().getHostAddress());
 		}
 	}
 
@@ -84,11 +86,12 @@ public class MapAgent extends AgentClass{
 
 	private boolean countMappers(ArrayList<AID> receivers) {
 		for(AID aid : receivers) {
+			System.out.println(aid.getName() + " : " + aid.getType().getName());
 			if(aid.getType().getName().equals("MapAgent")) {
 				mapNumber++;
 			}
 		}
-		
+		System.out.println("Number of mappers: " + mapNumber);
 		return mapNumber > 0;
 	}
 
